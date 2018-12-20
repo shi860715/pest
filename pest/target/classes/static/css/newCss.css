@@ -1,0 +1,788 @@
+p,dl,h1,h2,h3,h4,h5,h6{
+	margin: 0;
+	padding: 0;
+}
+ol,ul,li{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.greenBlue{
+	color: #00aa83!important;
+}
+.sidebarHead{
+	width: 100%;
+	text-align: center;
+	margin-top: 30%;
+	margin-bottom: 40px;
+}
+
+.sidebarHead  dt img{
+	width: 100px;
+	height: 100px;
+	border-radius: 100%;
+	border: 3px solid #006633;
+}
+.sidebarHead  dd p{
+	font-size: 13px;
+	color: #666666;
+	font-weight: bold;
+}
+.breadcrumb .icon-home{
+	color: #00aa83;
+}
+.breadcrumb li a{
+	color: #00aa83;
+}
+.sx-content{
+	width: 100%;
+	border: 1px solid #CCCCCC;
+	min-height: 478px;
+	background: #FFFFFF;
+}.sxc-head:after{
+	content: '';
+	display: block;
+	height: 0;
+	clear: both;
+	overflow: hidden;
+}
+.sxc-head{
+	padding: 20px;
+	border-bottom: 1px solid #CCCCCC;
+}
+.sxc-head ol{
+	float: left;
+	
+}
+.sxc-head ol li{
+	float: left;
+	margin-right: 10px;
+}
+.sxc-head ol li input{
+	height: 30px;
+	line-height: 30px;
+	margin:0 10px
+}
+.sxc-head ol li label{
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+	line-height: 30px;
+}
+.sxc-head ol li select{
+	width: 120px;
+	height: 30px;
+	line-height: 30px;
+}
+.sxc-head ol li .btn{
+	height: 30px;
+	line-height: 16px;
+	text-shadow: none !important;
+	padding: 0 15px;
+	border-width: 0;
+}
+.sxc-subhead ol li select{
+	height: 30px;
+	line-height: 30px;
+	
+}
+.sxc-subhead{
+	border-bottom: none;
+}
+.sxc-subhead ol li{
+	margin-right: 10px;
+}
+.sxc-subhead ol li .btn{
+	padding: 0 6px;
+	height: 30px;
+	line-height: 30px;
+}
+.sxc-subhead ol li input{
+	height: 30px;
+	line-height: 30px;
+}
+.sxc-subhead ol li button i{
+	display: inline-block;
+	width:25px;
+	height: 25px;
+	vertical-align: top;
+    margin-top: 3px;
+}
+button i.addIcon{
+	display: inline-block;
+    width: 25px;
+    height: 25px;
+    vertical-align: top;
+    margin-top: 3px;
+	background: url(../images/add.png) no-repeat 50% 50%;
+	background-size: 100%;
+}
+.sxc-subhead ol li button i.starIcon{
+	background: url(../images/star.png) no-repeat 50% 50%;
+	background-size: 100%;
+}
+.sxc-subhead ol li button i.stopIcon{
+	background: url(../images/stop.png) no-repeat 50% 50%;
+	background-size: 100%;
+}
+.sxc-subhead ol li .btn-white{
+	border-width: 1px;
+}
+.sxc-subhead ol li .btn-white.btn-star{
+	border-color: #00AA83;
+	color:#00AA83 !important;
+}
+.sxc-subhead ol li .btn-white.btn-stop{
+	border-color: #f75c5a;
+	color:#f75c5a !important;
+}
+.sxc-subhead ol li .btnDownLoad{
+	margin-left: -4px;
+    margin-top: -4px;
+    padding: 0 10px;
+}
+.sxc-subhead ol li .btnDownLoad i{
+	margin-top: 6px;
+	display: inline-block;
+	
+}
+.dataTables_filter {
+    display: none;
+}
+.table-responsive{
+	padding:0 20px;
+	background: #FFFFFF;
+}
+.table-bordered>tbody>tr>td{
+	text-align: center;
+}
+/*é‡æ–°è®¾ç½®å³ä¾§èœå•æ çš„icon*/
+#sidebar .nav-list>li>a>i.selfIcon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 30px;
+    height: 36px;
+    text-align: center;
+    margin-right: 2px;
+}
+#sidebar .nav-list>li.active i.userIcon{
+	background: url(../images/yonghu.png) no-repeat 50% 50%;
+	background-size: 100%;
+}
+.modal-header{
+	background: #00aa83;
+    color: #fff;
+}
+.modal-dialog{
+	padding-top: 12%;
+}
+.tipimg{
+	display: inline-block;
+	width: 35px;
+	height: 35px;
+	vertical-align: middle;
+}
+.editCon{
+	width: 90%;
+	margin: 0 auto;
+}
+.editCon ul li{
+	margin-bottom: 5px;
+}
+.editCon ul li label{
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+	vertical-align: middle;
+	margin-right: 8px;
+}
+.editCon ul li span{
+	color: #333;
+	font-size: 14px;
+	font-weight: bold;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 5px;
+}
+.editCon ul li input,.editCon ul li select{
+	display: inline-block;
+	vertical-align: middle;
+	width: 60%;
+	height: 32px;
+	line-height: 32px;
+	text-indent: 5px;
+	background: #FFFFFF;
+}
+.editCon ul li textarea{
+	display: inline-block;
+	vertical-align: middle;
+	width: 60%;
+	height: 70px;
+}
+.editCon ul li dl{
+	width: 43%;
+	float: left;
+}
+.editCon ul li dl  select{
+	width: 48%;
+	
+}
+.region{
+	
+}
+.region h3{
+	font-size: 16px;
+	margin-bottom: 20px;
+}
+.region ul li{
+	margin-bottom: 10px;
+}
+.region ul li label{
+	width: 50px;
+	font-size: 14px;
+	text-align: center;
+}
+.region ul li select{
+	width: 60%;
+	height: 30px;
+}
+/*login*/
+.loginBody{
+	width: 100%;
+	background: url(../images/bg.jpg) no-repeat 50% 50%;
+	background-size: 100%;
+}
+.login{
+	width: 600px;
+	height: 400px;
+	background: url(../images/loginBg.png) no-repeat 50% 50%;
+	background-size: 100%;
+	position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 12% auto 0;
+}
+.logonLogo{
+	padding: 20px 0 0 30px;
+}
+.logonLogo dl dt{
+	float: left;
+	margin-right: 10px;
+}
+.logonLogo dl dd{
+	float: left;
+	font-size: 26px;
+	font-weight: bold;
+	color: #FFFFFF;
+	line-height: 51px;
+}
+.login{
+	padding: 50px;
+}
+.login h3{
+	font-size: 18px;
+	font-weight: bold;
+	color: #00aa83;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #00aa83;
+}
+.login ul{
+	width: 400px;
+	margin: 38px auto 0;
+}
+.login ul li{
+	margin-bottom: 15px;
+}
+.login ul li label{
+	display: inline-block;
+	vertical-align: middle;
+	width: 80px;
+	text-align: right;
+}
+.login ul li input{
+	display: inline-block;
+	vertical-align: middle;
+	width: 60%;
+	height: 42px;
+	line-height: 42px;
+	text-indent: 5px;
+	border: 1px solid #00aa83;
+	font-size: 14px;
+}
+.login ul li i{
+	font-size: 20px;
+	font-family: "å¾®è½¯é›…é»‘";
+	font-style: normal;
+	display: inline-block;
+	margin-left: 8px;
+}
+.login ul li dl dt{
+	width: 203px;
+	float: left;
+}
+.login ul li dl dd{
+	width: 118px;
+	float: left;
+}
+.login ul li dl dd img{
+	width: 118px;
+	height: 42px;
+	border: 1px solid #CCCCCC;
+	overflow: hidden;
+}
+.login .loginBtn{
+	text-align: center;
+}
+.login .loginBtn a.btn{
+	padding: 5px 40px;
+}
+.loginBtn{
+	margin-top: 35px;
+}
+.sxc-head .dataTime li dl{
+	display: inline-block;
+	vertical-align: middle;	
+}
+.sxc-head .dataTime li dl dd{
+	float: left;
+	line-height: 35px;
+	position: relative;
+}
+.sxc-head .dataTime li dl dd input{
+	margin: 0;
+	font-size: 14px;
+}
+.sxc-head .dataTime li dl dd span{
+	display: inline-block;
+	vertical-align: middle;
+	width: 30px;
+	height: 26px;
+	background:url(../images/dataTime.png) no-repeat 50% 50% #FFFFFF;
+	background-size: 70%;
+	right: 1px;
+	top: 4px;
+	position: absolute;
+	
+}
+.autoPostEdit li{
+	position: relative;
+}
+#J-xl-4-btn{
+	display: inline-block;
+	vertical-align: middle;
+	width: 35px;
+	height: 29px;
+	background:url(../images/dataTime.png) no-repeat 50% 50% #FFFFFF;
+	background-size: 70%;
+	right: 87px;
+	top: 1px;
+	position: absolute;
+}
+.editCon .datePic{
+	background: url(../images/dataTime.png) no-repeat  98% 50% #FFFFFF;
+    background-size:25px 25px ;
+    padding-right: 40PX;
+}
+.plantPicConList{
+	border: 1px solid #CCCCCC;
+	margin-top: 20px;
+	padding: 20px 70px;
+	background: #FFFFFF;
+	
+}
+.plantPicConTitle {
+	margin-bottom: 20px;
+}
+.plantPicConTitle  .clockIcon{
+	display: inline-block;
+	vertical-align: middle;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+	background: url(../images/clock.png) no-repeat;
+	background-size: 100%;
+}
+.plantPicConTitle span{
+	display: inline-block;
+	vertical-align: middle;
+	font-size:16px;
+	color: #666666;
+	border-bottom: 1px solid #00aa83;
+}
+.plantPicConTitle input{
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	vertical-align: middle;
+	margin:0 10px;
+}
+.picScroll{
+	border: 1px solid #CCCCCC;
+}
+.picScroll .slick-slide .picCon{
+	padding: 10px;
+	width: 310px;
+	margin: 10px auto;
+	background: #F2F2F2;
+}
+.picScroll .slick-slide .picCon dd img{
+	width: 260px;
+	height: 150px;
+	margin: 10px auto;
+	border: 1px solid #666666;
+}
+.picScroll .slick-slide .picCon dd  label{
+	display: inline-block;
+	vertical-align: middle;
+	width: 70px;
+	text-align: right;
+	padding-right: 10px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.picScroll .slick-slide .picCon .picBtn{
+	text-align: center;
+}
+.picScroll .slick-slide .picCon .picBtn .btn{
+	padding: 3px 10px;
+	margin-top: 15px;
+}
+.picScroll .slick-slide .picCon .picBtn a{
+	margin-right: 10px;
+}
+.picScroll .slick-slide .picCon .picBtn a.btn.btn-white{
+	border: 1px solid #00aa83;
+	color: #00aa83 !important;
+}
+.picScroll .slick-slide .picCon .picBtn button.btn.btn-white{
+	border: 1px solid #f75c5a;
+	color: #f75c5a !important;
+}
+.pagination{
+	float: right;
+}
+.setParameterList{
+	background: #FFFFFF;
+	border: 1px solid #CCCCCC;
+	margin-top: 20px;
+}
+.setParameterList .listHead{
+	padding: 7px 20px;
+	border-bottom: 1px solid #CCCCCC;
+}
+.setParameterList .listHead h3{
+	font-size: 14px;
+	display: inline-block;
+	margin-top: 5px;
+}
+.setParameterList .listHead button.btn{
+	float: right;
+	border-width: 0;
+	padding: 4px 10px;
+}
+.setParameterList .listCon{
+	padding: 20px;
+}
+.setParameterList .listCon img{
+	width: 210px;
+	height: 200px;
+	border: 1px solid #CCCCCC;
+	overflow: hidden;
+	float: left;
+	margin-right: 80px;
+}
+.setParameterList .listCon ul.listList{
+	float: left;
+	max-width: 75%;
+	
+}
+.setParameterList .listCon ul.listList li{
+	float: left;
+	margin-right: 60px;
+}
+.setParameterList .listCon ul.listList li label{
+	display: inline-block;
+	vertical-align: middle;
+	width: 110px;
+	text-align: right;
+	margin-right:3px;
+	color: #666;
+}
+.setParameterList .listCon ul.listList li input{
+	width: 140px;
+	margin-right: 5px;
+}
+.setParameterList .listCon ul.listList li span{
+	color: #999999;
+}
+.setParameterList .listCon ul.listList li dd{
+	margin-bottom: 10px;
+}
+
+.remoteDiagnosisTable table td{
+	vertical-align: middle !important;
+}
+.remoteDiagnosisTable table td img{
+	width: 120px;
+	height: 60px;
+	overflow: hidden;
+}
+.editCon ul li span.bigPicTip{
+	display: block;
+	text-align: center;
+	margin-bottom: 20px;
+}
+.bigPicTip img{
+	width: 300px;
+	height: 215px;
+	overflow: hidden;
+	border: 2px solid #CCCCCC;
+}
+.vedioCon{
+	padding: 40px 50px;
+	
+}
+.vedioCon .vedio{
+	border: 1px solid #CCCCCC;
+	width: 700px;
+	height: 460px;
+	margin-right: 20px;
+	background: #000000;
+	float: left;
+}
+.vedioCon .vedioControl{
+	margin-top: 20px;
+	width: 250px;
+	float: left;
+	margin-left: 20px;
+}
+.vedioCon .vedioControl h3{
+	font-size: 18px;
+	text-align: left;
+}
+.plusMinusBtn{
+	margin-top: 37px;
+    margin-left: 12px;
+    margin-bottom: 15px;
+}
+.vedioCon .vedioControl .controlBtn{
+	width: 190px;
+	height: 190px;
+	background: url(../images/vediobtn.png) no-repeat 50% 50%;
+	margin-top: 10px;
+	position: relative;
+	float: left;
+}
+.vedioCon .vedioControl .controlBtn span.btnSpan{
+	display: inline-block;
+	width: 54px;
+	height: 50px;
+	cursor: pointer;
+}
+.vedioCon .vedioControl .controlBtn span.btnTop {
+	position: absolute;
+	left: 68px;
+	top: 0;
+}
+.vedioCon .vedioControl .controlBtn span.btnBottom {
+	position: absolute;
+	left: 68px;
+	bottom: 0;
+}
+.vedioCon .vedioControl .controlBtn span.btnLeft {
+	position: absolute;
+	left: 0;
+	top: 74px;
+}
+.vedioCon .vedioControl .controlBtn span.btnRight {
+	position: absolute;
+	right: 0;
+	top: 74px;
+}
+.vedioCon .vedioControl .controlBtn .camera{
+	margin: 70px 0 0 36%;
+	
+}
+.vedioCon .vedioControl  button{
+	margin-left: 20px;
+}
+#user-profile-1,#user-profile-3{
+	padding: 40px 30px;
+	background: #FFFFFF;
+	margin: 0;
+}
+.profileBtn{
+	text-align: center;
+	padding: 10px 0 50px;
+}
+#user-profile-3 .form-actions{
+	background: none;
+	border-top:none
+}
+.ztreeCon{
+	width: 300px;
+	height: 600px;
+	border: 1px solid #CCCCCC;
+	margin: 30px auto;
+}
+.ztreeRight{
+	padding: 30px 0;
+}
+.ztreeRight button.btn{
+	height: 35px;
+    line-height: 32px;
+    text-shadow: none !important;
+    padding: 0 15px;
+    border-width: 0;
+}
+.ztreeRightList ol{
+	border: 1px solid #CCCCCC;
+	width: 400px;
+	padding: 20px;
+	margin-top: 30px;
+}
+.ztreeRightList ol li{
+	margin-bottom: 10px;
+}
+.ztreeRightList ol li h3{
+	font-size: 18px;
+	border-bottom: 1px solid #CCCCCC;
+	padding-bottom: 10px;
+	margin-bottom: 30px;
+	color: #666666;
+}
+.ztreeRightList label{
+	display: inline-block;
+	vertical-align: middle;
+	width: 100px;
+	text-align: right;
+	margin-right: 15px;
+}
+.ztreeRightList ol li button.btn {
+	height: 30px;
+	line-height: 30px;
+	margin-top: 10px;
+	margin-right: 10px;	
+}
+.fieldInvForm{
+	width: 350px;
+	margin: 0 auto;
+}
+.fieldInvForm ul li{
+	margin-bottom: 10px;
+}
+.fieldInvForm ul li label{
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+}
+.fieldInvForm ul li input{
+	display: inline-block;
+	margin-right: 10px;
+}
+.fieldInvForm ul li input,.fieldInvForm ul li textarea{
+	width: 200px;
+}
+.fieldInvForm ul li select{
+	width: 95px;	
+}
+.setWarnTab{
+	padding:30px;
+}
+.setWarnTab .nav-tabs>li>a,.setWarnTab .nav-tabs>li>a:focus{
+	line-height: 25px;
+	
+}
+.setWarnTab .nav-tabs>li.active>a,.setWarnTab .nav-tabs>li.active>a:hover, .setWarnTab .nav-tabs>li.active>a:focus{
+	border-top: 2px solid #009573;
+}
+.setWarnTab  .nav-tabs>li>a:hover{
+	color: #009573;
+}
+.setWarnTab .nav-tabs>li>a{
+	width: 100px;
+}
+.setWarnTab .tab-pane{
+	min-height: 400px;	
+}
+.statistical_con .widget-header h5{
+	
+}
+.statistical_con .widget-header dl{
+	display: inline-block;
+	float: right;
+    margin: 13px 20px 0 0;
+}
+.statistical_con .widget-header dl dd{
+	float: left;
+	margin-left: 15px;
+}
+.statistical_con .widget-header dl dd input.datePic{
+	background: url(../images/dataTime.png) no-repeat 98% 50% #FFFFFF;
+    background-size: 25px 25px;
+    padding-right: 40PX;
+}
+.statistical_con .widget-body .widget-main{
+	padding: 40px 20px 20px;
+}
+#piechart-placeholder{
+	margin-bottom: 20px;
+}
+.zxfz_footer{
+	    border-top: 1px solid #e5e5e5;
+	    padding: 0 20px;
+}
+.zxfz_footer dt{
+	font-size: 12px;
+	font-weight: normal !important;
+	line-height: 30px;
+	float: left;
+	color: #666666;
+	width: 45%;
+}
+.zxfz_footer  dd{
+	font-size: 12px;
+	float: right;
+	margin-top: 6px;
+}
+.zxfz_footer  dd a{
+	display: inline-block;
+	color: #666666;
+	padding: 0 8px;
+	border-right: 1px solid #CCCCCC;
+	text-decoration: none;
+}
+.zxfz_footer  dd a.iconImg{
+	border-right: 0;
+	padding: 0 0 0 8px;	
+}
+.zxfz_footer  dd a.iconImg i{
+	font-size: 16px;
+	
+}
+p.error,p.valid{ display:block; font-size:14px; padding-left:20px; margin-left:120px;}
+p.error {
+	background: url(../images/error.png) left center no-repeat;
+	color: red;
+}
+
+p.valid {
+	background: url(../images/ok.png) left center  no-repeat;
+	color: black;
+}
+
+
+.weixin{ float:left; position:relative; font-size:12px; text-align:center;}
+ /*×¢ÊÍ´ò¿ªÃ÷°µÐ§¹ûÌæ»»  ÏÂÃæÌæµô*/
+.weixin .weixin_nr{box-shadow:0 0 1px #444 inset; border-radius: 5px; width:120px; height:140px; padding:10px; background:#fff; text-align:center; position:absolute; left:-45px; top:-152px; display:none;}
+.weixin .weixin_nr img{ margin-bottom:5px;}
+.weixin .weixin_nr .arrow{ width:0; height:0; border-top:10px solid #fff;border-left:10px solid transparent;border-right:10px solid transparent; position:absolute; left:50px; top:140px;}
+.weixin.on .weixin_nr{ display:block;}
+
+.menu-min .avatar{
+	display:none;
+}

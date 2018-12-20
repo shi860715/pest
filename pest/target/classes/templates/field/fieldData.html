@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>数据统计--生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<style type="text/css">
+			#J-xl-2-btn{
+				display: inline-block;
+			    vertical-align: middle;
+			    width: 35px;
+			    height: 33px;
+			    background: url(../images/dataTime.png) no-repeat 50% 50% #FFFFFF;
+			    background-size: 70%;
+			    right: 118px;
+			    top: 176px;
+			    position: absolute;
+			}
+		</style>
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">野外调查</li>
+							<li class="active">数据统计</li>
+						</ul><!-- .breadcrumb -->
+
+						
+					</div>
+
+					<div class="page-content">
+						
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="sxc-head">
+                                		<h3>数据统计</h3>
+                                	</div>
+                                	<div class="tabbable setWarnTab">
+											<ul class="nav nav-tabs" id="myTab">
+												<li class="active">
+													<a data-toggle="tab" href="#step">
+														<i class="icon-bookmark  bigger-110"></i>
+														踏查
+													</a>
+												</li>
+												<li>
+													<a data-toggle="tab" href="#standard">
+														<i class="icon-bookmark  bigger-110"></i>
+														标准地
+													</a>
+												</li>
+												<li>
+													<a data-toggle="tab" href="#trapped">
+														<i class="icon-bookmark  bigger-110"></i>
+														诱捕
+													</a>
+												</li>
+												<li>
+													<a data-toggle="tab" href="#nursery" style="width:105px">
+														<i class="icon-bookmark  bigger-110"></i>
+														苗圃花木
+													</a>
+												</li>
+												<li>
+													<a data-toggle="tab" href="#fruit" style="width:105px">
+														<i class="icon-bookmark  bigger-110"></i>
+														种果花木
+													</a>
+												</li>
+											</ul>
+											
+											<div class="tab-content">
+												<div id="step" class="tab-pane in active">
+													<div class="sxc-head demoTable">
+				                                		<ol class="clearfix dataTime">
+				                                			<li>
+				                                				<label>调查时间:</label>
+				                                				<dl>
+				                                					<dd><input id="J-xl-1" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});"></dd>
+				                                				</dl>
+				                                				
+				                                			</li>
+				                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch1">搜索</button></li>
+				                                			<li>
+				                                				<button class="btn btn-primary layui-btn" data-type="exportData1" shiro:hasPermission="/fieldPage/exportStepInvestigations">
+																	<i class="icon-cloud-upload bigger-150"></i>导出数据
+															    </button>
+				                                			</li>                     
+				                                		</ol>
+				                                	</div>
+                                	
+				                                	<div class="table-responsive">
+				                                		<table class="layui-table" id="stepList" lay-data="{url:'/fieldPage/findStepDataPage', page:true,limit:10,even: true, id:'idTest1'}" lay-filter="stepList">
+														  <thead>
+														    <tr>
+														      <th lay-data="{field:'images', align:'center', width:80, templet:'#fmtImages'}">照片</th>
+														      <th lay-data="{field:'name', width:150, sort: true}">踏查点名称</th>
+														      <th lay-data="{field:'lon', width:150, sort: true}">经度</th>
+														      <th lay-data="{field:'lat', width:150, sort: true}">纬度</th>
+														      <th lay-data="{field:'altitude', width:150, sort: true}">海拔（单位：m）</th>
+														      <th lay-data="{field:'constituent', width:150, sort: true}">林分组成</th>
+														      <th lay-data="{field:'pest', width:150, sort: true}">有害生物名称或标本编号</th>
+														      <th lay-data="{field:'hostPlant', width:150, sort: true}">寄主植物名称</th>
+														      <th lay-data="{field:'harmPart', width:150, sort: true}">危害部位</th>
+														      <th lay-data="{field:'harmDegree', width:150, sort: true, templet:'#fmtHarmDegree'}">发生（危害）程度</th>
+														      <th lay-data="{field:'insectStatus', width:100, sort: true, templet:'#fmtInsectStatus'}">虫态</th>
+														      <th lay-data="{field:'isSetStandard', width:150, templet:'#fmtIsSetStandard'}">是否需要设置标准地</th>
+														      <th lay-data="{field:'standardCode', width:150, sort: true}">标准地编号</th>
+														      <th lay-data="{field:'remark', width:150, sort: true}">备注</th>
+														      <th lay-data="{field:'fieldName', width:150, sort: true}">野外调查名称</th>
+														      <th lay-data="{field:'districtName', width:150, sort: true}">县名称</th>
+														      <th lay-data="{field:'districtCode', width:150, sort: true}">县代码</th>
+														      <th lay-data="{field:'townshipName', width:150, sort: true}">乡镇名称</th>
+														      <th lay-data="{field:'townshipCode', width:150, sort: true}">乡镇代码</th>
+														      <th lay-data="{field:'number', width:150, sort: true}">踏查路线编号</th>
+														      <th lay-data="{field:'acreage', width:150, sort: true}">踏查面积</th>
+														      <th lay-data="{field:'investigator', width:150, sort: true}">调查人</th>
+														      <th lay-data="{field:'companion', width:150, sort: true}">陪同人员</th>
+														      <th lay-data="{field:'surveyTime', width:150, sort: true,templet:'#fmtSurveyTime'}">调查时间</th>
+														    </tr>
+														  </thead>
+														</table>
+													</div>
+                                				</div>
+                                				
+                                				<div id="standard" class="tab-pane">
+                                					<div class="sxc-head demoTable">
+				                                		<ol class="clearfix dataTime">
+				                                			<li>
+				                                				<label>调查时间:</label>
+				                                				<dl>
+				                                					<dd><input id="J-xl-2" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});"></dd>
+				                                				</dl>
+				                                				
+				                                			</li>
+				                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch2">搜索</button></li>
+				                                			<li>
+				                                				<button class="btn btn-primary layui-btn" data-type="exportData2" shiro:hasPermission="/fieldPage/exportStandardSurveys">
+																	<i class="icon-cloud-upload bigger-150"></i>导出数据
+															    </button>
+				                                			</li>                     
+				                                		</ol>
+				                                	</div>
+                                	
+				                                	<div class="table-responsive">
+				                                		<table class="layui-table" id="standardList" lay-data="{url:'/fieldPage/findStandardDataPage', page:true,limit:10,even: true, id:'idTest2'}" lay-filter="standardList">
+														  <thead>
+														    <tr>
+														      <th lay-data="{field:'images', width:120, templet:'#fmtImages'}">照片</th>
+														      <th lay-data="{field:'pest', width:150, sort: true}">有害生物种类</th>
+														      <th lay-data="{field:'hostPlant', width:150, sort: true}">寄主植物</th>
+														      <th lay-data="{field:'harmPart', width:150, sort: true}">危害部位</th>
+														      <th lay-data="{field:'victimsRate', width:150, sort: true}">受害株率（单位：%）</th>
+														      <th lay-data="{field:'harmDegree', width:150,templet:'#fmtHarmDegree'}">发生（危害）程度</th>
+														      <th lay-data="{field:'insectStatus', width:100, sort: true, templet:'#fmtInsectStatus'}">虫态</th>
+														      <th lay-data="{field:'isDisaster', width:150,templet:'#fmtIsDisaster'}">是否成灾</th>
+														      <th lay-data="{field:'remark', width:150, sort: true}">备注</th>
+														      <th lay-data="{field:'fieldName', width:150, sort: true}">野外调查名称</th>
+														      <th lay-data="{field:'districtName', width:150, sort: true}">县名称</th>
+														      <th lay-data="{field:'districtCode', width:150, sort: true}">县代码</th>
+														      <th lay-data="{field:'townshipName', width:150, sort: true}">乡镇名称</th>
+														      <th lay-data="{field:'townshipCode', width:150, sort: true}">乡镇代码</th>
+														      <th lay-data="{field:'placeName', width:150, sort: true}">场所名称</th>
+														      <th lay-data="{field:'number', width:150, sort: true}">标准地编号</th>
+														      <th lay-data="{field:'acreage', width:150, sort: true}">标准地面积（单位：亩）</th>
+														      <th lay-data="{field:'currentClass', width:150, sort: true}">所在小班</th>
+														      <th lay-data="{field:'deputyAcreage', width:150, sort: true}">代表面积（单位：亩）</th>
+														      <th lay-data="{field:'lon', width:150, sort: true}">经度</th>
+														      <th lay-data="{field:'lat', width:150, sort: true}">纬度</th>
+														      <th lay-data="{field:'altitude', width:150, sort: true}">海拔（单位：m）</th>
+														      <th lay-data="{field:'investigator', width:150, sort: true}">调查人</th>
+														      <th lay-data="{field:'companion', width:150, sort: true}">陪同人员</th>
+														      <th lay-data="{field:'surveyTime', width:150, sort: true,templet:'#fmtSurveyTime'}">调查时间</th>
+														    </tr>
+														  </thead>
+														</table>
+													</div>
+                                				</div>
+                                				
+                                				<div id="trapped" class="tab-pane">
+                                					<div class="sxc-head demoTable">
+				                                		<ol class="clearfix dataTime">
+				                                			<li>
+				                                				<label>调查时间:</label>
+				                                				<dl>
+				                                					<dd><input id="J-xl-3" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});"></dd>
+				                                				</dl>
+				                                				
+				                                			</li>
+				                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch3">搜索</button></li>
+				                                			<li>
+				                                				<button class="btn btn-primary layui-btn" data-type="exportData3" shiro:hasPermission="/fieldPage/exportTrappedSurveys">
+																	<i class="icon-cloud-upload bigger-150"></i>导出数据
+															    </button>
+				                                			</li>                     
+				                                		</ol>
+				                                	</div>
+                                	
+				                                	<div class="table-responsive">
+				                                		<table class="layui-table" id="trappedList" lay-data="{url:'/fieldPage/findTrappedDataPage', page:true,limit:10,even: true, id:'idTest3'}" lay-filter="trappedList">
+														  <thead>
+														    <tr>
+														      <th lay-data="{field:'images', width:120, templet:'#fmtImages'}">照片</th>
+														      <th lay-data="{field:'insectName', width:150, sort: true}">昆虫名称</th>
+														      <th lay-data="{field:'insectStatus', width:100, sort: true, templet:'#fmtInsectStatus'}">虫态</th>
+														      <th lay-data="{field:'totalCount', width:150, sort: true}">合计诱虫数量（单位：头）</th>
+														      <th lay-data="{field:'femaleCount', width:150, sort: true}">雌虫数量（单位：头）</th>
+														      <th lay-data="{field:'maleCount', width:150, sort: true}">雄虫数量（单位：头）</th>
+														      <th lay-data="{field:'harmDegree', width:150, sort: true, templet:'#fmtHarmDegree'}">发生（危害）程度</th>
+														      <th lay-data="{field:'remark', width:150, sort: true}">备注</th>
+														      <th lay-data="{field:'fieldName', width:150, sort: true}">野外调查名称</th>
+														      <th lay-data="{field:'districtName', width:150, sort: true}">县名称</th>
+														      <th lay-data="{field:'districtCode', width:150, sort: true}">县代码</th>
+														      <th lay-data="{field:'townshipName', width:150, sort: true}">乡镇名称</th>
+														      <th lay-data="{field:'townshipCode', width:150, sort: true}">乡镇代码</th>
+														      <th lay-data="{field:'currentClass', width:150, sort: true}">所在小班</th>
+														      <th lay-data="{field:'number', width:150, sort: true}">诱虫灯（引诱剂）编号</th>
+														      <th lay-data="{field:'acreage', width:150, sort: true}">林分面积（单位：亩）</th>
+														      <th lay-data="{field:'standsType', width:150, sort: true}">林分类型</th>
+														      <th lay-data="{field:'mainSpecies', width:150, sort: true}">主要树种</th>
+														      <th lay-data="{field:'lon', width:150, sort: true}">经度</th>
+														      <th lay-data="{field:'lat', width:150, sort: true}">纬度</th>
+														      <th lay-data="{field:'altitude', width:150, sort: true}">海拔（单位：m）</th>
+														      <th lay-data="{field:'investigator', width:150, sort: true}">调查人</th>
+														      <th lay-data="{field:'companion', width:150, sort: true}">陪同人员</th>
+														      <th lay-data="{field:'surveyTime', width:150, sort: true,templet:'#fmtSurveyTime'}">调查时间</th>
+														    </tr>
+														  </thead>
+														</table>
+													</div>
+                                				</div>
+                                				
+                                				<div id="nursery" class="tab-pane">
+                                					<div class="sxc-head demoTable">
+				                                		<ol class="clearfix dataTime">
+				                                			<li>
+				                                				<label>调查时间:</label>
+				                                				<dl>
+				                                					<dd><input id="J-xl-4" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});"></dd>
+				                                				</dl>
+				                                				
+				                                			</li>
+				                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch4">搜索</button></li>
+				                                			<li>
+				                                				<button class="btn btn-primary layui-btn" data-type="exportData4" shiro:hasPermission="/fieldPage/exportNurserySurveys">
+																	<i class="icon-cloud-upload bigger-150"></i>导出数据
+															    </button>
+				                                			</li>                     
+				                                		</ol>
+				                                	</div>
+                                	
+				                                	<div class="table-responsive">
+				                                		<table class="layui-table" id="nurseryList" lay-data="{url:'/fieldPage/findNurseryDataPage', page:true,limit:10,even: true, id:'idTest4'}" lay-filter="nurseryList">
+														  <thead>
+														    <tr>
+														      <th lay-data="{field:'images', width:120, templet:'#fmtImages'}">照片</th>
+														      <th lay-data="{field:'pest', width:150, sort: true}">有害生物种类</th>
+														      <th lay-data="{field:'hostPlant', width:150, sort: true}">寄主植物</th>
+														      <th lay-data="{field:'harmPart', width:150, sort: true}">危害部位</th>
+														      <th lay-data="{field:'victimsRate', width:150, sort: true}">受害株率（单位：%）</th>
+														      <th lay-data="{field:'harmDegree', width:150,templet:'#fmtHarmDegree'}">发生（危害）程度</th>
+														      <th lay-data="{field:'insectStatus', width:100, sort: true, templet:'#fmtInsectStatus'}">虫态</th>
+														      <th lay-data="{field:'isDisaster', width:150,templet:'#fmtIsDisaster'}">是否成灾</th>
+														      <th lay-data="{field:'remark', width:150, sort: true}">备注</th>
+														      <th lay-data="{field:'cardNumber', width:150, sort: true}">调查卡编号</th>
+														      <th lay-data="{field:'fieldName', width:150, sort: true}">野外调查名称</th>
+														      <th lay-data="{field:'districtName', width:150, sort: true}">县名称</th>
+														      <th lay-data="{field:'districtCode', width:150, sort: true}">县代码</th>
+														      <th lay-data="{field:'townshipName', width:150, sort: true}">乡镇名称</th>
+														      <th lay-data="{field:'townshipCode', width:150, sort: true}">乡镇代码</th>
+														      <th lay-data="{field:'placeName', width:150, sort: true}">场所名称</th>
+														      <th lay-data="{field:'acreage', width:150, sort: true}">苗圃面积（单位：亩）</th>
+														      <th lay-data="{field:'lon', width:150, sort: true}">经度</th>
+														      <th lay-data="{field:'lat', width:150, sort: true}">纬度</th>
+														      <th lay-data="{field:'altitude', width:150, sort: true}">海拔（单位：m）</th>
+														      <th lay-data="{field:'investigator', width:150, sort: true}">调查人</th>
+														      <th lay-data="{field:'companion', width:150, sort: true}">陪同人员</th>
+														      <th lay-data="{field:'surveyTime', width:150, sort: true,templet:'#fmtSurveyTime'}">调查日期</th>
+														    </tr>
+														  </thead>
+														</table>
+													</div>
+                                				</div>
+                                				
+                                				<div id="fruit" class="tab-pane">
+                                					<div class="sxc-head demoTable">
+				                                		<ol class="clearfix dataTime">
+				                                			<li>
+				                                				<label>调查时间:</label>
+				                                				<dl>
+				                                					<dd><input id="J-xl-5" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});"></dd>
+				                                				</dl>
+				                                				
+				                                			</li>
+				                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch5">搜索</button></li>
+				                                			<li>
+				                                				<button class="btn btn-primary layui-btn" data-type="exportData5" shiro:hasPermission="/fieldPage/exportFruitSurveys">
+																	<i class="icon-cloud-upload bigger-150"></i>导出数据
+															    </button>
+				                                			</li>                     
+				                                		</ol>
+				                                	</div>
+                                	
+				                                	<div class="table-responsive">
+				                                		<table class="layui-table" id="fruitList" lay-data="{url:'/fieldPage/findFruitDataPage', page:true,limit:10,even: true, id:'idTest5'}" lay-filter="fruitList">
+														  <thead>
+														    <tr>
+														      <th lay-data="{field:'images', width:120, align:'center', templet:'#fmtImages'}">照片</th>
+														      <th lay-data="{field:'pest', width:150, sort: true}">有害生物种类</th>
+														      <th lay-data="{field:'hostPlant', width:150, sort: true}">寄主植物</th>
+														      <th lay-data="{field:'hostType', width:150, sort: true}">寄主类型</th>
+														      <th lay-data="{field:'harmCount', width:150, sort: true}">危害数量（m³，件，张，kg，株等）</th>
+														      <th lay-data="{field:'deputyCount', width:150, sort: true}">代表数量（m³，件，张，kg，株等）</th>
+														      <th lay-data="{field:'harmDegree', width:150,templet:'#fmtHarmDegree'}">发生（危害）程度</th>
+														      <th lay-data="{field:'insectStatus', width:100, sort: true, templet:'#fmtInsectStatus'}">虫态</th>
+														      <th lay-data="{field:'remark', width:150, sort: true}">备注</th>
+														      <th lay-data="{field:'fieldName', width:150, sort: true}">野外调查名称</th>
+														      <th lay-data="{field:'districtName', width:150, sort: true}">县名称</th>
+														      <th lay-data="{field:'districtCode', width:150, sort: true}">县代码</th>
+														      <th lay-data="{field:'townshipName', width:150, sort: true}">乡镇名称</th>
+														      <th lay-data="{field:'townshipCode', width:150, sort: true}">乡镇代码</th>
+														      <th lay-data="{field:'placeName', width:150, sort: true}">场所名称</th>
+														      <th lay-data="{field:'stock', width:150, sort: true}">库存</th>
+														      <th lay-data="{field:'stockUnit', width:150, sort: true}">库存单位（m³，件，张，kg，株等）</th>
+														      <th lay-data="{field:'sampleNumber', width:150, sort: true}">抽样数量</th>
+														      <th lay-data="{field:'sampleNumberUnit', width:150, sort: true}">抽样数量单位（m³，件，张，kg，株等）</th>
+														      <th lay-data="{field:'lon', width:150, sort: true}">经度</th>
+														      <th lay-data="{field:'lat', width:150, sort: true}">纬度</th>
+														      <th lay-data="{field:'altitude', width:150, sort: true}">海拔（单位：m）</th>
+														      <th lay-data="{field:'investigator', width:150, sort: true}">调查人</th>
+														      <th lay-data="{field:'companion', width:150, sort: true}">陪同人员</th>
+														      <th lay-data="{field:'surveyTime', width:150, sort: true,templet:'#fmtSurveyTime'}">调查日期</th>
+														    </tr>
+														  </thead>
+														</table>
+													</div>
+                                				</div>
+                                			</div>
+                                		</div>
+                                </div>
+							</div>
+						</div>
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+
+		<form id="exportForm" action="" method="post">
+			<input type="hidden" name="time" id="time">
+			<input type="hidden" name="columns" id="columns">
+			<input type="hidden" name="columnsName" id="columnsName">
+		</form>
+		<div id="viewDiv" style="display:none;">
+			<form id="formTemp1">
+				<div class="editCon">
+				</div>
+			</form>
+		</div>
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+        
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+
+		<!-- ace scripts -->
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		
+		<script type="text/html" id="fmtImages">
+			{{#  if(d.images){ }}
+				<a class="blue" onclick="showPic('{{d.images}}')" title="查看照片" href="javascript:void(0);"><i class="icon-picture bigger-150"></i></a>
+			{{#  } else { }}
+				无
+			{{#  } }}
+		</script>
+		
+		<script type="text/html" id="fmtSurveyTime">
+			{{# return DateUtil.stamp4Time(d.surveyTime) }}
+		</script>
+
+		<!-- inline scripts related to this page -->
+		<script type="text/html" id="fmtIsSetStandard">
+			{{#  if(d.isSetStandard === 1){ }}
+    			是
+  			{{#  } else { }}
+    			否
+			{{#  } }}
+		</script>
+
+		<script type="text/html" id="fmtHarmDegree">
+			{{#  if(d.harmDegree === 1){ }}
+    			轻度以下
+			{{#  } else if(d.harmDegree === 2){ }}
+    			轻
+			{{#  } else if(d.harmDegree === 3){ }}
+    			中
+  			{{#  } else if(d.harmDegree === 4){ }}
+    			重
+			{{#  } }}
+		</script>
+		
+		<script type="text/html" id="fmtInsectStatus">
+			{{#  if(d.insectStatus === 1){ }}
+    			成虫
+			{{#  } else if(d.insectStatus === 2){ }}
+    			卵
+			{{#  } else if(d.insectStatus === 3){ }}
+    			幼虫
+			{{#  } else if(d.insectStatus === 4){ }}
+    			若虫
+  			{{#  } else if(d.insectStatus === 5){ }}
+    			蛹
+			{{#  } }}
+		</script>
+		
+		<script type="text/html" id="fmtIsDisaster">
+			{{#  if(d.isDisaster === 1){ }}
+    			是
+  			{{#  } else { }}
+    			否
+			{{#  } }}
+		</script>
+
+		<!-- inline scripts related to this page -->
+		
+		<script type="text/javascript">
+			layui.use('table', function(){
+			  var table = layui.table;
+			  var $ = layui.$, active = {
+					  exportData1: function(){
+							var columns = "name,lon,lat,altitude,constituent,pest,hostPlant,harmPart,harmDegree,insectStatus,isSetStandard,standardCode,remark,fieldName,districtName,districtCode,townshipName,townshipCode,number,acreage,investigator,companion,surveyTime";
+							var columnsName = "踏查点名称,经度,纬度,海拔（单位：m）,林分组成,有害生物名称或标本编号,寄主植物名称,危害部位,发生（危害）程度,虫态,是否需要设置标准地,标准地编号,备注,野外调查名称,县名称,县代码,乡镇名称,乡镇代码,踏查路线编号,踏查面积,调查人,陪同人员,调查时间";
+							
+							if($("#J-xl-1").val()){
+								$("#time").val($("#J-xl-1").val()+" 00:00:00");
+							}
+					    	$("#columns").val(columns);
+					    	$("#columnsName").val(columnsName);
+					    	$("#exportForm").attr('action',"fieldPage/exportStepInvestigations"); 
+					    	$("#exportForm").submit();
+					  },
+					  exportData2: function(){
+						  	var columns = "pest,hostPlant,harmPart,victimsRate,harmDegree,insectStatus,isDisaster,remark,fieldName,districtName,districtCode,townshipName,townshipCode,placeName,number,acreage,currentClass,deputyAcreage,lon,lat,altitude,investigator,companion,surveyTime";
+							var columnsName = "有害生物种类,寄主植物,危害部位,受害株率（单位：%）,发生（危害）程度,虫态,是否成灾,备注,野外调查名称,县名称,县代码,乡镇名称,乡镇代码,场所名称,标准地编号,标准地面积（单位：亩）,所在小班,代表面积（单位：亩）,经度,纬度,海拔（单位：m）,调查人,陪同人员,调查时间";
+							
+							if($("#J-xl-2").val()){
+								$("#time").val($("#J-xl-2").val()+" 00:00:00");
+							}
+					    	$("#columns").val(columns);
+					    	$("#columnsName").val(columnsName);
+					    	$("#exportForm").attr('action',"fieldPage/exportStandardSurveys"); 
+					    	$("#exportForm").submit();
+					  },
+					  exportData3: function(){
+						  	var columns = "insectName,insectStatus,totalCount,femaleCount,maleCount,harmDegree,remark,fieldName,districtName,districtCode,townshipName,townshipCode,currentClass,number,acreage,standsType,mainSpecies,lon,lat,altitude,investigator,companion,surveyTime";
+							var columnsName = "昆虫名称,虫态,合计诱虫数量（单位：头）,雌虫数量（单位：头）,雄虫数量（单位：头）,发生（危害）程度,备注,野外调查名称,县名称,县代码,乡镇名称,乡镇代码,所在小班,诱虫灯（引诱剂）编号,林分面积（单位：亩）,林分类型,主要树种,经度,纬度,海拔（单位：m）,调查人,陪同人员,调查时间";
+							
+							if($("#J-xl-3").val()){
+								$("#time").val($("#J-xl-3").val()+" 00:00:00");
+							}
+					    	$("#columns").val(columns);
+					    	$("#columnsName").val(columnsName);
+					    	$("#exportForm").attr('action',"fieldPage/exportTrappedSurveys"); 
+					    	$("#exportForm").submit();
+					  },
+					  exportData4: function(){
+						  	var columns = "pest,hostPlant,harmPart,victimsRate,harmDegree,insectStatus,isDisaster,remark,cardNumber,fieldName,districtName,districtCode,townshipName,townshipCode,placeName,acreage,lon,lat,altitude,investigator,companion,surveyTime";
+							var columnsName = "有害生物种类,寄主植物,危害部位,受害株率（单位：%）,发生（危害）程度,虫态,是否成灾,备注,调查卡编号,野外调查名称,县名称,县代码,乡镇名称,乡镇代码,场所名称,苗圃面积（单位：亩）,经度,纬度,海拔（单位：m）,调查人,陪同人员,调查日期";
+							
+							if($("#J-xl-4").val()){
+								$("#time").val($("#J-xl-4").val()+" 00:00:00");
+							}
+					    	$("#columns").val(columns);
+					    	$("#columnsName").val(columnsName);
+					    	$("#exportForm").attr('action',"fieldPage/exportNurserySurveys"); 
+					    	$("#exportForm").submit();
+					  },
+					  exportData5: function(){
+						  	var columns = "pest,hostPlant,hostType,harmCount,deputyCount,harmDegree,insectStatus,remark,fieldName,districtName,districtCode,townshipName,townshipCode,placeName,stock,stockUnit,sampleNumber,sampleNumberUnit,lon,lat,altitude,investigator,companion,surveyTime";
+							var columnsName = "有害生物种类,寄主植物,寄主类型,危害数量（m³，件，张，kg，株等）,代表数量（m³，件，张，kg，株等）,发生（危害）程度,虫态,备注,野外调查名称,县名称,县代码,乡镇名称,乡镇代码,场所名称,库存,库存单位（m³，件，张，kg，株等）,抽样数量,抽样数量单位（m³，件，张，kg，株等）,经度,纬度,海拔（单位：m）,调查人,陪同人员,调查日期";
+							
+							if($("#J-xl-5").val()){
+								$("#time").val($("#J-xl-5").val()+" 00:00:00");
+							}
+					    	$("#columns").val(columns);
+					    	$("#columnsName").val(columnsName);
+					    	$("#exportForm").attr('action',"fieldPage/exportFruitSurveys"); 
+					    	$("#exportForm").submit();
+					  },
+					  doSearch1: function(){
+						  if($("#J-xl-1").val()){
+							  table.reload('idTest1', {
+									page:{
+										curr:1
+									},
+					            	where: { //设定异步数据接口的额外参数
+					            		"surveyTime":($("#J-xl-1").val()+" 00:00:00")
+					            	}
+								}); 
+						  }
+						  else{
+							  table.reload('idTest1', {
+									page:{
+										curr:1
+									}
+								}); 
+						  }
+				    	},
+				    	doSearch2: function(){
+						  if($("#J-xl-2").val()){
+							  table.reload('idTest2', {
+									page:{
+										curr:1
+									},
+					            	where: { //设定异步数据接口的额外参数
+					            		"surveyTime":($("#J-xl-2").val()+" 00:00:00")
+					            	}
+								}); 
+						  }
+						  else{
+							  table.reload('idTest2', {
+									page:{
+										curr:1
+									}
+								}); 
+						  }
+				    	},
+				    	doSearch3: function(){
+						  if($("#J-xl-3").val()){
+							  table.reload('idTest3', {
+									page:{
+										curr:1
+									},
+					            	where: { //设定异步数据接口的额外参数
+					            		"surveyTime":($("#J-xl-3").val()+" 00:00:00")
+					            	}
+								}); 
+						  }
+						  else{
+							  table.reload('idTest3', {
+									page:{
+										curr:1
+									}
+								}); 
+						  }
+				    	},
+				    	doSearch4: function(){
+						  	if($("#J-xl-4").val()){
+							  table.reload('idTest4', {
+									page:{
+										curr:1
+									},
+					            	where: { //设定异步数据接口的额外参数
+					            		"surveyTime":($("#J-xl-4").val()+" 00:00:00")
+					            	}
+								}); 
+						  }
+						  else{
+							  table.reload('idTest4', {
+									page:{
+										curr:1
+									}
+								}); 
+						  }
+				    	},
+				    	doSearch5: function(){
+						  if($("#J-xl-5").val()){
+							  table.reload('idTest5', {
+									page:{
+										curr:1
+									},
+					            	where: { //设定异步数据接口的额外参数
+					            		"surveyTime":($("#J-xl-5").val()+" 00:00:00")
+					            	}
+								}); 
+						  }
+						  else{
+							  table.reload('idTest5', {
+									page:{
+										curr:1
+									}
+								}); 
+						  }
+				    	}
+				  	};
+			  
+			  $('.demoTable .layui-btn').on('click', function(){
+			    var type = $(this).data('type');
+			    active[type] ? active[type].call(this) : '';
+			  });
+			  
+			  
+			});
+		
+			jQuery(function($) {
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+				
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+			});
+			
+			function showPic(path){
+				layer.open({
+					  title: '查看照片'
+					  ,content: $("#viewDiv").html().replace('formTemp1','viewForm'),
+					  area:['600px','450px'],
+					  success:function(){
+						  
+						  var imgStr = '';
+						  var pathArr = path.split(",");
+						  for(var i=0;i<pathArr.length;i++){
+							
+							imgStr += '<img src="'+pathArr[i]+'" style="width:500px; height:300px;margin:5px;">'
+						  }
+						  $("#viewForm .editCon").html(imgStr);
+						  
+					  },
+					  btn:['关闭']
+					  ,yes: function(){
+						  layer.closeAll(); 
+					  },
+					  btnAlign: 'c'
+					});
+			}
+		</script>
+	</body>
+</html>
+

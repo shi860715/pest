@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>调查记录--生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+
+		<link  rel="stylesheet" th:href="@{/css/jquery.editable-select.css}"/>
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+		
+		<style type="text/css">
+		.editable-select{
+				width: 266px !important;
+			}
+		</style>
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">野外调查</li>
+							<li class="active">调查记录</li>
+						</ul><!-- .breadcrumb -->
+						
+					</div>
+
+					<div class="page-content">
+						
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="sxc-head sxc-subhead clearfix demoTable">
+										<ol class="clearfix manyBtncon">
+											<li><label>野外调查名称:</label><input type="text" id="name" placeholder="野外调查名称"/></li>
+                                			<li><label>野外调查类型:</label>
+                                				<select id="type">
+                                					<option value="">请选择调查类型</option>
+													<option value="1">踏查</option>
+													<option value="2">标准地</option>
+													<option value="3">诱捕</option>
+													<option value="4">苗圃花木</option>
+													<option value="5">种果花木</option>
+												</select>
+											</li>
+                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch">搜索</button></li>
+										</ol>
+										<ol class="clearfix searchCon" style="float: right;">
+											<li>
+                                				<button class="btn btn-primary layui-btn" data-type="openAdd" shiro:hasPermission="/fieldPage/addFieldSurvey"> 
+													<i class="addIcon"></i> 添加
+											    </button>
+                                			</li>
+                                			<li>
+                                				<button class="btn btn-danger layui-btn" data-type="delSelect" shiro:hasPermission="/fieldPage/deleteFieldSurvey">
+													<i class="icon-trash bigger-120"></i>删除
+											    </button>
+                                			</li>		
+										</ol>
+									</div>
+                                	
+                                	<div class="table-responsive">
+                                		<table class="layui-table" id="fieldInvestigateList" lay-data="{url:'/fieldPage/findPage', page:true,limit:10,even: true, id:'idTest'}" lay-filter="fieldInvestigateList">
+										  <thead>
+										    <tr>
+										      <th lay-data="{checkbox:true, fixed: true}"></th>
+										      <th lay-data="{field:'name', width:150, sort: true}">野外调查名称</th>
+										      <th lay-data="{field:'districtName', width:100}">县名称</th>
+										      <th lay-data="{field:'districtCode', width:100, sort: true}">县代码</th>
+										      <th lay-data="{field:'townshipName', width:100}">乡镇名称</th>
+										      <th lay-data="{field:'townshipCode', width:100, sort: true}">乡镇代码</th>
+										      <th lay-data="{field:'placeName', width:100, align:'center', sort: true, templet: '#fmtPlaceName'}">场所名称</th>
+										      <th lay-data="{field:'type', width:100, templet: '#fmtType'}">调查类型</th>
+										      <th lay-data="{field:'number', width:100, align:'center', sort: true, templet: '#fmtNumber'}">编号</th>
+										      <th lay-data="{field:'acreage', width:180, align:'center', templet: '#fmtAcreage'}">调查面积（单位：亩）</th>
+										      <th lay-data="{field:'deputyAcreage', width:180, align:'center', templet: '#fmtDeputyAcreage'}">代表面积（单位：亩）</th>
+										      <th lay-data="{field:'currentClass', width:100, align:'center', templet: '#fmtCurrentClass'}">所在小班</th>
+										      <th lay-data="{field:'lon', width:100, sort: true, align:'center', templet: '#fmtLon'}">经度</th>
+										      <th lay-data="{field:'lat', width:100, sort: true, align:'center', templet: '#fmtLat'}">纬度</th>
+										      <th lay-data="{field:'altitude', width:150, align:'center', templet: '#fmtAltitude'}">海拔（单位：m）</th>
+										      <th lay-data="{field:'standType', width:100, align:'center', templet: '#fmtStandType'}">林分类型</th>
+										      <th lay-data="{field:'mainSpecies', width:100, align:'center', templet: '#fmtMainSpecies'}">主要树种</th>
+										      <th lay-data="{field:'investigator', width:100}">调查人员</th>
+										      <th lay-data="{field:'companion', width:100}">陪同人员</th>
+										      <th lay-data="{field:'surveyTime', width:120, sort: true, templet: '#fmtSurveyTime'}">调查时间</th>
+										      <th lay-data="{field:'stock', width:200, align:'center', templet: '#fmtStock'}">库存</th>
+										      <th lay-data="{field:'stockUnit', width:200, align:'center', templet: '#fmtStockUnit'}">库存单位（m³，件，张，kg，株等）</th>
+										      <th lay-data="{field:'sampleNumber', width:200, align:'center', templet: '#fmtSampleNumber'}">抽样数量</th>
+										      <th lay-data="{field:'sampleNumberUnit', width:200, align:'center', templet: '#fmtSampleNumberUnit'}">抽样数量单位（m³，件，张，kg，株等）</th>
+										      <th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}">操作</th>
+										    </tr>
+										  </thead>
+										</table>
+									</div>
+                                </div>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+		<script th:src="@{/js/jquery.editable-select.js}" ></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+				<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}" charset="utf-8"></script>
+
+		<!-- inline scripts related to this page -->
+		<script type="text/html" id="fmtPlaceName">
+			{{#  if(d.placeName == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.placeName }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtNumber">
+			{{#  if(d.number == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.number }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtAcreage">
+			{{#  if(d.acreage == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.acreage }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtDeputyAcreage">
+			{{#  if(d.deputyAcreage == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.deputyAcreage }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtCurrentClass">
+			{{#  if(d.currentClass == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.currentClass }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtLon">
+			{{#  if(d.lon == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.lon }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtLat">
+			{{#  if(d.lat == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.lat }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtAltitude">
+			{{#  if(d.altitude == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.altitude }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtStandType">
+			{{#  if(d.standType == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.standType }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtMainSpecies">
+			{{#  if(d.mainSpecies == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.mainSpecies }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtStock">
+			{{#  if(d.stock == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.stock }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtStockUnit">
+			{{#  if(d.stockUnit == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.stockUnit }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtSampleNumber">
+			{{#  if(d.sampleNumber == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.sampleNumber }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtSampleNumberUnit">
+			{{#  if(d.sampleNumberUnit == null){ }}
+    			-
+  			{{#  } else { }}
+    		{{# return d.sampleNumberUnit }}
+			{{#  } }}
+		</script>
+		<script type="text/html" id="fmtType">
+			{{#  if(d.type === 1){ }}
+    			踏查
+			{{#  } else if(d.type === 2){ }}
+    			标准地
+			{{#  } else if(d.type === 3){ }}
+    			诱捕
+			{{#  } else if(d.type === 4){ }}
+    			苗圃花木
+  			{{#  } else { }}
+    			种果花木
+			{{#  } }}
+		</script>
+		
+		<script type="text/html" id="fmtSurveyTime">
+			{{# return DateUtil.stamp4Time(d.surveyTime) }}
+		</script>
+
+		<div id="barDemo" style="display:none;">
+			<a class="green" lay-event="edit" title="编辑"><i class="icon-pencil bigger-150" shiro:hasPermission="/fieldPage/updateFieldSurvey"></i></a>
+			<a class="blue" lay-event="viewList" title="查看列表"><i class="icon-th-list bigger-150" shiro:hasPermission="/fieldPage/toList"></i></a>
+			<a class="red" lay-event="del" title="删除"><i class="icon-trash bigger-150" shiro:hasPermission="/fieldPage/deleteFieldSurvey"></i></a>
+		</div>
+
+		<div id="addDiv" style="display:none;">
+			<form id="formTemp">
+				<div class="editCon">
+					<input type="hidden" name="id"/>
+					<input type="hidden" name="districtId"/>
+					<ul>
+						<li>
+							<label>野外调查类型:</label>
+							<select name="type">
+								<option value="">--请选择--</option>
+								<option value="1">踏查</option>
+								<option value="2">标准地</option>
+								<option value="3">诱捕</option>
+								<option value="4">苗圃花木</option>
+								<option value="5">种果花木</option>
+							</select>
+						</li>
+						<li style="display:none;">
+							<label>野外调查名称:</label>
+							<input type="text" name="name"/>
+						</li>
+						<li style="display:none;">
+							<label>县名称:</label>
+							<input type="text" name="districtName" onblur="queryCode(this,'districtName','districtCode')"/>
+						</li>
+						<li style="display:none;">
+							<label>县代码:</label>
+							<input type="text" name="districtCode"/>
+						</li>
+						<li style="display:none;">
+							<label>乡镇名称:</label>
+							<input type="text" name="townshipName" onblur="queryCode(this,'townshipName','townshipCode')"/>
+						</li>
+						<li style="display:none;">
+							<label>乡镇代码:</label>
+							<input type="text" name="townshipCode"/>
+						</li>
+						<li style="display:none;">
+							<label>场所名称:</label>
+							<input type="text" name="placeName"/>
+						</li>
+						<li style="display:none;">
+							<label>编号:</label>
+							<input type="text" name="number"/>
+						</li>
+						<li style="display:none;">
+							<label>调查面积:</label>
+							<input type="text" name="acreage"/>单位：亩
+						</li>
+						<li style="display:none;">
+							<label>代表面积:</label>
+							<input type="text" name="deputyAcreage"/>单位：亩
+						</li>
+						<li style="display:none;">
+							<label>所在小班:</label>
+							<input type="text" name="currentClass"/>
+						</li>
+						<li style="display:none;">
+							<label>经度:</label>
+							<input type="text" name="lon"/>
+						</li>
+						<li style="display:none;">
+							<label>纬度:</label>
+							<input type="text" name="lat"/>
+						</li>
+						<li style="display:none;">
+							<label>海拔:</label>
+							<input type="text" name="altitude"/>单位：m
+						</li>
+						<li style="display:none;">
+							<label>林分类型:</label>
+							<input type="text" name="standsType"/>
+						</li>
+						<li style="display:none;">
+							<label>主要树种:</label>
+							<input type="text" name="mainSpecies"/>
+						</li>
+						<li style="display:none;">
+							<label>库存:</label>
+							<input type="text" name="stock"/>
+						</li>
+						<li style="display:none;">
+							<label>库存单位:</label>
+							<select name="stockUnit" id="stockTemp">
+								<option value="-1">--自定义--</option>
+								<option value="m³">m³</option>
+								<option value="件">件</option>
+								<option value="张">张</option>
+								<option value="kg">kg</option>
+								<option value="株">株</option>
+							</select>
+						</li>
+						<li style="display:none;">
+							<label>抽样数量:</label>
+							<input type="text" name="sampleNumber"/>
+						</li>
+						<li style="display:none;">
+							<label>抽样数量单位:</label>
+							<select name="sampleNumberUnit" id="sampleNumberTemp">
+								<option value="-1">--自定义--</option>
+								<option value="m³">m³</option>
+								<option value="件">件</option>
+								<option value="张">张</option>
+								<option value="kg">kg</option>
+								<option value="株">株</option>
+							</select>
+						</li>
+						<li style="display:none;">
+							<label>调查人:</label>
+							<input type="text" name="investigator"/>
+						</li>
+						<li style="display:none;">
+							<label>陪同人员:</label>
+							<input type="text" name="companion"/>
+						</li>
+						<li style="display:none;">
+							<label>调查时间:</label>
+							<input id="J-xl-2" name="surveyTime1" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});" style="height: 35px;padding: 4px 12px 4px 5px;">
+							<input type="hidden" name="surveyTime"/>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div id="radioDiv" style="display:none;">
+			<form id="form1Temp">
+				<div class="editCon">
+					<ul>
+						<li>
+							<div class="areaDiv" style="margin-top: 50px;">
+								
+							</div>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<script type="text/javascript">
+		$.validator.addMethod("districtCode1", function (value, element, param) {
+			var flag = false;
+			if(value){
+				$.ajax({
+	                cache: true,
+	                type: "POST",
+	                url:'/fieldPage/queryAreaByCode',
+	                data:{code : value},
+	                async: false,
+	                dataType:"json",
+	                success: function(obj) {
+	                    if(obj.data){
+	                    	flag = true;
+	                    	$("#fieldInvestigateForm input[name='districtId']").val(obj.data.id);
+	                    }
+	                }
+	            });
+			}else{
+				flag = true;
+			}
+			
+			return flag;
+		}, "县代码在系统中不存在");
+		
+		layui.use('table', function(){
+			  var table = layui.table;
+			  //监听表格复选框选择
+			  table.on('checkbox(fieldInvestigateList)', function(obj){
+			    
+			  });
+			  //监听工具条
+			  table.on('tool(fieldInvestigateList)', function(obj){
+			    var fieldInvestigate = obj.data;
+			    if(obj.event === 'del'){
+			      layer.confirm('是否确定删除该条数据？', function(index){
+			    	  $.ajax({
+			                cache: true,
+			                type: "POST",
+			                url:'/fieldPage/deleteFieldSurvey',
+			                data:{ids : fieldInvestigate.id},
+			                async: false,
+			                dataType:'json',
+			                success: function(xhr) {
+			                	if(xhr.code == 1){
+			                        layer.msg('删除成功');
+			                        obj.del();
+									layer.close(index);
+									table.reload('idTest', {
+						            	where: { //设定异步数据接口的额外参数
+						            		"name":$("#name").val(),
+						            		"type":$("#type").val()
+						            	}
+									});
+			                    }else{
+			                    	layer.msg(xhr.message);
+			                    }
+			                }
+			            });
+			      });
+			    } else if(obj.event === 'edit'){
+			    	layer.open({
+						  title: '编辑野外调查'
+						  ,content: $("#addDiv").html().replace('formTemp','fieldInvestigateForm').replace('stockTemp','stockUnit').replace('sampleNumberTemp','sampleNumberUnit'),
+						  area:['550px','600px'],
+						  success:function(){
+
+							  $('#stockUnit').editableSelect({
+							       bg_iframe: true,
+								   trigger : 'manual',
+							       onSelect: function(list_item) {
+							         // 'this' is a reference to the instance of EditableSelect
+							         // object, so you have full access to everything there
+									 if(this.text.val()=='--自定义--'){
+										$("#stockUnit_sele").val('');
+										$("#stockUnit_sele").attr('placeholder','请输入抽样数量单位');
+									 }
+							       },
+							       case_sensitive: false, // If set to true, the user has to type in an exact
+							                              // match for the item to get highlighted
+							       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+							       isFilter:false //If set to true, the item will be filtered according to the matching criteria.
+							     }
+							   );
+							  
+							  $('#sampleNumberUnit').editableSelect({
+							       bg_iframe: true,
+								   trigger : 'manual',
+							       onSelect: function(list_item) {
+							         // 'this' is a reference to the instance of EditableSelect
+							         // object, so you have full access to everything there
+									 if(this.text.val()=='--自定义--'){
+										$("#sampleNumberUnit_sele").val('');
+										$("#sampleNumberUnit_sele").attr('placeholder','请输入抽样数量单位');
+									 }
+							       },
+							       case_sensitive: false, // If set to true, the user has to type in an exact
+							                              // match for the item to get highlighted
+							       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+							       isFilter:false //If set to true, the item will be filtered according to the matching criteria.
+							     }
+							   );
+							  
+							  
+							  $("#fieldInvestigateForm select[name='type'] option[value='"+fieldInvestigate.type+"']").attr('selected',true);
+							  $("#fieldInvestigateForm select[name='type']").attr("disabled","disabled").css("background-color","lightGray");
+							  $("#fieldInvestigateForm input[name='id']").val(fieldInvestigate.id);
+							  $("#fieldInvestigateForm input[name='districtId']").val(fieldInvestigate.districtId);
+							  $("#fieldInvestigateForm input[name='name']").val(fieldInvestigate.name);
+							  $("#fieldInvestigateForm input[name='districtName']").val(fieldInvestigate.districtName);
+							  $("#fieldInvestigateForm input[name='districtCode']").val(fieldInvestigate.districtCode);
+							  $("#fieldInvestigateForm input[name='townshipName']").val(fieldInvestigate.townshipName);
+							  $("#fieldInvestigateForm input[name='townshipCode']").val(fieldInvestigate.townshipCode);
+							  $("#fieldInvestigateForm input[name='placeName']").val(fieldInvestigate.placeName);
+							  $("#fieldInvestigateForm input[name='number']").val(fieldInvestigate.number);
+							  $("#fieldInvestigateForm input[name='acreage']").val(fieldInvestigate.acreage);
+							  $("#fieldInvestigateForm input[name='currentClass']").val(fieldInvestigate.currentClass);
+							  $("#fieldInvestigateForm input[name='deputyAcreage']").val(fieldInvestigate.deputyAcreage);
+							  $("#fieldInvestigateForm input[name='lon']").val(fieldInvestigate.lon);
+							  $("#fieldInvestigateForm input[name='lat']").val(fieldInvestigate.lat);
+							  $("#fieldInvestigateForm input[name='altitude']").val(fieldInvestigate.altitude);
+							  $("#fieldInvestigateForm input[name='standsType']").val(fieldInvestigate.standsType);
+							  $("#fieldInvestigateForm input[name='mainSpecies']").val(fieldInvestigate.mainSpecies);
+							  $("#fieldInvestigateForm input[name='investigator']").val(fieldInvestigate.investigator);
+							  $("#fieldInvestigateForm input[name='companion']").val(fieldInvestigate.companion);
+							  if(fieldInvestigate.surveyTime){
+							  $("#fieldInvestigateForm input[name='surveyTime1']").val(DateUtil.stamp4Time(fieldInvestigate.surveyTime));
+							  $("#fieldInvestigateForm input[name='surveyTime']").val(DateUtil.stamp4Time(fieldInvestigate.surveyTime));
+							  }
+							  $("#fieldInvestigateForm input[name='stock']").val(fieldInvestigate.stock);
+							  $("#fieldInvestigateForm input[name='stockUnit_sele']").trigger('click');
+							  $("#fieldInvestigateForm input[name='stockUnit_sele']").val(fieldInvestigate.stockUnit);
+							  $("#fieldInvestigateForm input[name='stockUnit']").val(fieldInvestigate.stockUnit);
+							  $("#fieldInvestigateForm input[name='sampleNumber']").val(fieldInvestigate.sampleNumber);
+							  $("#fieldInvestigateForm input[name='sampleNumberUnit_sele']").trigger('click');
+							  $("#fieldInvestigateForm input[name='sampleNumberUnit_sele']").val(fieldInvestigate.sampleNumberUnit);
+							  $("#fieldInvestigateForm input[name='sampleNumberUnit']").val(fieldInvestigate.sampleNumberUnit);
+							  
+							  viewFrom(fieldInvestigate.type);
+							  
+							  $("#fieldInvestigateForm select[name='type']").change(function(){
+								  viewFrom($(this).val());
+							  });
+							  
+						  },
+						  btn:['确定','取消']
+						  ,yes: function(){
+							  if(!$("#fieldInvestigateForm").valid()) {
+									return false;
+							  }
+							  
+							  var flag = true;
+							  var k = $("#stockUnit_sele").val();
+							  if(k){
+									$("#stockUnit_hidden_select option").each(function(e){  
+										if($(this).text() == k){  
+											$(this).attr("selected","selected");
+											flag = false;
+											return false;
+										}
+									}); 
+									if(flag){
+										$("#stockUnit_hidden_select").val(-1);
+									}
+									$("#fieldInvestigateForm input[name='stockUnit']").val($("#stockUnit_sele").val());
+							  }
+							  var flag1 = true;
+							  var k1 = $("#sampleNumberUnit_sele").val();
+							  if(k1){
+									$("#sampleNumberUnit_hidden_select option").each(function(e){  
+										if($(this).text() == k1){  
+											$(this).attr("selected","selected");
+											flag1 = false;
+											return false;
+										}
+									}); 
+									if(flag1){
+										$("#sampleNumberUnit_hidden_select").val(-1);
+									}
+									$("#fieldInvestigateForm input[name='sampleNumberUnit']").val($("#sampleNumberUnit_sele").val());
+							  }
+							  $("#fieldInvestigateForm input[name='surveyTime']").val($("#fieldInvestigateForm input[name='surveyTime1']").val()+" 00:00:00");
+							  $.ajax({
+						            cache: true,
+						            type: "POST",
+						            url:'/fieldPage/updateFieldSurvey',
+						            data:$('#fieldInvestigateForm').serialize(),// 你的formid
+						            async: false,
+						            dataType:'json',
+					                success: function(obj) {
+					                	if(obj.code == 1){
+							        		layer.msg('编辑成功');
+							                layer.closeAll('page');
+							                table.reload('idTest', {
+								            	where: { //设定异步数据接口的额外参数
+								            		"name":$("#name").val(),
+								            		"type":$("#type").val()
+								            	}
+											});
+							        	}else{
+							        		layer.msg(obj.message);
+							        	}
+						            }
+						        });
+						  },
+						  btn2: function(){
+						    layer.closeAll();
+						  },
+						  btnAlign: 'c'
+						});
+			    	
+			    }else if(obj.event === 'viewList'){
+			    	if(fieldInvestigate.type == 1){
+						//踏查
+						window.location.href="/fieldListPage/toStepInvestigation/"+fieldInvestigate.id;
+					}else if(fieldInvestigate.type == 2){
+						//标准地
+						window.location.href="/fieldListPage/toStandardSurvey/"+fieldInvestigate.id;
+					}else if(fieldInvestigate.type == 3){
+						//诱捕
+						window.location.href="/fieldListPage/toTrappedSurvey/"+fieldInvestigate.id;
+					}else if(fieldInvestigate.type == 4){
+						//苗圃花木
+						window.location.href="/fieldListPage/toNurserySurvey/"+fieldInvestigate.id;
+					}else if(fieldInvestigate.type == 5){
+						//种果花木
+						window.location.href="/fieldListPage/toFruitSurvey/"+fieldInvestigate.id;
+					}
+			    }
+			  });
+			  
+			  var $ = layui.$, active = {
+						openAdd: function(){
+							layer.open({
+							  title: '添加野外调查'
+							  ,content: $("#addDiv").html().replace('formTemp','fieldInvestigateForm').replace('stockTemp','stockUnit').replace('sampleNumberTemp','sampleNumberUnit'),
+							  area:['550px','600px'],
+							  success:function(){
+								  $('#stockUnit').editableSelect({
+								       bg_iframe: true,
+									   trigger : 'manual',
+								       onSelect: function(list_item) {
+								         // 'this' is a reference to the instance of EditableSelect
+								         // object, so you have full access to everything there
+										 if(this.text.val()=='--自定义--'){
+											$("#stockUnit_sele").val('');
+											$("#stockUnit_sele").attr('placeholder','请输入抽样数量单位');
+										 }
+								       },
+								       case_sensitive: false, // If set to true, the user has to type in an exact
+								                              // match for the item to get highlighted
+								       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+								       isFilter:false //If set to true, the item will be filtered according to the matching criteria.
+								     }
+								   );
+								  
+								  $('#sampleNumberUnit').editableSelect({
+								       bg_iframe: true,
+									   trigger : 'manual',
+								       onSelect: function(list_item) {
+								         // 'this' is a reference to the instance of EditableSelect
+								         // object, so you have full access to everything there
+										 if(this.text.val()=='--自定义--'){
+											$("#sampleNumberUnit_sele").val('');
+											$("#sampleNumberUnit_sele").attr('placeholder','请输入抽样数量单位');
+										 }
+								       },
+								       case_sensitive: false, // If set to true, the user has to type in an exact
+								                              // match for the item to get highlighted
+								       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+								       isFilter:false //If set to true, the item will be filtered according to the matching criteria.
+								     }
+								   );
+								  
+								  $("#fieldInvestigateForm select[name='type']").change(function(){
+									  viewFrom($(this).val());
+								  });
+								  
+							  },
+							  btn:['确定','取消']
+							  ,yes: function(){
+								  if(!$("#fieldInvestigateForm").valid()) {
+										return false;
+								  }
+								  var flag = true;
+								  var k = $("#stockUnit_sele").val();
+								  if(k){
+										$("#stockUnit_hidden_select option").each(function(e){  
+											if($(this).text() == k){  
+												$(this).attr("selected","selected");
+												flag = false;
+												return false;
+											}
+										}); 
+										if(flag){
+											$("#stockUnit_hidden_select").val(-1);
+										}
+										$("#fieldInvestigateForm input[name='stockUnit']").val($("#stockUnit_sele").val());
+								  }
+								  
+								  var flag1 = true;
+								  var k1 = $("#sampleNumberUnit_sele").val();
+								  if(k1){
+										$("#sampleNumberUnit_hidden_select option").each(function(e){  
+											if($(this).text() == k1){  
+												$(this).attr("selected","selected");
+												flag1 = false;
+												return false;
+											}
+										}); 
+										if(flag1){
+											$("#sampleNumberUnit_hidden_select").val(-1);
+										}
+										$("#fieldInvestigateForm input[name='sampleNumberUnit']").val($("#sampleNumberUnit_sele").val());
+								  }
+								  
+								  $("#fieldInvestigateForm input[name='surveyTime']").val($("#fieldInvestigateForm input[name='surveyTime1']").val()+" 00:00:00");
+								  $.ajax({
+							            cache: true,
+							            type: "POST",
+							            url:'/fieldPage/addFieldSurvey',
+							            data:$('#fieldInvestigateForm').serialize(),// 你的formid
+							            async: false,
+							            dataType:'json',
+						                success: function(obj) {
+						                	if(obj.code == 1){
+							                    layer.msg('添加成功');
+								                layer.closeAll('page');
+								                table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数
+									            		"name":$("#name").val(),
+									            		"type":$("#type").val()
+									            	}
+												});
+							                }else{
+							                	layer.msg(obj.message);
+							                }
+							            }
+							        });
+							  },
+							  btn2: function(){
+							    layer.closeAll();
+							  },
+							  btnAlign: 'c'
+							});
+						}
+						,delSelect: function(){ //获取选中数目
+				      		var checkStatus = table.checkStatus('idTest')
+				      			,data = checkStatus.data;
+							if(data.length>0){
+								var ids = "";
+								for(var i=0;i<data.length;i++){
+									ids += ","+ data[i].id;
+								}
+								layer.confirm('是否删除选中的数据？', function(index){
+									$.ajax({
+						                cache: true,
+						                type: "POST",
+						                url:'/fieldPage/deleteFieldSurvey',
+						                data:{ids:ids.substring(1)},
+						                async: false,
+						                dataType:'json',
+						                success: function(obj) {
+						                	if(obj.code == 1){
+						                        layer.msg('删除成功');
+												layer.close(index);
+												table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数
+									            		"name":$("#name").val(),
+									            		"type":$("#type").val()
+									            	}
+												});
+						                    }else{
+						                    	layer.msg(obj.message);
+						                    }
+						                }
+						            });
+								});
+							}else{
+					      		layer.msg('请选择要删除的数据！');
+							}
+							
+				    	},
+				    	doSearch: function(){
+							table.reload('idTest', {
+				            	where: { //设定异步数据接口的额外参数
+				            		"name":$("#name").val(),
+				            		"type":$("#type").val()
+				            	}
+							});
+				    	}
+				  	};
+			  
+			  $('.demoTable .layui-btn').on('click', function(){
+			    var type = $(this).data('type');
+			    active[type] ? active[type].call(this) : '';
+			  });
+			  
+			  
+			});
+		
+			jQuery(function($) {
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+			
+			
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+			});
+			
+			function viewFrom(type){
+				  if(type == 1){
+					  $("#fieldInvestigateForm li").show();
+					  $("#fieldInvestigateForm input[name='placeName']").parent().hide();
+					  $("#fieldInvestigateForm input[name='placeName']").val('');
+					  $("#fieldInvestigateForm input[name='currentClass']").parent().hide();
+					  $("#fieldInvestigateForm input[name='currentClass']").val('');
+					  $("#fieldInvestigateForm input[name='deputyAcreage']").parent().hide();
+					  $("#fieldInvestigateForm input[name='deputyAcreage']").val('');
+					  $("#fieldInvestigateForm input[name='standsType']").parent().hide();
+					  $("#fieldInvestigateForm input[name='standsType']").val('');
+					  $("#fieldInvestigateForm input[name='mainSpecies']").parent().hide();
+					  $("#fieldInvestigateForm input[name='mainSpecies']").val('');
+					  $("#fieldInvestigateForm input[name='stock']").parent().hide();
+					  $("#fieldInvestigateForm input[name='stock']").val('');
+					  $("#fieldInvestigateForm select[name='stockUnit']").parent().hide();
+					  $("#fieldInvestigateForm input[name='sampleNumber']").parent().hide();
+					  $("#fieldInvestigateForm input[name='sampleNumber']").val('');
+					  $("#fieldInvestigateForm select[name='sampleNumberUnit']").parent().hide();
+					  $("#fieldInvestigateForm").validate({
+						    rules: {
+						    	name : "required",
+						    	districtCode : {
+						    		districtCode1 : true
+						    	},
+						    	surveyTime1: "required"
+						    	
+						    },
+						    messages: {
+						    	name : "请输入野外调查名称",
+						    	districtCode: {
+						    	},
+						    	surveyTime1 : "请输入调查日期"
+						    }
+						});
+				  }else if(type == 2){
+					  $("#fieldInvestigateForm li").show();
+					  $("#fieldInvestigateForm input[name='standsType']").parent().hide();
+					  $("#fieldInvestigateForm input[name='standsType']").val('');
+					  $("#fieldInvestigateForm input[name='mainSpecies']").parent().hide();
+					  $("#fieldInvestigateForm input[name='mainSpecies']").val('');
+					  $("#fieldInvestigateForm input[name='stock']").parent().hide();
+					  $("#fieldInvestigateForm input[name='stock']").val('');
+					  $("#fieldInvestigateForm select[name='stockUnit']").parent().hide();
+					  $("#fieldInvestigateForm input[name='sampleNumber']").parent().hide();
+					  $("#fieldInvestigateForm input[name='sampleNumber']").val('');
+					  $("#fieldInvestigateForm select[name='sampleNumberUnit']").parent().hide();
+					  $("#fieldInvestigateForm").validate({
+						    rules: {
+						    	name : "required",
+						    	districtCode : {
+						    		districtCode1 : true
+						    	},
+						    	surveyTime1: "required"
+						    },
+						    messages: {
+						    	name : "请输入野外调查名称",
+						    	districtCode: {
+						    	},
+						    	surveyTime1 : "请输入调查日期"
+						    }
+						});
+				  }else if(type == 3){
+					  $("#fieldInvestigateForm li").show();
+					  $("#fieldInvestigateForm input[name='placeName']").parent().hide();
+					  $("#fieldInvestigateForm input[name='placeName']").val('');
+					  $("#fieldInvestigateForm input[name='deputyAcreage']").parent().hide();
+					  $("#fieldInvestigateForm input[name='deputyAcreage']").val('');
+					  $("#fieldInvestigateForm input[name='stock']").parent().hide();
+					  $("#fieldInvestigateForm input[name='stock']").val('');
+					  $("#fieldInvestigateForm select[name='stockUnit']").parent().hide();
+					  $("#fieldInvestigateForm input[name='sampleNumber']").parent().hide();
+					  $("#fieldInvestigateForm input[name='sampleNumber']").val('');
+					  $("#fieldInvestigateForm select[name='sampleNumberUnit']").parent().hide();
+					  $("#fieldInvestigateForm").validate({
+						    rules: {
+						    	name : "required",
+						    	districtCode : {
+						    		districtCode1 : true
+						    	},
+						    	surveyTime1: "required"
+						    },
+						    messages: {
+						    	name : "请输入野外调查名称",
+						    	districtCode: {
+						    	},
+						    	surveyTime1 : "请输入调查日期"
+						    }
+						});
+				  }else if(type == 4){
+					  $("#fieldInvestigateForm li").show();
+					  $("#fieldInvestigateForm input[name='number']").parent().hide();
+					  $("#fieldInvestigateForm input[name='number']").val('');
+					  $("#fieldInvestigateForm input[name='currentClass']").parent().hide();
+					  $("#fieldInvestigateForm input[name='currentClass']").val('');
+					  $("#fieldInvestigateForm input[name='deputyAcreage']").parent().hide();
+					  $("#fieldInvestigateForm input[name='deputyAcreage']").val('');
+					  $("#fieldInvestigateForm input[name='standsType']").parent().hide();
+					  $("#fieldInvestigateForm input[name='standsType']").val('');
+					  $("#fieldInvestigateForm input[name='mainSpecies']").parent().hide();
+					  $("#fieldInvestigateForm input[name='mainSpecies']").val('');
+					  $("#fieldInvestigateForm input[name='stock']").parent().hide();
+					  $("#fieldInvestigateForm input[name='stock']").val('');
+					  $("#fieldInvestigateForm select[name='stockUnit']").parent().hide();
+					  $("#fieldInvestigateForm input[name='sampleNumber']").parent().hide();
+					  $("#fieldInvestigateForm input[name='sampleNumber']").val('');
+					  $("#fieldInvestigateForm select[name='sampleNumberUnit']").parent().hide();
+					  $("#fieldInvestigateForm").validate({
+						    rules: {
+						    	name : "required",
+						    	districtCode : {
+						    		districtCode1 : true
+						    	},
+						    	surveyTime1: "required"
+						    },
+						    messages: {
+						    	name : "请输入野外调查名称",
+						    	districtCode: {
+						    	},
+						    	surveyTime1 : "请输入调查日期"
+						    }
+						});
+				  }else if(type == 5){
+					  $("#fieldInvestigateForm li").show();
+					  $("#fieldInvestigateForm input[name='number']").parent().hide();
+					  $("#fieldInvestigateForm input[name='number']").val('');
+					  $("#fieldInvestigateForm input[name='currentClass']").parent().hide();
+					  $("#fieldInvestigateForm input[name='currentClass']").val('');
+					  $("#fieldInvestigateForm input[name='deputyAcreage']").parent().hide();
+					  $("#fieldInvestigateForm input[name='deputyAcreage']").val('');
+					  $("#fieldInvestigateForm input[name='standsType']").parent().hide();
+					  $("#fieldInvestigateForm input[name='standsType']").val('');
+					  $("#fieldInvestigateForm input[name='mainSpecies']").parent().hide();
+					  $("#fieldInvestigateForm input[name='mainSpecies']").val('');
+					  $("#fieldInvestigateForm input[name='acreage']").parent().hide();
+					  $("#fieldInvestigateForm input[name='acreage']").val('');
+					  $("#fieldInvestigateForm").validate({
+						    rules: {
+						    	name : "required",
+						    	districtCode : {
+						    		districtCode1 : true
+						    	},
+						    	surveyTime1: "required"
+						    },
+						    messages: {
+						    	name : "请输入野外调查名称",
+						    	districtCode: {
+						    	},
+						    	surveyTime1 : "请输入调查日期"
+						    }
+						});
+				  }else{
+					  $("#fieldInvestigateForm li").hide();
+					  $("#fieldInvestigateForm select[name='type']").parent().show();
+					  $("#fieldInvestigateForm").validate({
+						    rules: {
+						    	type : "required"
+						    },
+						    messages: {
+						    	type : "请选择野外调查类型"
+						    }
+						});
+				  }
+			}
+			
+			function queryCode(event,name,code){
+				if(!$.trim($(event).val())){
+					return;
+				}
+				$.ajax({
+					cache: true,
+					type: "GET",
+					url:'http://restapi.amap.com/v3/config/district?keywords='+$(event).val()+'&subdistrict=0&key=3a089cb499916ab1bb9ba43f336aab24',	
+					async: false,
+					dataType:'json',
+					success: function(obj) {
+						if(obj.districts.length == 0){
+							if(code == 'districtCode'){
+								alert("未搜索到对应的县代码，请手动填写");
+							}else{
+								
+								alert("未搜索到对应的乡镇代码，请手动填写");
+							}
+						}else if(obj.districts.length == 1){
+							$("#fieldInvestigateForm input[name='"+name+"']").val(obj.districts[0].name);
+							$("#fieldInvestigateForm input[name='"+code+"']").val(obj.districts[0].adcode);
+						}
+						else{
+							layer.open({
+								type:1,
+								title: '请选择地区代码'
+								,content: $("#radioDiv").html().replace('form1Temp','codeForm'),
+								area:['350px','300px'],
+								success:function(){
+									var str = '';
+									for(var i=0;i<obj.districts.length;i++){
+										if(i==0){
+											str += '<input style="height:20px;width:40%;" type="radio" name="sex" value="'+obj.districts[i].name+'#'+ obj.districts[i].adcode +'" checked="">'+obj.districts[i].name + '('+obj.districts[i].adcode+')';
+										}
+										else {
+											str += '<input style="height:20px;width:40%;" type="radio" name="sex" value="'+obj.districts[i].name+'#'+ obj.districts[i].adcode +'">'+obj.districts[i].name + '('+obj.districts[i].adcode+')';
+										}
+									}
+									$("#codeForm .areaDiv").html(str);
+								},
+								btn:['确定','取消']
+								,yes: function(){
+									var value = $("#codeForm input[type='radio']:checked").val().split('#');
+									$("#fieldInvestigateForm input[name='"+name+"']").val(value[0]);
+									$("#fieldInvestigateForm input[name='"+code+"']").val(value[1]);
+									layer.close(layer.index);
+								},
+								btn2: function(){
+									layer.close(layer.index);
+								},
+								btnAlign: 'c'
+							});
+							
+						}
+					}
+				});
+				
+				
+			}
+		</script>
+		
+	</body>
+</html>
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta charset="utf-8" />
+		<title>视屏监控--生兴防治</title>
+		<meta name="renderer" content="ie-comp|ie-stand">
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" />
+
+		<!--[if IE 7]>
+	  		<link rel="stylesheet" th:href="@{/css/font-awesome-ie7.min.css}" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" th:href="@{/css/vedio/video-js.css}" />
+		<script th:src="@{/js/vedio/video.min.js}"></script>	
+		<!-- fonts -->
+
+		<!-- ace styles -->
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/newCss.css}" />
+
+		<!--[if lte IE 8]>
+	  		<link rel="stylesheet" th:href="@{/css/ace-ie.min.css}" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+			<script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+		<![endif]-->
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+		
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+			
+			<script src="https://open.ys7.com/sdk/js/1.1/ezuikit.js"></script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+				
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">远程监控</li>
+						</ul><!-- .breadcrumb -->
+
+						
+					</div>
+
+					<div class="page-content">
+						
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="sxc-head">
+                                		<ol class="clearfix dataTime">
+                                			<li><label>设备名:</label><span th:text="${pojo.name}" style="color:red;"></span></li>
+                                		</ol>
+                                	</div>
+                                	<div class="vedioCon clearfix">
+                               				<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:800px;height:500px;">
+											    <source th:src="${pojo.rtmpHd}" type="" />
+											    <source th:src="${pojo.hlsHd}" type="application/x-mpegURL" />
+											</video>
+                                	</div>
+                                </div> 
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-1.10.2.min.js}'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+
+	<script type="text/javascript">
+		
+		var player = new EZUIPlayer('myPlayer');
+	    player.on('error', function(){
+	        console.log('error');
+	    });
+	    player.on('play', function(){
+	        console.log('play');
+	    });
+	    player.on('pause', function(){
+	        console.log('pause');
+	    });
+	
+		</script>
+		   
+	</body>
+</html>
+

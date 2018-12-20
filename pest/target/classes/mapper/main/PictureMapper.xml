@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.PictureMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.Picture">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="path_id" jdbcType="INTEGER" property="pathId" />
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="dev_mac" jdbcType="VARCHAR" property="devMac" />
+    <result column="dev_id" jdbcType="INTEGER" property="devId" />
+    <result column="capture_time" jdbcType="INTEGER" property="captureTime" />
+    <result column="pic_path" jdbcType="VARCHAR" property="picPath" />
+    <result column="deal_time" jdbcType="INTEGER" property="dealTime" />
+    <result column="pic_status" jdbcType="INTEGER" property="picStatus" />
+  </resultMap>
+  
+  <select id="findPicByMac" resultType="com.isoftstone.entity.model.Picture">
+   	SELECT 
+			  		      p.path_id AS "pathId",
+			  	   			   p.id AS "id",
+						  p.dev_mac AS "devMac",
+			  	     p.capture_time AS "captureTime",
+					     p.pic_path AS "picPath"
+	FROM
+		t_picture p
+	<where> 
+		p.pic_status = 1 and p.dev_mac = #{devMac}
+		<if test="beforeTime != null and afterTime != null">
+				AND	(p.capture_time between #{beforeTime} and #{afterTime} )
+		</if>
+	</where>
+	ORDER BY p.capture_time DESC
+  </select>
+
+	
+	<!-- 删除图片信息 -->
+    <update id="delPic">		
+		UPDATE t_picture SET
+		pic_status = 0
+		<where>
+		path_id in
+		<foreach collection="idList" item="id" index="index" open="(" separator="," close=")">  	
+		 #{id}
+		</foreach>
+		</where>
+	</update>
+	
+</mapper>

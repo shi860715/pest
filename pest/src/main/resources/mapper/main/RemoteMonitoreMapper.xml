@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.RemoteMonitoreMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.RemoteMonitore">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="loginip" jdbcType="VARCHAR" property="loginip" />
+    <result column="port" jdbcType="VARCHAR" property="port" />
+    <result column="deviceSerial" jdbcType="VARCHAR" property="deviceSerial" />
+    <result column="cameraNo" jdbcType="VARCHAR" property="cameraNo" />
+    <result column="ezopen" jdbcType="VARCHAR" property="ezopen" />
+    <result column="ezopen_hd" jdbcType="VARCHAR" property="ezopenHd" />
+    <result column="rtmp" jdbcType="VARCHAR" property="rtmp" />
+    <result column="rtmp_hd" jdbcType="VARCHAR" property="rtmpHd" />
+    <result column="hls" jdbcType="VARCHAR" property="hls" />
+    <result column="hls_hd" jdbcType="VARCHAR" property="hlsHd" />
+    <result column="province" jdbcType="INTEGER" property="province" />
+    <result column="city" jdbcType="INTEGER" property="city" />
+    <result column="district" jdbcType="INTEGER" property="district" />
+    <result column="belong_area" jdbcType="INTEGER" property="belongArea" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <resultMap id="PojoResultMap" extends="BaseResultMap" type="com.isoftstone.entity.pojo.RemoteMonitorePojo">
+    <result column="provinceName" jdbcType="VARCHAR" property="provinceName" />
+    <result column="cityName" jdbcType="VARCHAR" property="cityName" />
+    <result column="districtName" jdbcType="VARCHAR" property="districtName" />
+    <result column="belongAreaName" jdbcType="VARCHAR" property="belongAreaName" />
+  </resultMap>
+
+	<select id="findPage" resultMap="PojoResultMap" parameterType="java.util.Map">
+		SELECT
+			rm.id,
+			rm.name,
+			rm.code,
+			rm.deviceSerial,
+			rm.loginip,
+			rm.port,
+			rm.cameraNo,
+			rm.ezopen,
+			rm.ezopen_hd,
+			rm.rtmp,
+			rm.rtmp_hd,
+			rm.hls,
+			rm.hls_hd,
+			rm.address,
+			rm.province,
+			rm.city,
+			rm.district,
+			rm.belong_area,
+			a1.name belongAreaName,
+			rm.user,
+			rm.status,
+			rm.create_time
+		FROM t_remote_monitore rm
+		LEFT JOIN t_area a1 on a1.id = rm.belong_area
+		WHERE rm.status = 1
+		<if test="name != null and name !=''">
+			AND	rm.name LIKE concat('%',#{name},'%')
+		</if>
+		<if test="roleId != 1">
+			AND	rm.belong_area in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+		</if>
+		ORDER BY rm.create_time DESC
+	</select>
+
+	<!-- 批量删除远程监控信息 -->
+	<update id="delRemoteMonitore">		
+		UPDATE t_remote_monitore SET
+		status = 0
+		<where>
+		id in
+		<foreach collection="list" item="id" index="index" open="(" separator="," close=")">  	
+		 #{id}
+		</foreach>
+		</where>
+	</update>
+	
+	<insert id="addRemoteMonitore" parameterType="com.isoftstone.entity.model.RemoteMonitore">
+		insert into t_remote_monitore(
+			name,
+			code,
+			loginip,
+			port,
+			deviceSerial,
+			cameraNo,
+			ezopen,
+			ezopen_hd,
+			rtmp,
+			rtmp_hd,
+			hls,
+			hls_hd,
+			address,
+			province,
+			city,
+			district,
+			belong_area,
+			user,
+			status,
+			create_time
+		)values(
+			#{name},
+			#{code},
+			#{loginip},
+			#{port},
+			#{deviceSerial},
+			#{cameraNo},
+			#{ezopen},
+			#{ezopenHd},
+			#{rtmp},
+			#{rtmpHd},
+			#{hls},
+			#{hlsHd},
+			#{address},
+			#{province},
+			#{city},
+			#{district},
+			#{belongArea},
+			#{user},
+			1,
+			SYSDATE()
+		)
+	</insert>
+	
+	<update id="editRemoteMonitore" parameterType="com.isoftstone.entity.model.RemoteMonitore">		
+		UPDATE t_remote_monitore 
+		  SET name = #{name},
+			  code = #{code},
+			  loginip = #{loginip},
+			  port = #{port},
+			  deviceSerial = #{deviceSerial},
+			  cameraNo = #{cameraNo},
+			  ezopen = #{ezopen},
+			  ezopen_hd = #{ezopenHd},
+			  rtmp = #{rtmp},
+			  rtmp_hd = #{rtmpHd},
+			  hls = #{hls},
+			  hls_hd = #{hlsHd},
+			  address = #{address},
+			  province = #{province},
+			  city = #{city},
+			  district = #{district},
+			  belong_area = #{belongArea},
+			  user = #{user}
+		where id = #{id}
+	</update>
+	
+	<select id="findHdById" resultMap="PojoResultMap">
+		SELECT
+			rm.id,
+			rm.`name` AS "name",
+			rm.loginip,
+			rm.port,
+			rm.rtmp,
+			rm.rtmp_hd,
+			rm.hls,
+			rm.hls_hd
+		FROM t_remote_monitore rm
+		WHERE rm.id = #{id}
+	</select>
+</mapper>

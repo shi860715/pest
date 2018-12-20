@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.CollectMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.Collect">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="device_id" jdbcType="INTEGER" property="deviceId" />
+     <result column="device_code" jdbcType="VARCHAR" property="deviceCode" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="capture_time" jdbcType="TIMESTAMP" property="captureTime" />
+    <result column="insect_id" jdbcType="INTEGER" property="insectId" />
+    <result column="female_count" jdbcType="INTEGER" property="femaleCount" />
+    <result column="male_count" jdbcType="INTEGER" property="maleCount" />
+    <result column="total_count" jdbcType="INTEGER" property="totalCount" />
+    <result column="picture_id" jdbcType="INTEGER" property="pictureId" />
+    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+  </resultMap>
+  
+  <select id="findPage" resultType="com.isoftstone.entity.model.Collect" parameterType="java.util.Map">
+   	SELECT
+		c.id AS "id",
+		c.device_id AS "deviceId",
+		c.device_code AS "deviceCode",
+		c.device_name AS "deviceName",
+		c.capture_time AS "captureTime",
+		c.insect_id AS "insectId",
+	  	ii.`name` AS "insectName",
+		c.female_count AS "femaleCount",
+		c.male_count AS "maleCount",
+		c.total_count AS "totalCount",
+		c.picture_id AS "pictureId",
+		c.insert_time AS "insertTime"
+	FROM
+		t_collect c
+	LEFT JOIN t_insect_info ii ON c.insect_id = ii.id
+	LEFT JOIN t_dev_info di ON c.device_id = di.id
+	<where>
+		picture_id != 0
+		<if test="roleId != 1">
+		and di.belong_area in
+		<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+		 #{item}
+		</foreach>
+		</if>
+		<if test="insectName != null and insectName != ''">
+				AND	(ii.`name` LIKE concat('%',#{insectName},'%'))
+		</if>
+		<if test="deviceCode != null and deviceCode != ''">
+				AND	(device_code LIKE concat('%',#{deviceCode},'%'))
+		</if>
+		<if test="deviceName != null and deviceName != ''">
+				AND	(device_name LIKE concat('%',#{deviceName},'%'))
+		</if>
+		<if test="beforeTime != null and afterTime != null">
+				AND	(capture_time between #{beforeTime} and #{afterTime} )
+		</if>
+	</where>
+	ORDER BY
+		c.insert_time DESC
+  </select>
+  
+  
+  	<!-- 添加自动虫情信息 -->
+	<insert id="addCollect" useGeneratedKeys="true" keyProperty="id" parameterType="com.isoftstone.entity.model.Collect">
+		INSERT INTO
+		 t_collect (
+				device_id,
+				device_code,
+				device_name,
+				capture_time,
+				insect_id,
+				female_count,
+				male_count,
+				total_count,
+				picture_id,
+				insert_time
+				)
+		VALUES
+		(
+		#{deviceId},
+		#{deviceCode},
+		#{deviceName},
+		#{captureTime},
+		#{insectId},
+		#{femaleCount},
+		#{maleCount},
+		#{totalCount},
+		#{pictureId},
+		SYSDATE()
+	)
+	</insert>
+	
+	<!-- 修改自动虫情信息 -->
+	<update id="updateCollectById">
+		UPDATE t_collect SET
+				female_count = #{femaleCount},
+				male_count = #{maleCount},
+				total_count = #{totalCount}
+			WHERE device_id = #{deviceId} and insect_id = #{insectId} and picture_id = #{pictureId}
+	</update>
+	
+	<!-- 更新自动虫情信息 -->
+	<update id="updateCollect">
+		UPDATE t_collect SET
+				device_name = #{deviceName},
+				capture_time = #{captureTime},
+				insect_id = #{insectId},
+				female_count = #{femaleCount},
+				male_count = #{maleCount},
+				total_count = #{totalCount}
+			WHERE id = #{id}	
+	</update>
+	
+	<!-- 删除自动虫情信息 -->
+	<delete id="delCollect" >
+    	DELETE FROM t_collect WHERE id in
+    	<foreach collection="idList" item="id" index="index" open="(" separator="," close=")">  
+			#{id}
+		</foreach>
+    </delete>
+    
+    <!-- 判断是否需要新增还是修改自动虫情信息 -->
+    <select id="findOne" resultType="java.lang.Integer">
+   	SELECT
+		count(1)
+	FROM
+		t_collect c
+	<where>
+		device_id = #{deviceId} and insect_id = #{insectId} and picture_id = #{pictureId}
+		<if test="captureTime != null">
+			AND	capture_time = #{captureTime}
+		</if>
+	</where>
+  </select>
+  
+  <insert id="importCollects" parameterType="java.util.List">
+		INSERT INTO
+		 t_collect (
+				device_id,
+				device_code,
+				device_name,
+				capture_time,
+				insect_id,
+				female_count,
+				male_count,
+				total_count,
+				picture_id,
+				insert_time
+		)
+		VALUES
+		<foreach collection="collectList" item="item" index="index" separator=",">  
+	        (
+				#{item.deviceId},
+				#{item.deviceCode},
+				#{item.deviceName},
+				#{item.captureTime},
+				#{item.insectId},
+				#{item.femaleCount},
+				#{item.maleCount},
+				#{item.totalCount},
+				#{item.pictureId},
+				SYSDATE()
+			)
+	    </foreach>
+	</insert>
+  
+	<select id="findInsectStatisticsPage" resultType="com.isoftstone.entity.model.Collect" parameterType="java.util.Map">
+	   	SELECT ii.`name` AS "insectName",
+			SUM(c.total_count) AS "totalCount"
+		FROM t_collect c
+		LEFT JOIN t_insect_info ii ON c.insect_id = ii.id
+		LEFT JOIN t_dev_info di ON c.device_id = di.id
+		<where>
+			<if test="roleId != 1 or (areaId != null and areaId != 0)">
+				AND di.belong_area in
+				<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+				 	#{item}
+				</foreach>
+			</if>
+			<if test="captureTime != null">
+				<![CDATA[ AND c.capture_time >= #{captureTime} and c.capture_time < date_add(#{captureTime},interval 1 day) ]]>     
+			</if>
+		</where>
+		GROUP BY ii.`name`
+		ORDER BY SUM(c.total_count) DESC
+		LIMIT 0,10
+  	</select>
+  	
+  	<select id="queryInsectNames" resultType="com.isoftstone.entity.pojo.CollectPojo" parameterType="java.util.Map">
+	   	SELECT 
+	   		c.insect_id insectId,
+	   		ii.`name` AS "insectName",
+	   		SUM(c.total_count) totalCount
+		FROM t_collect c
+		LEFT JOIN t_insect_info ii ON c.insect_id = ii.id
+		LEFT JOIN t_dev_info di ON c.device_id = di.id
+		<where>
+			<if test="insectId != null and insectId != 0">
+				AND c.insect_id = #{insectId}
+			</if>
+			<if test="type == 1 or type == null">
+				AND date_format(c.capture_time,'%Y-%m') =  date_format(#{captureTime},'%Y-%m') 
+			</if>
+			<if test="type == 2">
+				AND date_format(c.capture_time,'%Y') =  date_format(#{captureTime},'%Y')
+			</if>
+			<if test="roleId != 1 or (areaId != null and areaId != 0)">
+				AND di.belong_area in
+				<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+				 	#{item}
+				</foreach>
+			</if>
+		</where>
+		GROUP BY c.insect_id,ii.`name`
+		ORDER BY SUM(c.total_count) DESC
+		LIMIT 0,10
+  	</select>
+  	
+  	<select id="findPestPolylinePageByMonth" resultType="com.isoftstone.entity.pojo.PestPolylinePojo" parameterType="java.util.Map">
+	   	SELECT ii.`name` AS "insectName",
+	   		date_format(c.capture_time,'%Y-%m-%d') time,
+			SUM(c.total_count) AS "totalCount"
+		FROM t_collect c
+		LEFT JOIN t_insect_info ii ON c.insect_id = ii.id
+		LEFT JOIN t_dev_info di ON c.device_id = di.id
+		<where>
+			date_format(c.capture_time,'%Y-%m') =  date_format(#{captureTime},'%Y-%m')   
+			AND c.insect_id in
+				<foreach collection="collectPojoList" item="item" index="index" open="(" separator="," close=")">  	
+				 	#{item.insectId}
+				</foreach> 
+			<if test="roleId != 1 or (areaId != null and areaId != 0)">
+				AND di.belong_area in
+				<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+				 	#{item}
+				</foreach>
+			</if>
+		</where>
+		GROUP BY ii.`name`,date_format(c.capture_time,'%Y-%m-%d')
+		ORDER BY SUM(c.total_count) DESC
+  	</select>
+  	
+  	<select id="findPestPolylinePageByYear" resultType="com.isoftstone.entity.pojo.PestPolylinePojo" parameterType="java.util.Map">
+	   	SELECT ii.`name` AS "insectName",
+	   		date_format(c.capture_time,'%Y-%m') time,
+			SUM(c.total_count) AS "totalCount"
+		FROM t_collect c
+		LEFT JOIN t_insect_info ii ON c.insect_id = ii.id
+		LEFT JOIN t_dev_info di ON c.device_id = di.id
+		<where>
+			date_format(c.capture_time,'%Y') =  date_format(#{captureTime},'%Y')  
+			AND c.insect_id in
+				<foreach collection="collectPojoList" item="item" index="index" open="(" separator="," close=")">  	
+				 	#{item.insectId}
+				</foreach>  
+			<if test="roleId != 1 or (areaId != null and areaId != 0)">
+				AND di.belong_area in
+				<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+				 	#{item}
+				</foreach>
+			</if>
+		</where>
+		GROUP BY ii.`name`,date_format(c.capture_time,'%Y-%m')
+		ORDER BY SUM(c.total_count) DESC
+  	</select>
+  	
+  	<select id="findPestColumnarPage" resultType="com.isoftstone.entity.pojo.CollectPojo" parameterType="java.util.Map">
+	   	SELECT c.insect_id AS "insectId",
+	   		ii.`name` AS "insectName",
+	   		a.name AS "areaName",
+			SUM(c.total_count) AS "totalCount"
+		FROM t_collect c
+		LEFT JOIN t_insect_info ii ON c.insect_id = ii.id
+		LEFT JOIN t_dev_info di ON c.device_id = di.id
+		LEFT JOIN t_area a ON di.belong_area = a.id
+		<where>
+			c.insect_id in (#{insectId1},#{insectId2})
+			<if test="type == 1">
+				AND date_format(c.capture_time,'%Y-%m') =  date_format(#{captureTime},'%Y-%m')
+			</if>
+			<if test="type == 2">
+				AND date_format(c.capture_time,'%Y') =  date_format(#{captureTime},'%Y')
+			</if> 
+			AND di.belong_area in
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item.id}
+			</foreach>
+		</where>
+		GROUP BY ii.`name`,a.name
+  	</select>
+</mapper>

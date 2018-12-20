@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.slave.DeviceMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.Device">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dev_code" jdbcType="VARCHAR" property="devCode" />
+    <result column="dev_name" jdbcType="VARCHAR" property="devName" />
+    <result column="dev_mac" jdbcType="VARCHAR" property="devMac" />
+    <result column="dev_lon" jdbcType="VARCHAR" property="devLon" />
+    <result column="dev_lat" jdbcType="VARCHAR" property="devLat" />
+    <result column="altitude" jdbcType="VARCHAR" property="altitude" />
+    <result column="constituent" jdbcType="VARCHAR" property="constituent" />
+    <result column="groupname" jdbcType="VARCHAR" property="groupName" /> 
+    <result column="areacode" jdbcType="VARCHAR" property="areaCode" />
+    <result column="dev_addr" jdbcType="VARCHAR" property="devAddr" />
+    <result column="dev_status" jdbcType="INTEGER" property="devStatus" />
+    <result column="factory_code" jdbcType="VARCHAR" property="factoryCode" />
+    <result column="create_userid" jdbcType="INTEGER" property="createUserid" />
+    <result column="create_time" jdbcType="INTEGER" property="createTime" />
+    <result column="update_userid" jdbcType="INTEGER" property="updateUserid" />
+    <result column="update_time" jdbcType="INTEGER" property="updateTime" />
+    <result column="site_code" jdbcType="VARCHAR" property="siteCode" />
+    <result column="dev_type" jdbcType="INTEGER" property="devType" />
+    <result column="dev_model" jdbcType="VARCHAR" property="devModel" />
+    <result column="send_period" jdbcType="INTEGER" property="sendPeriod" />
+    <result column="install_time" jdbcType="INTEGER" property="installTime" />
+    <result column="isremove" jdbcType="INTEGER" property="isRemove" /> 
+    <result column="isdelete" jdbcType="INTEGER" property="isDelete" />
+    <result column="sync" jdbcType="INTEGER" property="sync" />
+  </resultMap>
+  
+  <select id="findPage" resultMap="BaseResultMap" parameterType="com.isoftstone.entity.model.Device">
+   	SELECT 
+		id,
+		dev_code,
+		dev_name,
+		dev_mac,
+		dev_lon,
+		dev_lat,
+		altitude,
+		constituent,
+		groupname,
+		areacode,
+		dev_addr,
+		dev_status,
+		factory_code,
+		create_userid,
+		create_userid,
+		update_userid,
+		update_time,
+		site_code,
+		dev_type,
+		dev_model,
+		send_period,
+		install_time,
+		isremove,
+		isdelete,
+		sync
+	FROM
+		tb_dev_info
+    <where>
+		id in
+		<foreach collection="deviceExtendsList" item="item" index="index" open="(" separator="," close=")">  	
+		 #{item.id}
+		</foreach>
+	</where>
+  </select>
+  
+  <select id="findPageOne" resultMap="BaseResultMap" parameterType="com.isoftstone.entity.model.Device">
+   	SELECT 
+		id,
+		dev_code,
+		dev_name,
+		dev_mac,
+		dev_lon,
+		dev_lat,
+		altitude,
+		constituent,
+		groupname,
+		areacode,
+		dev_addr,
+		dev_status,
+		factory_code,
+		create_userid,
+		create_userid,
+		update_userid,
+		update_time,
+		site_code,
+		dev_type,
+		dev_model,
+		send_period,
+		install_time,
+		isremove,
+		isdelete,
+		sync
+	FROM
+		tb_dev_info
+    <where>
+		isdelete = 0
+		<if test="devName != null and devName != ''">
+			AND	(dev_name LIKE concat('%',#{devName},'%'))
+		</if>
+	</where>
+	ORDER BY create_time DESC
+  </select>
+  
+
+  	<!-- 添加设备 -->
+	<insert id="addDevice" useGeneratedKeys="true" keyProperty="id" parameterType="com.isoftstone.entity.pojo.DevicePojo">
+		INSERT INTO
+		 tb_dev_info (
+			dev_code ,
+			dev_name ,
+			dev_mac ,
+			dev_type,
+			constituent,
+			groupname,
+			dev_status,
+			dev_addr,
+			create_userid,
+			create_time,
+			isremove,
+			isdelete
+		)
+		VALUES
+		(
+			#{devCode},
+			#{devName},
+			#{devMac},
+			#{devType},
+			#{constituent},
+			#{groupName},
+			#{devStatus},
+			#{devAddr},
+			#{createUserid},
+			#{createTime},
+			#{isRemove},
+			#{isDelete}
+		)
+	</insert>
+	
+	<!-- 更新设备信息 -->
+	<update id="updateDevice">
+		UPDATE tb_dev_info SET
+			dev_code = #{devCode},
+			dev_name = #{devName} ,
+			dev_mac = #{devMac} ,
+			dev_type = #{devType} ,
+			constituent = #{constituent},
+			groupname = #{groupName},
+			dev_addr = #{devAddr},
+			update_userid = #{updateUserid},
+			update_time = #{updateTime}
+		WHERE id = #{id}	
+	</update>
+	
+	<!-- 删除设备信息 -->
+	<update id="deleteDevice">		
+		UPDATE tb_dev_info SET
+			isdelete = 1
+		<where>
+			id in
+			<foreach collection="idList" item="id" index="index" open="(" separator="," close=")">  	
+			 #{id}
+			</foreach>
+		</where>
+	</update>
+	
+	<select id="findMacById" resultType="com.isoftstone.entity.model.Device">
+	   	SELECT 
+			di.id AS id,
+			di.dev_code AS devCode,
+			di.dev_name AS devName,
+			di.dev_mac AS devMac
+		FROM
+			tb_dev_info di
+	    <where>
+			isdelete = 0 and di.id = #{id}
+		</where>
+	</select>
+	
+	
+	<select id="queryParam" parameterType="com.isoftstone.entity.model.DevParameter" resultType="com.isoftstone.entity.model.DevParameter">
+	   	SELECT 
+			dp.id,
+			dp.device_id deviceId,
+			dp.dev_code devCode,
+			dp.parameter_name parameterName,
+			dp.parameter_value parameterValue,
+			dp.update_time updateTime,
+			dp.status
+		FROM
+			tb_dev_parameter dp
+	    <where>
+			dp.device_id = #{deviceId}
+		AND dp.dev_code = #{devCode}
+		</where>
+	</select>
+
+	<delete id="delParam" parameterType="com.isoftstone.entity.pojo.DevParameterPojo">
+	   	DELETE FROM tb_dev_parameter WHERE device_id = #{deviceId} AND dev_code = #{devCode}
+	</delete>
+	
+	<insert id="addParam" parameterType="java.util.List">
+		INSERT INTO tb_dev_parameter(
+			device_id,
+			dev_code,
+			parameter_name,
+			parameter_value,
+			update_time,
+			status
+		) VALUES
+		<foreach collection="paramList" item="param" index="index" separator=",">  
+			(#{param.deviceId},#{param.devCode},#{param.parameterName},#{param.parameterValue},#{param.updateTime},#{param.status})
+		</foreach>
+	</insert>
+
+	<select id="queryDeviceByList" resultMap="BaseResultMap" parameterType="com.isoftstone.entity.model.Device">
+	   	SELECT 
+			id,
+			dev_code,
+			dev_name,
+			dev_mac,
+			dev_lon,
+			dev_lat,
+			altitude,
+			constituent,
+			groupname,
+			areacode,
+			dev_addr,
+			dev_status,
+			factory_code,
+			create_userid,
+			create_userid,
+			update_userid,
+			update_time,
+			site_code,
+			dev_type,
+			dev_model,
+			send_period,
+			install_time,
+			isremove,
+			isdelete,
+			sync
+		FROM
+			tb_dev_info
+	    <where>
+			isdelete = 0
+			AND id in
+			<foreach collection="deList" item="item" index="index" open="(" separator="," close=")">  	
+			 #{item.id}
+			</foreach>
+		</where>
+		ORDER BY create_time DESC
+	</select>
+	
+	<select id="selectByCodeAndName" resultMap="BaseResultMap" parameterType="com.isoftstone.entity.model.Device">
+   	SELECT 
+		id,
+		dev_code,
+		dev_name,
+		dev_mac,
+		dev_lon,
+		dev_lat,
+		altitude,
+		constituent,
+		groupname,
+		areacode,
+		dev_addr,
+		dev_status,
+		factory_code,
+		create_userid,
+		create_userid,
+		update_userid,
+		update_time,
+		site_code,
+		dev_type,
+		dev_model,
+		send_period,
+		install_time,
+		isremove,
+		isdelete,
+		sync
+	FROM
+		tb_dev_info
+    where
+		dev_code = #{deviceCode}
+	AND dev_name = #{deviceName}
+	AND isdelete = 0
+  </select>
+</mapper>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>虫情数据管理--生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+		
+		<link  rel="stylesheet" th:href="@{/css/jquery.editable-select.css}"/>
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		<style type="text/css">
+			#J-xl-4-btn{
+			    right: 118px;
+			    top: 98px;
+			}
+			.editable-select{
+				width: 275px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">自动虫情</li>
+							<li class="active">虫情数据管理</li>
+						</ul><!-- .breadcrumb -->
+
+						
+					</div>
+
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="sxc-head demoTable">
+                                		<ol class="clearfix">
+                                			<li>
+                                				<button class="btn btn-danger layui-btn" shiro:hasPermission="/collectPage/delCollect" data-type="delSelect">
+													<i class="icon-trash bigger-120"></i>删除
+											    </button>
+                                			</li>
+                                			
+                                			<li>
+                                				<button class="btn btn-primary btnDownLoad layui-btn" shiro:hasPermission="/collectPage/importCollects" data-type="importCollects" style="margin:0px;" title="上传虫情数据">
+													<i class="icon-cloud-upload bigger-150"></i>导入虫情
+											    </button>
+                                				<input type="file" style="display:none;" id="collectExcel" onchange="uploadExcel(this);" name="collectExcel">
+                                			</li>
+                                			<li>
+                                				<button class="btn btn-primary btnDownLoad layui-btn" shiro:hasPermission="/collectPage/exportCollects" data-type="exportCollects" style="margin:0px;" title="下载虫情数据">
+													<i class="icon-cloud-download bigger-150"></i>导出虫情
+											    </button>
+                                			</li>
+                                			<li>
+                                				<button class="btn btn-primary btnDownLoad  layui-btn" shiro:hasPermission="/collectPage/exportCollects" data-type="downLoad" style="margin:0px;" title="下载模板">
+													<i class="icon-cloud-download bigger-150"></i>下载模板
+											    </button>
+                                			</li>
+                                		</ol>
+	                                	<ol class="clearfix dataTime" style="margin-top: 10px;">
+                                			<li>
+                                				<label>捕获时间:</label>
+                                				<dl>
+                                					<dd><input id="J-xl-2" type="text"/><span id="J-xl-2-btn"></span></dd>
+                                					<dd style="margin: 0 10px;">-</dd>
+                                					<dd><input id="J-xl-3" type="text"/><span id="J-xl-3-btn"></span></dd>
+                                				</dl>
+                                				
+                                			</li>
+                                			<li><label>昆虫名称:</label><input type="text" id="insectName" placeholder="输入昆虫名称"/></li>
+                                			<li><label>设备名称:</label><input type="text" id="deviceName" placeholder="输入设备名称"/></li>
+                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch">搜索</button></li>
+                                		</ol>
+                                	</div>
+                                	<div class="table-responsive">
+										<table class="layui-table" id="collectList" lay-data="{url:'/collectPage/findPage', page:true,limit:10,even: true, id:'idTest'}" lay-filter="collectList">
+										  <thead>
+										    <tr>
+										      <th lay-data="{checkbox:true, fixed: true}"></th>
+										      <th lay-data="{field:'deviceCode', width:220, sort: true}">设备编号</th>
+										      <th lay-data="{field:'deviceName', width:140, sort: true}">设备名称</th>
+										      <th lay-data="{field:'captureTime', width:180, sort: true,align:'center',templet:'#fmtCaptureTime'}">抓捕时间</th>
+										      <th lay-data="{field:'insectName', width:140, sort: true}">昆虫名称</th>
+										      <th lay-data="{field:'femaleCount', width:120, sort: true}">雌虫数量</th>
+										      <th lay-data="{field:'maleCount', width:120, sort: true}">雄虫数量</th>
+										      <th lay-data="{field:'totalCount', width:120, sort: true}">总数量</th>
+										      <th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}">操作</th>
+										    </tr>
+										  </thead>
+										</table>
+									</div>
+                                </div>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+		<script th:src="@{/js/jquery.editable-select.js}" ></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+        <script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/ajaxfileupload.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}" charset="utf-8"></script>
+		
+		<div id="addDiv" style="display:none;">
+			<form id="formTemp">
+				<div class="editCon">
+					<input type="hidden" name="id"/>
+					<ul>
+						<li>
+							<label>设备编号:</label>
+							<input type="text" name="deviceCode" readonly="true"/>
+						</li>
+						<li>
+							<label>设备名称:</label>
+							<input type="text" name="deviceName" readonly="true"/>
+						</li>
+						<li>
+							<label>抓捕时间:</label>
+							<input id="J-xl-4" name="captureTime" type="text" style="height: 35px;padding: 4px 12px 4px 5px;" readonly="true"><span id="J-xl-4-btn"></span>
+						</li>
+						<li>
+							<label>昆虫名称:</label>
+							<input type="hidden" name="insectName">
+							<select id="insectTemp" name="insectId">
+								<option value="-1">--自定义--</option>
+							</select>
+						</li>
+						<li>
+							<label>雌虫数量:</label>
+							<input type="Number" name="femaleCount" id="femaleCount" onkeyup="sum(this);"/>
+						</li>
+						<li>
+							<label>雄虫数量:</label>
+							<input type="Number" name="maleCount" id="maleCount" onkeyup="sum(this);"/>
+						</li>
+						<li>
+							<label>总数量:</label>
+							<input type="Number" name="totalCount" id="totalCount" />
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		
+		<form id="exportForm" action="collectPage/exportCollects" method="post">
+			<input type="hidden" name="startTime" id="startTime">
+			<input type="hidden" name="endTime" id="endTime">
+			<input type="hidden" name="insectName" id="iName">
+			<input type="hidden" name="deviceName" id="dName">
+			<input type="hidden" name="columns" id="columns">
+			<input type="hidden" name="columnsName" id="columnsName">
+		</form>
+		
+		<!-- inline scripts related to this page -->
+		<script type="text/html" id="fmtCaptureTime">
+			{{# return DateUtil.stamp2Time(d.captureTime) }}
+		</script>
+
+		<div id="barDemo" style="display: none;">
+			<a class="green" lay-event="edit" shiro:hasPermission="/collectPage/edit" title="编辑"><i class="icon-pencil bigger-150"></i></a>
+			<a class="red" title="删除" shiro:hasPermission="/collectPage/delCollect" lay-event="del"><i class="icon-trash bigger-150"></i></a>
+		</div>
+		
+		<script type="text/javascript">
+		layui.use('table', function(){
+			  var table = layui.table;
+			  //监听表格复选框选择
+			  table.on('checkbox(collectList)', function(obj){
+				  
+			  });
+			  //监听工具条
+			  table.on('tool(collectList)', function(obj){
+			    var dev = obj.data;
+			    if(obj.event === 'del'){
+			      layer.confirm('是否确定删除该条数据？', function(index){
+			    	  $.ajax({
+			                cache: true,
+			                type: "POST",
+			                url:'/collectPage/delCollect',
+			                data:{ids : dev.id},
+			                async: false,
+			                dataType:'json',
+			                success: function(xhr) {
+			                	if(xhr.code == 1){
+			                        layer.msg('删除虫情成功');
+			                        obj.del();
+									layer.close(index);
+									table.reload('idTest', {
+						            	where: { //设定异步数据接口的额外参数
+						            		"insectName":$("#insectName").val(),
+											"deviceName":$("#deviceName").val()
+						            	}
+									});
+			                    }else{
+			                        layer.msg(xhr.message);
+			                    }
+			                }
+			            });
+			      });
+			    } else if(obj.event === 'edit'){
+			    	layer.open({
+					  title: '编辑自动虫情数据信息'
+					  ,content: $("#addDiv").html().replace('formTemp','collectForm').replace('insectTemp','insectId'),
+					  area:['550px','420px'],
+					  success:function(){
+						  $.ajax({
+					            cache: true,
+					            type: "POST",
+					            url:'/insectPage/getAllInsect',
+					            async: false,
+					            dataType: "json",
+					            success: function(obj) {
+					                var insect = obj.data;
+					                var optionStr = "";
+					                for(var i =0;i<insect.length;i++){
+					                	optionStr += '<option value="'+insect[i].id+'">'+insect[i].name+'</option>';
+					                }
+					                $("#collectForm #insectId").append(optionStr);
+					            }
+					        });
+						  
+						  $('#insectId').editableSelect({
+						       bg_iframe: true,
+							   trigger : 'manual',
+						       onSelect: function(list_item) {
+						         // 'this' is a reference to the instance of EditableSelect
+						         // object, so you have full access to everything there
+								 if(this.text.val()=='--自定义--'){
+									$("#insectId_sele").val('');
+									$("#insectId_sele").attr('placeholder','请输入昆虫名');
+								 }
+						       },
+						       case_sensitive: false, // If set to true, the user has to type in an exact
+						                              // match for the item to get highlighted
+						       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+						       isFilter:false //If set to true, the item will be filtered according to the matching criteria.
+						     }
+						   );
+						  $("#collectForm input[name='id']").val(dev.id);
+						  $("#collectForm input[name='deviceCode']").val(dev.deviceCode);
+						  $("#collectForm input[name='deviceName']").val(dev.deviceName);
+						  $("#collectForm input[name='captureTime']").val(DateUtil.stamp2Time(dev.captureTime));
+						  $("#collectForm input[name='insectId_sele']").trigger('click');
+						  $("#collectForm input[name='insectId_sele']").val(dev.insectName);
+ 						  $("#collectForm input[name='femaleCount']").val(dev.femaleCount);
+						  $("#collectForm input[name='maleCount']").val(dev.maleCount);
+						  $("#collectForm input[name='totalCount']").val(dev.totalCount);
+						  $("#collectForm").validate({
+							    rules: {
+							    	femaleCount : "required",
+							    	maleCount : "required"
+							    },
+							    messages: {
+							    	femaleCount : "请填写雌虫数量",
+							    	maleCount : "请填写雄虫数量",
+							    }
+							});
+					  },
+					  btn:['确定','取消']
+					  ,yes: function(){
+						  if(!$("#collectForm").valid()) {
+								return false;
+						  }
+						  var flag = true;
+						  var k = $("#insectId_sele").val();
+						  if(k){
+								$("#insectId_hidden_select option").each(function(e){  
+									if($(this).text() == k){  
+										$(this).attr("selected","selected");
+										flag = false;
+										return false;
+									}
+								}); 
+								if(flag){
+									$("#insectId_hidden_select").val(-1);
+								}
+								$("#collectForm input[name='insectName']").val($("#insectId_sele").val());
+								$("#collectForm input[name='insectId']").val($("#insectId_hidden_select").val());
+						  }else{
+								alert('昆虫名不能为空');
+						  }
+						  $.ajax({
+					            cache: true,
+					            type: "POST",
+					            url:'/collectPage/updateCollect',
+					            data:$('#collectForm').serialize(),// 你的formid
+					            dataType:'json',
+				                success: function(obj) {
+				                	if(obj.code == 1){
+					                    layer.msg('编辑成功');
+						                layer.closeAll('page');
+							                if($.trim($("#J-xl-2").val()) == "" || $.trim($("#J-xl-2").val()) == null || $.trim($("#J-xl-3").val()) == "" || $.trim($("#J-xl-3").val()) == null){
+												table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数
+									            		"insectName":$("#insectName").val(),
+														"deviceName":$("#deviceName").val()
+									            	}
+												});
+											}else{
+												table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数
+									            		"insectName":$("#insectName").val(),
+														"deviceName":$("#deviceName").val(),
+														"beforeTime":$("#J-xl-2").val()+" 00:00:00",
+														"afterTime":$("#J-xl-3").val()+" 23:59:59"
+									            	}
+												});
+											}
+					                }else{
+					                    layer.msg(obj.message);
+					                }
+					            }
+					        });
+					  },
+					  btn2: function(){
+					    layer.closeAll();
+					  },
+					  btnAlign: 'c'
+					});
+			    }
+			  });
+			  
+			  var $ = layui.$, active = {
+						delSelect: function(){ //获取选中数目
+				      		var checkStatus = table.checkStatus('idTest')
+				      			,data = checkStatus.data;
+							if(data.length>0){
+								var ids = "";
+								for(var i=0;i<data.length;i++){
+									ids += ","+ data[i].id;
+								}
+								layer.confirm('是否删除选中的数据？', function(index){
+									$.ajax({
+						                cache: true,
+						                type: "POST",
+						                url:'/collectPage/delCollect',
+						                data:{ids:ids.substring(1)},
+						                async: false,
+						                dataType:'json',
+						                success: function(obj) {
+						                	if(obj.code == 1){
+						                        layer.msg('删除虫情成功');
+												layer.close(index);
+													if($.trim($("#J-xl-2").val()) == "" || $.trim($("#J-xl-2").val()) == null || $.trim($("#J-xl-3").val()) == "" || $.trim($("#J-xl-3").val()) == null){
+														table.reload('idTest', {
+											            	where: { //设定异步数据接口的额外参数
+											            		"insectName":$("#insectName").val(),
+																"deviceName":$("#deviceName").val()
+											            	}
+														});
+													}else{
+														table.reload('idTest', {
+											            	where: { //设定异步数据接口的额外参数
+											            		"insectName":$("#insectName").val(),
+																"deviceName":$("#deviceName").val(),
+																"beforeTime":$("#J-xl-2").val()+" 00:00:00",
+																"afterTime":$("#J-xl-3").val()+" 23:59:59"
+											            	}
+														});
+													}
+						                    }else{
+						                        layer.msg(obj.message);
+						                    }
+						                }
+						            });
+								});
+							}else{
+					      		layer.msg('请选择要删除的数据！');
+							}
+							
+				    	}
+						,doSearch: function(){
+								if($.trim($("#J-xl-2").val()) == "" || $.trim($("#J-xl-2").val()) == null || $.trim($("#J-xl-3").val()) == "" || $.trim($("#J-xl-3").val()) == null){
+									table.reload('idTest', {
+										page:{
+											curr:1
+										},
+						            	where: { //设定异步数据接口的额外参数
+						            		"insectName":$("#insectName").val(),
+											"deviceName":$("#deviceName").val()
+						            	}
+									});
+								}else{
+									table.reload('idTest', {
+										page:{
+											curr:1
+										},
+						            	where: { //设定异步数据接口的额外参数
+						            		"insectName":$("#insectName").val(),
+											"deviceName":$("#deviceName").val(),
+											"beforeTime":$("#J-xl-2").val()+" 00:00:00",
+											"afterTime":$("#J-xl-3").val()+" 23:59:59"
+						            	}
+									});
+								}
+				    	},
+				    	importCollects : function(){
+					    	$("#collectExcel").click();
+				    	},
+				    	exportCollects : function(){
+							var columns = "deviceCode,deviceName,captureTime,insectName,femaleCount,maleCount,totalCount";
+							var columnsName = "设备编号,设备名称,抓捕时间,昆虫名称,雌虫数量,雄虫数量,总数量";
+							
+							if($("#J-xl-2").val()){
+								$("#startTime").val($("#J-xl-2").val()+" 00:00:00");
+							}
+							if($("#J-xl-3").val()){
+								$("#endTime").val($("#J-xl-3").val()+" 23:59:59");
+							}
+							$("#iName").val($("#insectName").val());
+					    	$("#dName").val($("#deviceName").val());
+					    	$("#columns").val(columns);
+					    	$("#columnsName").val(columnsName);
+					    	$("#exportForm").submit();
+				    	},
+				    	downLoad : function(){
+				    		window.open("/template/虫情数据导入模板.xls");
+				    	}
+				  	};
+			  
+			  $('.demoTable .layui-btn').on('click', function(){
+			    var type = $(this).data('type');
+			    active[type] ? active[type].call(this) : '';
+			  });
+			  
+			});
+		
+			jQuery(function($) {
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+				
+				
+			});
+			
+		document.getElementById('J-xl-2-btn').onclick = function(){
+
+	            laydate({
+	
+	                elem: '#J-xl-2'
+	
+	            });
+
+			 }
+		 document.getElementById('J-xl-3-btn').onclick = function(){
+
+	            laydate({
+	
+	                elem: '#J-xl-3'
+	
+	            });
+
+			 }
+		 
+		 function jxl(){
+
+	            laydate({
+	
+	                elem: '#J-xl-4'
+	
+	            });
+
+		 }
+		 
+		 function sum(obj) {
+            var a = $("#collectForm input[name='femaleCount']").val();
+            var b = $("#collectForm input[name='maleCount']").val();
+            if(a === "" || b === "") {
+                return;
+            } 
+            s = parseInt(a) + parseInt(b);
+            $("#collectForm input[name='totalCount']").val(s);
+        }
+		 
+		function uploadExcel(e){
+			$.ajaxFileUpload({
+				url:"/collectPage/importCollects",	//需要链接到服务器地址 
+				secureuri:false,
+				async : false,
+				fileElementId:"collectExcel",//文件选择框的id属性
+				dataType: 'json',	//json
+				success: function (obj) {
+					$("#collectExcel").val('');
+					if(obj.code==1){
+	                    layer.msg(obj.message);
+	                    var table = layui.table;
+	                    if($.trim($("#J-xl-2").val()) == "" || $.trim($("#J-xl-2").val()) == null || $.trim($("#J-xl-3").val()) == "" || $.trim($("#J-xl-3").val()) == null){
+							table.reload('idTest', {
+								page:{
+									curr:1
+								},
+				            	where: { //设定异步数据接口的额外参数
+				            		"insectName":$("#insectName").val(),
+									"deviceName":$("#deviceName").val()
+				            	}
+							});
+						}else{
+							table.reload('idTest', {
+								page:{
+									curr:1
+								},
+				            	where: { //设定异步数据接口的额外参数
+				            		"insectName":$("#insectName").val(),
+									"deviceName":$("#deviceName").val(),
+									"beforeTime":$("#J-xl-2").val()+" 00:00:00",
+									"afterTime":$("#J-xl-3").val()+" 23:59:59"
+				            	}
+							});
+						}
+					}
+					else{
+						console.log(obj.message);
+						layer.msg(obj.message);
+					}
+					
+				},
+				error:function(XMLHttpRequest, textStatus, errorThrown){
+					layer.msg('导入用户信息失败！');
+				}
+			});
+		}
+		</script>
+		
+	</body>
+</html>
+

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta charset="utf-8" />
+		<title>生兴防治</title>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- basic styles -->
+		<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+		<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"  />
+
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+		
+		<link  rel="stylesheet" th:href="@{/css/jquery.editable-select.css}"/>
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="/js/html5shiv.js"></script>
+		<script src="/js/respond.min.js"></script>
+		<![endif]-->
+	
+		<style type="text/css">
+			#J-xl-4-btn{
+			    right: 118px;
+			    top: 98px;
+			}
+			.editable-select{
+				width: 275px !important;
+			}
+		</style>	
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">自动虫情</li>
+							<li class="active">图片采集</li>
+						</ul><!-- .breadcrumb -->
+
+						
+					</div>
+
+					<div class="page-content">
+						
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sxc-head demoTable" style="border-bottom: none;">
+                                		<ol class="clearfix dataTime">
+                                			<li><label>设备名称:</label><span th:text="${devName}" style="color:red;"></span></li>
+                                			<li><input type="hidden" name="devId" id="devId" th:value="${devId}"/></li>
+                                			<li>
+                                				<label>拍摄时间:</label>
+                                				<dl>
+                                					<dd><input id="J-xl-2" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});"/><span id="J-xl-2-btn" ></span></dd>
+                                					<dd style="margin: 0 10px;">-</dd>
+                                					<dd><input id="J-xl-3" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});"><span id="J-xl-3-btn"></span></dd>
+                                				</dl>
+                                				
+                                			</li>
+                                			
+                                			<li><button class="btn btn-primary" onClick="searchDev()">搜索</button></li>
+                                			<li><button class="btn btn-danger">删除</button></li>
+                                		</ol>
+                                	</div>                           	
+                                	
+                                	<div id="picListDiv" class="plantPicCon">
+                                	  
+                                	</div>
+                                	<!--分页-->
+                                	<div id="pageDiv" style="text-align:right;"></div>
+	
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div id="addCollect" style="display:none;">
+					<form id="formTemp">
+						<div class="editCon">
+							<input type="hidden" name="deviceId"/>
+							<input type="hidden" name="pictureId"/>
+							<ul>
+						<li>
+							<label>设备编号:</label>
+							<input type="text" name="deviceCode" readonly="true"/>
+						</li>
+						<li>
+							<label>设备名称:</label>
+							<input type="text" name="deviceName" readonly="true"/>
+						</li>
+						<li>
+							<label>抓捕时间:</label>
+							<input id="J-xl-4" name="captureTime" type="text" style="height: 35px;padding: 4px 12px 4px 5px;" readonly="true"><span id="J-xl-4-btn" readonly="true"></span>
+						</li>
+						<li>
+							<label>昆虫名称:</label>
+							<input type="hidden" name="insectName">
+							<select id="insectTemp" name="insectId">
+								<option value="-1">--自定义--</option>
+							</select>
+						</li>
+						<li>
+							<label>雌虫数量:</label>
+							<input type="Number" name="femaleCount" id="femaleCount" onkeyup="sum(this);"/>
+						</li>
+						<li>
+							<label>雄虫数量:</label>
+							<input type="Number" name="maleCount" id="maleCount" onkeyup="sum(this);"/>
+						</li>
+						<li>
+							<label>总数量:</label>
+							<input type="Number" name="totalCount" id="totalCount"/>
+						</li>
+					</ul>
+						</div>
+					</form>
+				</div>
+
+				<div class="ace-settings-container" id="ace-settings-container">
+					<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+						<i class="icon-cog bigger-150"></i>
+					</div>
+
+					<div class="ace-settings-box" id="ace-settings-box">
+						<div>
+							<div class="pull-left">
+								<select id="skin-colorpicker" class="hide">
+									
+									<option data-skin="default" value="#00aa83">#00aa83</option>
+									<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+									<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+									<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+								</select>
+							</div>
+							<span>&nbsp; 选择皮肤</span>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+							<label class="lbl" for="ace-settings-navbar"> 固定导航条</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+							<label class="lbl" for="ace-settings-sidebar"> 固定滑动条</label>
+						</div>
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+							<label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
+						</div>
+
+						<!--<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+							<label class="lbl" for="ace-settings-rtl">切换到左边</label>
+						</div>-->
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+							<label class="lbl" for="ace-settings-add-container">
+								切换窄屏
+								<b></b>
+							</label>
+						</div>
+					</div>
+				</div><!-- /#ace-settings-container -->
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+		<script th:src="@{/js/jquery.editable-select.js}" ></script>
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script  th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script  th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+        <!--照片list-->
+        <script th:src="@{/js/slick/slick.js}"></script>
+        <script th:src="@{/js/slick/scripts.js}"></script>
+        
+        <link rel="stylesheet" th:href="@{/css/slice/slick.css}" />
+        
+		<!--[if lte IE 8]>
+		  <script src="/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+
+		<!-- ace scripts -->
+
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}" charset="utf-8"></script>
+		
+		
+
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+			var layer;
+			layui.use('layer', function(){
+  				layer = layui.layer;
+  			});
+			
+			jQuery(function($) {
+				var devId = $("#devId").val();
+				toPage(devId,1);
+				
+			});
+			function toPage(devId,page,beforeTime,afterTime){
+				var devId = $("#devId").val();
+				$.ajax({
+	                cache: true,
+	                type: "POST",
+	                url:'/plantPicPage/findPicByMac',
+	                data:{devId:devId,beforeTime:beforeTime,afterTime:afterTime,page:page,limit:5},
+	                dataType: 'json',
+	                async: false,
+	                success: function(xhr) {
+	                    var params = xhr.data;
+	                    var paramStr='';
+	                    if(params.length > 0){
+	                    	 for(var i =0;i<params.length;i++){
+	 	                    	var param = params[i];
+	 	                    	paramStr += '<div class="plantPicConList">';
+	 	                    	paramStr += '<div class="plantPicConTitle"><i class="clockIcon"></i><span id="captureTime">' + DateUtil.stamp4Time(param[0].captureTime) + '</span>';
+	 	                    	paramStr += '<span id="deviceId" style="display:none">' + param[0].devId + '</span>';
+	 	                    	paramStr += '<span id="deviceCode" style="display:none">' + param[0].deviceCode + '</span>';
+	 	                    	paramStr += '<span id="deviceName" style="display:none">' + param[0].deviceName + '</span>';
+	 	                    	paramStr += '<span id="pathId" style="display:none">' + param[0].id + '</span></div>';
+	 	                    	paramStr += '<div class="picScroll"><div class="slider responsive">';
+	 	                    	for(var j =0;j<param.length;j++){
+	 	                    		var jpg = param[j];
+	 	                    		paramStr += '<div><dl class="picCon">';
+	 	                    		paramStr += '<dd><img src="/plantPicPage/viewImage/?imgPath='+ jpg.imgPath + '"/></dd>';
+	 	                    		paramStr += '<dd><label>拍摄时间:</label><span> ' + DateUtil.stamp4Time(param[0].captureTime) + '</span></dd>';
+	 	                    		paramStr += '<dd class="picBtn"><a href="javascript:" class="btn btn-white" onClick="addCollect(this)">诊断</a><button class="btn btn-white" onClick="delPic(this)">删除</button></dd>';
+	 	                    		paramStr += '</dl></div>';
+	 	                    	}
+	 	                    	paramStr += '</div></div></div>';
+	 	                    }
+	                    }else{
+	                    	paramStr += '<form onsubmit="return false"><div class="setParameterList">';
+	                    	paramStr += '<div class="layui-none" style="line-height: 40px;text-align: center;color: #999;">未检索到虫情图片</div>';
+	                    	paramStr += '</div></form>';
+	                    }
+	                   
+	                    
+	                    $("#picListDiv").html(paramStr);
+
+	        			//照片list
+	        			
+	        			$('.responsive').slick({
+     							  dots: false,
+     							  infinite: false,
+     							  speed: 300,
+     							  slidesToShow: 4,
+     							  slidesToScroll: 4,
+     							  responsive: [
+     							    {
+     							      breakpoint: 1024,
+     							      settings: {
+     							        slidesToShow: 3,
+     							        slidesToScroll: 3,
+     							        infinite: true,
+     							        dots: false
+     							      }
+     							    },
+     							    {
+     							      breakpoint: 600,
+     							      settings: {
+     							        slidesToShow: 2,
+     							        slidesToScroll: 2
+     							      }
+     							    },
+     							    {
+     							      breakpoint: 480,
+     							      settings: {
+     							        slidesToShow: 1,
+     							        slidesToScroll: 1
+     							      }
+     							    }
+     							  ]
+     							});
+	                    layui.use('laypage', function(){
+		      				var laypage = layui.laypage
+		      				laypage.render({
+		      				    elem: 'pageDiv',
+		      				    count: xhr.count, //数据总数
+		      				    limit: 5,
+		      				  	curr: page,
+		      				    jump: function(obj, first){
+		      				    	if(!first){
+		      				    		toPage(devId,obj.curr)
+		      				    	}
+		      				    }
+		      				});
+		      			});
+	                    
+	                }
+	            });
+			}
+			
+			function searchDev(){
+				var devId = $("#devId").val();
+				if($.trim($("#J-xl-2").val()) == "" || $.trim($("#J-xl-2").val()) == null || $.trim($("#J-xl-3").val()) == "" || $.trim($("#J-xl-3").val()) == null){
+					toPage(devId,1);
+				}else{
+					var beforeTime = DateUtil.time2Stamp($("#J-xl-2").val())/1000;
+					var afterTime = DateUtil.time2Stamp($("#J-xl-3").val())/1000;
+					toPage(devId,1,beforeTime,afterTime);
+				}
+				
+			
+			}
+			
+
+            function addCollect(event){
+				var captureTime = $($(event).parent().parent().parent().parent().parent().parent().parent().parent()).find("#captureTime").text();
+				var deviceId = $($(event).parent().parent().parent().parent().parent().parent().parent().parent()).find("#deviceId").text();
+				var deviceCode = $($(event).parent().parent().parent().parent().parent().parent().parent().parent()).find("#deviceCode").text();
+				var deviceName = $($(event).parent().parent().parent().parent().parent().parent().parent().parent()).find("#deviceName").text();
+				var pathId = $($(event).parent().parent().parent().parent().parent().parent().parent().parent()).find("#pathId").text();
+				layer.open({
+					  title: '添加虫情数据信息'
+					  ,content: $("#addCollect").html().replace('formTemp','collectForm').replace('insectTemp','insectId'),
+					  area:['550px','500px'],
+					  success:function(){
+						  $('#insectId').editableSelect({
+						       bg_iframe: true,
+							   trigger : 'manual',
+						       onSelect: function(list_item) {
+						         // 'this' is a reference to the instance of EditableSelect
+						         // object, so you have full access to everything there
+								 if(this.text.val()=='--自定义--'){
+									$("#insectId_sele").val('');
+									$("#insectId_sele").attr('placeholder','请输入昆虫名');
+								 }
+						       },
+						       case_sensitive: false, // If set to true, the user has to type in an exact
+						                              // match for the item to get highlighted
+						       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+						       isFilter:false //If set to true, the item will be filtered according to the matching criteria.
+						     }
+						   );
+						  $("#collectForm input[name='pictureId']").val(pathId);
+						  $("#collectForm input[name='deviceId']").val(deviceId);
+						  $("#collectForm input[name='deviceCode']").val(deviceCode);
+						  $("#collectForm input[name='deviceName']").val(deviceName);
+						  $("#collectForm input[name='captureTime']").val(captureTime);
+						  $("#collectForm").validate({
+							    rules: {
+							    	insectId : "required",
+							    	femaleCount : "required",
+							    	maleCount : "required"
+							    },
+							    messages: {
+							    	insectId : "请选择昆虫种类",
+							    	femaleCount : "请填写雌虫数量",
+							    	maleCount : "请填写雄虫数量",
+							    }
+							});
+					  },
+					  btn:['确定','取消']
+					  ,yes: function(){
+						  if(!$("#collectForm").valid()) {
+								return false;
+						  }
+						  $("#collectForm input[name='captureTime']").val(captureTime +" 00:00:00");
+
+						  var flag = true;
+						  var k = $("#insectId_sele").val();
+						  if(k){
+								$("#insectId_hidden_select option").each(function(e){  
+									if($(this).text() == k){  
+										$(this).attr("selected","selected");
+										flag = false;
+										return false;
+									}
+								}); 
+								if(flag){
+									$("#insectId_hidden_select").val(-1);
+								}
+								$("#collectForm input[name='insectName']").val($("#insectId_sele").val());
+								$("#collectForm input[name='insectId']").val($("#insectId_hidden_select").val());
+						  }else{
+								alert('昆虫名不能为空');
+						  }
+						  $.ajax({
+					            cache: true,
+					            type: "POST",
+					            url:'/collectPage/addCollect',
+					            data:$('#collectForm').serialize(),// 你的formid
+					            dataType:'json',
+				                success: function(obj) {
+				                	if(obj.code == 1){
+					                    layer.msg('添加成功');
+						                layer.closeAll('page');
+							                if($.trim($("#J-xl-2").val()) == "" || $.trim($("#J-xl-2").val()) == null || $.trim($("#J-xl-3").val()) == "" || $.trim($("#J-xl-3").val()) == null){
+												table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数	
+									            	}
+												});
+											}else{
+												table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数
+														"beforeTime":DateUtil.time2Stamp($("#J-xl-2").val())/1000,
+														"afterTime":DateUtil.time2Stamp($("#J-xl-3").val())/1000	
+									            	}	
+												});
+											}
+					                }else{
+					                	layer.msg(obj.message);
+					                }
+					            }
+					        });
+					  },
+					  btn2: function(){
+					    layer.closeAll();
+					  },
+					  btnAlign: 'c'
+					});
+				
+				
+				}
+            
+            function delPic(event){
+            	var deviceId = $($(event).parent().parent().parent().parent().parent().parent().parent().parent()).find("#deviceId").text();
+            	var pathId = $($(event).parent().parent().parent().parent().parent().parent().parent().parent()).find("#pathId").text();
+				layer.confirm('是否确定删除该条数据？', function(index){
+			    	  $.ajax({
+			                cache: true,
+			                type: "POST",
+			                url:'/plantPicPage/delPic',
+			                data:{ids : pathId},
+			                async: false,
+			                dataType:'json',
+			                success: function(obj) {
+			                	if(obj.code == 1){
+			                        layer.msg('删除成功');
+									layer.closeAll('page');
+									if($.trim($("#J-xl-2").val()) == "" || $.trim($("#J-xl-2").val()) == null || $.trim($("#J-xl-3").val()) == "" || $.trim($("#J-xl-3").val()) == null){
+										toPage(deviceId,1);
+									}else{
+										var beforeTime = DateUtil.time2Stamp($("#J-xl-2").val())/1000;
+										var afterTime = DateUtil.time2Stamp($("#J-xl-3").val())/1000;
+										toPage(deviceId,1,beforeTime,afterTime);
+									}
+			                    }else{
+			                    	layer.msg(obj.message);
+			                    }
+			                }
+			            });
+			      });
+				
+				
+				}
+			
+			function sum(obj) {
+
+	            var a = $("#collectForm input[name='femaleCount']").val();
+	            var b = $("#collectForm input[name='maleCount']").val();
+	            if(a === "" || b === "") {
+	                return;
+	            } 
+	            s = parseInt(a) + parseInt(b);
+	            $("#collectForm input[name='totalCount']").val(s);
+	        }
+				
+		</script>
+
+		<script type="text/javascript">
+			jQuery(function($) {
+				//控制表格列数和数据的
+				var oTable1 = $('#sample-table-2').dataTable( {
+				"aoColumns": [
+			      { "bSortable": false },
+			      { "bSortable": false },
+			      { "bSortable": false },
+			      { "bSortable": false },
+			      { "bSortable": false }, 
+				] } );
+				
+				
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+			
+			
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+				
+				$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url:'/insectPage/getAllInsect',
+		            async: false,
+		            dataType: "json",
+		            success: function(obj) {
+		                var insect = obj.data;
+		                var optionStr = "";
+		                for(var i =0;i<insect.length;i++){
+		                	optionStr += '<option value="'+insect[i].id+'">'+insect[i].name+'</option>';
+		                }
+		                $("#insectTemp").append(optionStr);
+		            }
+		        });
+			});
+
+			
+		</script>
+		
+
+		
+	</body>
+</html>
+

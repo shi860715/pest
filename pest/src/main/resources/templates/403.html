@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	
+	<title>用户管理--生兴防治</title>
+	<meta name="keywords" content="生兴防治" />
+	<meta name="description" content="生兴防治" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+ 	<!-- basic styles -->
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" />
+	<!--[if IE 7]>
+	  <link rel="stylesheet" th:href="@{/css/font-awesome-ie7.min.css}" />
+	<![endif]-->
+	<!-- page specific plugin styles -->
+	<!-- fonts -->
+	<!-- ace styles -->
+	<link rel="stylesheet" th:href="@{/css/ace.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/newCss.css}" />
+	<!-- layer ui css -->
+  	<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+  	
+	<!--[if lte IE 8]>
+	  <link rel="stylesheet" th:href="@{/css/ace-ie.min.css}" />
+	<![endif]-->
+	<!-- inline styles related to this page -->
+	<!-- ace settings handler -->
+	<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+	<script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+	<![endif]-->
+</head>
+<body>
+		
+	<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="javascript:void(0);">首页</a>
+							</li>
+							<li class="active">403</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<!-- PAGE CONTENT BEGINS -->
+						<div class="row-fluid">
+							<div class="span12">
+								<div class="widget-box">
+									<div class="widget-title"> <span class="icon"> <i class="icon-info-sign"></i> </span>
+										<h5>Error 403</h5>
+									</div>
+									<div class="widget-content">
+										<div class="error_ex">
+											<h1>403</h1>
+											<h3>Opps, You're lost.</h3>
+											<p>Access to this page is forbidden</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+				<div th:include="common/toolbar :: toolbar"></div>
+				<!-- /#ace-settings-container -->
+			</div><!-- /.main-container-inner -->
+		</div><!-- /.main-container -->		
+	</body>
+</html>

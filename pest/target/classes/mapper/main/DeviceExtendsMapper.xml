@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.DeviceExtendsMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.DeviceExtends">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="province" jdbcType="INTEGER" property="province" />
+    <result column="city" jdbcType="INTEGER" property="city" />
+    <result column="district" jdbcType="INTEGER" property="district" />
+    <result column="belong_area" jdbcType="INTEGER" property="belongArea" />
+    <result column="buy_time" jdbcType="INTEGER" property="buyTime" />
+    <result column="buy_type" jdbcType="INTEGER" property="buyType" />
+    <result column="expire_time" jdbcType="INTEGER" property="expireTime" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="diffDay" jdbcType="INTEGER" property="diffDay" />
+  </resultMap>
+  
+  <select id="findPage" resultType="com.isoftstone.entity.model.DeviceExtends" parameterType="java.util.Map">
+   	SELECT 
+		di.id,
+		di.image,
+		di.dev_name devName,
+		di.province,
+		di.city,
+		di.district,
+		di.belong_area belongArea,
+		di.buy_time buyTime,
+		di.buy_type buyType,
+		di.expire_time expireTime,
+		di.owner,
+		di.user,
+		di.isdelete,
+		a.name areaName
+	FROM
+		t_dev_info di
+	LEFT JOIN t_area a on a.id = di.belong_area
+    <where>
+    	isdelete = 0
+		<if test="devName != null and devName != ''">
+			AND	di.dev_name LIKE concat('%',#{devName},'%')
+		</if>
+		<if test="roleId != 1">
+			AND	di.belong_area in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+		</if>
+	</where>
+	ORDER BY di.id DESC
+  </select>
+  
+  <select id="findPageOne" resultType="com.isoftstone.entity.model.DeviceExtends">
+   	SELECT 
+		di.id,
+		di.image,
+		di.province,
+		di.city,
+		di.district,
+		di.belong_area belongArea,
+		di.buy_time buyTime,
+		di.buy_type buyType,
+		di.expire_time expireTime,
+		di.owner,
+		di.user,
+		a.name areaName
+	FROM
+		t_dev_info di
+	LEFT JOIN t_area a on a.id = di.belong_area
+    <where>
+		di.id in
+		<foreach collection="deviceList" item="item" index="index" open="(" separator="," close=")">  	
+		 #{item.id}
+		</foreach>
+	</where>
+  </select>
+
+  	<!-- 添加设备 -->
+	<insert id="addDevice" parameterType="com.isoftstone.entity.pojo.DevicePojo">
+		INSERT INTO
+		 t_dev_info (
+		 	id,
+		 	image,
+		 	dev_name,
+		 	province,
+		 	city,
+		 	district,
+		 	belong_area,
+		 	buy_time,
+		 	buy_type,
+		 	expire_time,
+			owner ,
+			user,
+			isdelete
+		)
+		VALUES
+		(
+			#{id},
+			#{image},
+			#{devName},
+			#{province},
+		 	#{city},
+		 	#{district},
+			#{belongArea},
+			#{buyTime},
+			#{buyType},
+			#{expireTime},
+			#{owner},
+			#{user},
+			#{isDelete}
+		)
+	</insert>
+	
+	<!-- 更新设备信息 -->
+	<update id="updateDevice">
+		UPDATE t_dev_info 
+		SET image = #{image},
+			dev_name = #{devName},
+			province=#{province},
+			city=#{city},
+			district=#{district},
+			belong_area = #{belongArea},
+			buy_time = #{buyTime},
+			buy_type = #{buyType},
+			<if test="buyType == 2">
+			expire_time = #{expireTime},
+			</if>
+			owner = #{owner},
+			user = #{user}
+		WHERE id = #{id}	
+	</update>
+
+	<!-- 删除设备信息 -->
+	<update id="deleteDeviceExtends">		
+		UPDATE t_dev_info SET
+			isdelete = 1
+		<where>
+			id in
+			<foreach collection="idList" item="id" index="index" open="(" separator="," close=")">  	
+			 #{id}
+			</foreach>
+		</where>
+	</update>
+
+	<select id="queryExpireDeviceByArea" resultType="com.isoftstone.entity.model.DeviceExtends">
+		SELECT 
+			di.id,
+			di.image,
+			di.province,
+			di.city,
+			di.district,
+			di.belong_area belongArea,
+			di.buy_time buyTime,
+			di.buy_type buyType,
+			di.expire_time expireTime,
+			di.owner,
+			di.user,
+			DATEDIFF(FROM_UNIXTIME(di.expire_time),now()) AS diffDay
+		FROM
+			t_dev_info di
+		WHERE DATEDIFF(FROM_UNIXTIME(di.expire_time),now()) BETWEEN 0 AND 3
+		  AND di.buy_type=2
+		  AND di.belong_area in
+	    	<foreach collection="idList" item="id" index="index" open="(" separator="," close=")">  
+				#{id}
+			</foreach>
+ 	</select>
+ 	
+	<select id="queryExpireDevice" resultType="com.isoftstone.entity.model.DeviceExtends">
+		<![CDATA[
+		SELECT 
+			di.id,
+			di.image,
+			di.province,
+			di.city,
+			di.district,
+			di.belong_area belongArea,
+			di.buy_time buyTime,
+			di.buy_type buyType,
+			di.expire_time expireTime,
+			di.owner,
+			di.user,
+			DATEDIFF(FROM_UNIXTIME(di.expire_time),now()) AS diffDay
+		FROM
+			t_dev_info di
+		WHERE DATEDIFF(FROM_UNIXTIME(di.expire_time),now()) BETWEEN 0 AND 3
+		  AND di.buy_type=2
+		  ]]>
+ 	</select>
+ 	
+ 	<!-- 查询设备总数 -->
+ 	<select id="getDevNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+   	SELECT 
+		count(1)
+	FROM
+		t_dev_info di
+    <where>
+    	isdelete = 0
+		<if test="roleId != 1">
+			AND	di.belong_area in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+		</if>
+	</where>
+  </select>
+  
+  <!-- 查询过期设备总数 -->
+  <select id="getExpireDevNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+   	SELECT 
+		count(1)
+	FROM
+		t_dev_info di
+    <where>
+    	di.isdelete = 0
+    	AND di.expire_time &lt; (select unix_timestamp(SYSDATE()))
+		<if test="roleId != 1">
+			AND	di.belong_area in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+		</if>
+	</where>
+  </select>
+  
+  <!-- 查询过期设备详情 -->
+  <select id="getExpireDev" resultType="com.isoftstone.entity.model.DeviceExtends" parameterType="java.util.Map">
+   	SELECT 
+			di.id,
+			di.image,
+			di.dev_name devName,
+			di.province,
+			di.city,
+			di.district,
+			di.belong_area belongArea,
+			di.buy_time buyTime,
+			di.buy_type buyType,
+			di.expire_time expireTime,
+			di.owner,
+			di.user
+	FROM
+		t_dev_info di
+    <where>
+    	di.isdelete = 0
+    	AND di.expire_time &lt; (select unix_timestamp(SYSDATE()))
+		<if test="roleId != 1">
+			AND	di.belong_area in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+		</if>
+	</where>
+  </select>
+</mapper>

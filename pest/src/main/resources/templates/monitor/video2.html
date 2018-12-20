@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta charset="utf-8" />
+		<title>视屏监控--生兴防治</title>
+		<meta name="renderer" content="ie-comp|ie-stand">
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" />
+
+		<!--[if IE 7]>
+	  		<link rel="stylesheet" th:href="@{/css/font-awesome-ie7.min.css}" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" th:href="@{/css/vedio/video-js.css}" />
+		<script th:src="@{/js/vedio/video.min.js}"></script>	
+		<!-- fonts -->
+
+		<!-- ace styles -->
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/newCss.css}" />
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+
+		<!--[if lte IE 8]>
+	  		<link rel="stylesheet" th:href="@{/css/ace-ie.min.css}" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+			<script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+		<![endif]-->
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+		
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+			
+			<script src="https://open.ys7.com/sdk/js/1.1/ezuikit.js"></script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+				
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="#">首页</a>
+							</li>
+							<li class="active">远程监控</li>
+						</ul><!-- .breadcrumb -->
+
+						
+					</div>
+
+					<div class="page-content">
+						
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="sxc-head">
+                                		<ol class="clearfix dataTime">
+                                			<li><label>设备名:</label><span th:text="${pojo.name}" style="color:red;"></span></li>
+                                		</ol>
+                                	</div>
+                                	<div class="vedioCon clearfix">
+										<div class="vedio" id="divPlugin"></div>
+										
+										<div class="vedioControl clearfix">
+                                			<h3>监控操作</h3>
+                                			<div class="plusMinusBtn">
+                                				<button class="btn btn-primary btn-small" onmousedown="PTZZoomIn()" onmouseup="PTZZoomStop()">
+		                                		   <i class="icon-plus"></i>
+			                                	</button>
+			                                    <button class="btn btn-primary btn-small" onmousedown="PTZZoomout()" onmouseup="PTZZoomStop()">
+			                                		<i class="icon-minus"></i>
+			                                	</button>
+                                			</div>
+                                			
+                                			<div class="controlBtn">
+                                				<span class="btnSpan btnTop" onmousedown="mouseDownPTZControl(1);" onmouseup="mouseUpPTZControl();"></span>
+												<span class="btnSpan btnBottom" onmousedown="mouseDownPTZControl(2);" onmouseup="mouseUpPTZControl();"></span>
+												<span class="btnSpan btnLeft" onmousedown="mouseDownPTZControl(3);" onmouseup="mouseUpPTZControl();"></span>
+												<span class="btnSpan btnRight" onmousedown="mouseDownPTZControl(4);" onmouseup="mouseUpPTZControl();"></span>
+                                				<button class="camera" style="width: 50px;height:50px;border-radius: 100%;background: #FFFFFF;border: 0;" onclick="clickCapturePic();">
+                               				         <i class="icon-camera icon-3x greenBlue"></i>
+                                			    </button>
+                                			</div>
+                                		</div>
+                                		<div style="float: left; width: 270px;">
+											<br/>
+											<br/>
+											<span style="color:#808080;">(图片保存目录为【D:\生兴防治监控抓图】)</span>
+                                		</div>
+									</div>
+                                	<div style="display:none;">
+                                		<table cellpadding="0" cellspacing="3" border="0">
+											<tr>
+												<td class="tt">IP地址</td>
+												<td><input id="loginip" type="text" class="txt" th:value="${pojo.loginip}" /></td>
+												<td class="tt">端口号</td>
+												<td><input id="port" type="text" class="txt" th:value="${pojo.port}" /></td>
+											</tr>
+											<tr>
+												<td class="tt">用户名</td>
+												<td><input id="username" type="text" class="txt" value="admin" /></td>
+												<td class="tt">密码</td>
+												<td><input id="password" type="password" class="txt" value="1qaz2WSX" /></td>
+											</tr>
+											<tr>
+												<td class="tt">设备端口</td>
+												<td colspan="2"><input id="deviceport" type="text" class="txt" value="8000" />（可选参数）</td>
+												<td>
+													窗口分割数&nbsp;
+													<select class="sel2" onchange="changeWndNum(this.value);">
+														<option value="1" selected>1x1</option>
+														<option value="2">2x2</option>
+														<option value="3">3x3</option>
+														<option value="4">4x4</option>
+													</select>
+													<select id="streamtype" class="sel">
+														<option value="1">主码流</option>
+														<option value="2">子码流</option>
+														<option value="3">第三码流</option>
+														<option value="4">转码码流</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="4">
+													<input type="button" class="btn" value="登录" id="loginBtn" onclick="clickLogin();" />
+													<input type="button" class="btn" value="退出" onclick="clickLogout();" />
+													<input type="button" class="btn2" value="获取基本信息" onclick="clickGetDeviceInfo();" />
+													
+													<input type="button" class="btn" value="开始预览" id="startView" onclick="clickStartRealPlay();" />
+													
+													<input type="button" class="btn" value="上" onmousedown="mouseDownPTZControl(1);" onmouseup="mouseUpPTZControl();" />
+													<input type="button" class="btn" value="下" onmousedown="mouseDownPTZControl(2);" onmouseup="mouseUpPTZControl();" />
+													<input type="button" class="btn" value="左" onmousedown="mouseDownPTZControl(3);" onmouseup="mouseUpPTZControl();" />
+													<input type="button" class="btn" value="右" onmousedown="mouseDownPTZControl(4);" onmouseup="mouseUpPTZControl();" />
+													
+													<input id="previewPicPath" type="text" class="txt" value="D:\生兴防治监控抓图" />
+												</td>
+											</tr>
+											<tr>
+												<td class="tt">已登录设备</td>
+												<td>
+													<select id="ip" class="sel" onchange="getChannelInfo();"></select>
+												</td>
+												<td class="tt">通道列表</td>
+												<td>
+													<select id="channels" class="sel"></select>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="3">
+													<div id="opinfo" class="opinfo"></div>
+												</td>
+											</tr>
+										</table>
+                                	</div>
+                                </div> 
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-1.10.2.min.js}'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/vedio/webVideoCtrl.js}"></script>
+		<script type="text/javascript" th:src="@{/js/vedio/video.js}"></script>
+
+		<script type="text/javascript">
+			var t;
+			$(function(){
+				$("#loginBtn").click();
+				t = setInterval(startView,1000)
+			});
+			function startView(){
+				if($("#channels").val()){
+					clickStartRealPlay();
+					clickSetLocalCfg();
+					clearInterval(t);
+				}
+			}
+		</script>
+		   
+	</body>
+</html>
+

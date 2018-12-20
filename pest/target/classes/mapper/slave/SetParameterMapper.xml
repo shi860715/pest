@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.slave.SetParameterMapper">
+
+	<select id="findPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.pojo.SetParameterPojo">
+		SELECT dp.device_id AS deviceId, dp.DEV_CODE AS devCode,di.dev_name devName,
+		MAX(CASE WHEN dp.parameter_name = 'lm_th' THEN dp.parameter_value END) AS lmTh,
+		MAX(CASE WHEN dp.parameter_name = 'run_tm' THEN dp.parameter_value END) AS runTm,
+		MAX(CASE WHEN dp.parameter_name = 'wk_invl' THEN dp.parameter_value END) AS wkInvl,
+		MAX(CASE WHEN dp.parameter_name = 'pic_up_invl' THEN dp.parameter_value END) AS picUpInvl,
+		MAX(CASE WHEN dp.parameter_name = 'heat_temp' THEN dp.parameter_value END) AS heatTemp,
+		MAX(CASE WHEN dp.parameter_name = 'heat_tm' THEN dp.parameter_value END) AS hearTm,
+		MAX(CASE WHEN dp.parameter_name = 'clear_invl' THEN dp.parameter_value END) AS clearInvl,
+		MAX(CASE WHEN dp.parameter_name = 'sleep_tm' THEN dp.parameter_value END) AS sleepTm,
+		MAX(dp.UPDATE_TIME) updateTime,
+		MAX(dp.STATUS) status
+		FROM tb_dev_parameter dp
+		INNER JOIN tb_dev_info di ON di.id = dp.device_id
+		WHERE 
+		<if test="devList.size() > 0">
+			di.id in 
+			<foreach collection="devList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item.id}
+			</foreach>
+		</if>
+		<if test="devList.size() == 0">
+			di.id is null
+		</if>
+		GROUP BY dp.device_id, dp.DEV_CODE
+		ORDER BY dp.UPDATE_TIME desc
+	</select>
+
+</mapper>

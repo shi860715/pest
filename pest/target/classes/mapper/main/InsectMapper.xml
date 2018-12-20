@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.InsectMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.Insect">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="creater" jdbcType="INTEGER" property="creater" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <select id="findPage" resultType="com.isoftstone.entity.model.Insect">
+   	SELECT 
+			  		    ii.id AS "id",
+			  	      ii.name AS "name",
+			  	   ii.creater AS "creater",
+			   ii.create_time AS "createTime"
+	FROM
+		t_insect_info ii
+	ORDER BY ii.create_time DESC
+  </select>
+  
+  
+  	<!-- 添加虫类信息 -->
+	<insert id="addInsect" useGeneratedKeys="true" keyProperty="id" parameterType="com.isoftstone.entity.model.Insect">
+		INSERT INTO
+		 t_insect_info (
+				name,
+				creater,
+				create_time
+				)
+		VALUES
+		(
+		#{name},
+		#{creater},
+		SYSDATE()
+	)
+	</insert>
+	
+	<!-- 更新虫类信息 -->
+	<update id="updateInsect">
+		UPDATE t_insect_info SET
+				name = #{name},
+				creater = #{creater},
+				create_time = SYSDATE()
+			WHERE id = #{id}	
+	</update>
+	
+	<!-- 查询所有虫类信息 -->
+	<select id="getAllInsect" resultType="com.isoftstone.entity.model.Insect">
+		SELECT
+			id,
+			name
+		FROM
+			t_insect_info
+	</select>
+	
+	<select id="selectByName" resultType="com.isoftstone.entity.model.Insect">
+		SELECT
+			id,
+			name
+		FROM
+			t_insect_info
+		WHERE name = #{name}
+	</select>
+	
+</mapper>

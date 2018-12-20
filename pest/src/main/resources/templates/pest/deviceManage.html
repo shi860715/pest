@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">自动虫情</li>
+							<li class="active">设备管理</li>
+						</ul><!-- .breadcrumb -->
+
+						
+					</div>
+
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+	                                <div class="sxc-head sxc-subhead clearfix demoTable">
+										<ol class="clearfix manyBtncon">
+											<li>
+	                               				<button class="btn btn-primary layui-btn" shiro:hasPermission="/devicePage/addDevice" data-type="openAdd">
+													<i class="addIcon"></i> 添加
+											    </button>
+	                               			</li>
+	                               			<li>
+	                               				<button class="btn btn-danger layui-btn" shiro:hasPermission="/devicePage/deleteDevice" data-type="delSelect">
+													<i class="icon-trash bigger-120"></i>删除
+											    </button>
+	                               			</li>
+										</ol>
+										<ol class="clearfix searchCon" style="float: right;">
+											<li><label>设备名称:</label><input type="text" id="devName" placeholder="输入设备名称"/></li>
+	                               			<li><button class="btn btn-primary layui-btn" data-type="doSearch">搜索</button></li>		
+										</ol>
+									</div>
+                                	<div class="table-responsive">
+										<table class="layui-table" id="deviceList" lay-data="{url:'/devicePage/findPage', page:true,limit:10,even: true, id:'idTest'}" lay-filter="deviceList">
+										  <thead>
+										    <tr>
+										      <th lay-data="{checkbox:true, fixed: true}"></th>
+										      <th lay-data="{field:'devCode', width:150, sort: true}">设备编号</th>
+										      <th lay-data="{field:'devName', width:150, sort: true}">设备名称</th>
+										      <th lay-data="{field:'devType', width:100,templet:'#fmtDevType'}">设备类型</th>
+										      <!--  <th lay-data="{field:'owner', width:100,sort: true}">归属方</th>
+										      <th lay-data="{field:'user', width:100, sort: true}">使用方</th>-->
+										      <th lay-data="{field:'areaName', width:150, sort: true}">所属地区</th>
+										      <th lay-data="{field:'constituent', width:150, sort: true}">林分组成</th>
+										      <th lay-data="{field:'groupName', width:150, sort: true}">林业小班</th>
+										      <th lay-data="{field:'devStatus', width:100,align:'center', templet:'#fmtDevStatus'}">状态</th>
+										      <th lay-data="{field:'devAddr', width:200, sort: true}">详细地点</th>
+										      <th lay-data="{field:'buyTime', width:180, sort: true,align:'center',templet:'#fmtBuyTime'}">购买时间</th>
+										      <th lay-data="{field:'buyType', width:100,templet:'#fmtBuyType'}">购买类型</th>
+										      <th lay-data="{field:'expireTime', width:180,align:'center', sort: true, templet:'#fmtExpireTime'}">到期时间</th>
+										      <th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}">操作</th>
+										    </tr>
+										  </thead>
+										</table>
+									</div>
+                                </div>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+        <script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/city/jquery.cityselect.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<script type="text/javascript" th:src="@{/js/common/ajaxfileupload.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}" charset="utf-8"></script>
+		
+		<div id="addDiv" style="display:none;">
+			<form id="formTemp">
+				<div class="editCon">
+					<input type="hidden" name="id"/>
+					<ul>
+						<li>
+							<label>图片:</label>
+ 							<img name="imgIcon" th:src="@{/images/devImage.png}" onclick="$('#fileIcon').click();" style="width:150px; height:150px;">
+							<a href="javascript:void(0);" onclick="$('#fileIcon').click();">点击上传</a>
+							<input type="hidden" name="image" value="images/default.png" /> 
+							<input type="file" onchange="uploadThumb('fileIcon','imgIcon','image');" id="fileIcon" accept="image/*" style="display:none;" name="fileInput" />
+						</li>
+						<li>
+							<label>设备编号:</label>
+							<input type="text" name="devCode"/>
+						</li>
+						<li>
+							<label>设备名称:</label>
+							<input type="text" name="devName"/>
+						</li>
+						<li>
+							<label>省:</label>
+							<select id="province" name="province">
+								<option value="">---请选择省---</option>
+							</select>
+						</li>
+						<li>
+							<label>市:</label>
+							<select id="city" name="city">
+								<option value="">---请选择市---</option>
+							</select>
+						</li>
+						<li>
+							<label>区:</label>
+							<select id="district" name="district">
+								<option value="">---请选择区---</option>
+							</select>
+						</li>
+						<li>
+							<label>所属区域:</label>
+							<select id="belongArea" name="belongArea">
+								<option value="">---请选择所属区域---</option>
+							</select>
+						</li>
+						<li>
+							<label>MAC:</label>
+							<input type="text" name="devMac"/>
+						</li>
+						<li>
+							<label>设备类型:</label>
+							<select id="devType" name="devType">
+								<option value="">---请选择设备类型---</option>
+								<option value="1">第一代设备</option>
+								<option value="2">第二代设备</option>
+							</select>
+						</li>
+						<li>
+							<label>林分组成:</label>
+							<input type="text" name="constituent"/>
+						</li>
+						<li>
+							<label>林业小班:</label>
+							<input type="text" name="groupName"/>
+						</li>
+						 <!--  <li>
+							<label>归属方:</label>
+							<input type="text" name="owner"/>
+						</li>
+						<li>
+							<label>使用方:</label>
+							<input type="text" name="user"/>
+						</li>-->
+						<li>
+							<label>购买时间:</label>
+							<input id="J-xl-1" name="buyTime1" type="text" onfocus="laydate({istime: true,format: 'YYYY-MM-DD hh:mm:ss'});">
+						</li>
+						<li>
+							<label>购买类型:</label>
+							<select id="buyType" name="buyType">
+								<option value="">---请选择购买类型---</option>
+								<option value="1">购买</option>
+								<option value="2">租赁</option>
+							</select>
+						</li>
+						<li id="expireLi" style="display: none;">
+							<label>到期时间:</label>
+							<input id="J-xl-2" name="expireTime1" type="text" onfocus="laydate({istime: true,format: 'YYYY-MM-DD hh:mm:ss'});">
+						</li>
+						<li>
+							<label>详细地点:</label>
+							<textarea name="devAddr"></textarea>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		
+		<div id="paramDiv" style="display:none;">
+			<form id="form1Temp">
+				<div class="editCon">
+					<input type="hidden" name="deviceId"/>
+					<input type="hidden" name="devCode"/>
+					<ul>
+						<li>
+							<label>光照度:</label>
+							<input type="text" name="sunshineTime"/>
+							<span>单位：1x</span>
+						</li>
+						<li>
+							<label>运行开始时间:</label>
+							<select name="runStart">
+								<option value="">---请选择开始时间---</option>
+								<option value="1">01:00</option><option value="2">02:00</option>
+								<option value="3">03:00</option><option value="4">04:00</option>
+								<option value="5">05:00</option><option value="6">06:00</option>
+								<option value="7">07:00</option><option value="8">08:00</option>
+								<option value="9">09:00</option><option value="10">10:00</option>
+								<option value="11">11:00</option><option value="12">12:00</option>
+								<option value="13">13:00</option><option value="14">14:00</option>
+								<option value="15">15:00</option><option value="16">16:00</option>
+								<option value="17">17:00</option><option value="18">18:00</option>
+								<option value="19">19:00</option><option value="20">20:00</option>
+								<option value="21">21:00</option><option value="22">22:00</option>
+								<option value="23">23:00</option><option value="24">24:00</option>
+							</select>
+						</li>
+						<li>
+							<label>运行结束时间:</label>
+							<select name="runEnd">
+								<option value="">---请选择结束时间---</option>
+								<option value="1">01:00</option><option value="2">02:00</option>
+								<option value="3">03:00</option><option value="4">04:00</option>
+								<option value="5">05:00</option><option value="6">06:00</option>
+								<option value="7">07:00</option><option value="8">08:00</option>
+								<option value="9">09:00</option><option value="10">10:00</option>
+								<option value="11">11:00</option><option value="12">12:00</option>
+								<option value="13">13:00</option><option value="14">14:00</option>
+								<option value="15">15:00</option><option value="16">16:00</option>
+								<option value="17">17:00</option><option value="18">18:00</option>
+								<option value="19">19:00</option><option value="20">20:00</option>
+								<option value="21">21:00</option><option value="22">22:00</option>
+								<option value="23">23:00</option><option value="24">24:00</option>
+							</select>
+						</li>
+						<li>
+							<label>工作周期:</label>
+							<input type="text" name="workTime"/>
+							<span>单位：时</span>
+						</li>
+						<li>
+							<label>图片回传周期:</label>
+							<input type="text" name="backTime"/>
+							<span>单位：时</span>
+						</li>
+						<li>
+							<label>加热温度:</label>
+							<input type="text" name="heat"/>
+							<span>单位：℃</span>
+						</li>
+						<li>
+							<label>烘烤时间:</label>
+							<input type="text" name="roastTime"/>
+							<span>单位：分</span>
+						</li>
+						<li>
+							<label>清虫周期:</label>
+							<input type="text" name="cleanTime"/>
+							<span>单位：天</span>
+						</li>
+						<li>
+							<label>休眠开始时间:</label>
+							<input id="J-xl-3" name="sleepStart" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});">
+						</li>
+						<li>
+							<label>休眠结束时间:</label>
+							<input id="J-xl-4" name="sleepEnd" type="text" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});">
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		
+		<!-- inline scripts related to this page -->
+		<script type="text/html" id="fmtDevType">
+			{{#  if(d.devType === 1){ }}
+    			第一代设备
+  			{{#  } else { }}
+    			第二代设备
+			{{#  } }}
+		</script>
+
+		<script type="text/html" id="fmtDevStatus">
+			{{#  if(d.devStatus === 0){ }}
+    			<span class="label label-warning arrowed-in arrowed-in-right" style="font-size:14px;">离线</span>
+  			{{#  } else { }}
+    			<span class="label label-success arrowed-in arrowed-in-right" style="font-size:14px;">在线</span>
+			{{#  } }}
+		</script>
+		
+		<script type="text/html" id="fmtBuyType">
+			{{#  if(d.buyType === 1){ }}
+    			购买
+  			{{#  } else { }}
+    			租赁
+			{{#  } }}
+		</script>
+
+		<script type="text/html" id="fmtBuyTime">
+			{{# return DateUtil.stamp2Time(d.buyTime) }}
+		</script>
+		
+		<script type="text/html" id="fmtExpireTime">
+			{{#  if(d.buyType === 2){ }}
+				{{# return DateUtil.stamp2Time(d.expireTime) }}
+  			{{#  } else { }}
+    			-
+			{{#  } }}
+		</script>
+
+		<div id="barDemo" style="display: none;">
+			<a class="green" lay-event="edit" shiro:hasPermission="/devicePage/updateDevice" title="编辑"><i class="icon-pencil bigger-150"></i></a>
+			<a class="red" lay-event="setParam" shiro:hasPermission="/devicePage/queryParam" title="参数设定"><i class="icon-pinterest-sign bigger-150"></i></a>
+			<a class="blue" lay-event="viewPic" shiro:hasPermission="/plantPicPage/picId" title="查看照片"><i class="icon-picture bigger-150"></i></a>
+			<a class="red" title="删除" shiro:hasPermission="/devicePage/deleteDevice" lay-event="del"><i class="icon-trash bigger-150"></i></a>
+		</div>
+		
+		<script type="text/javascript">
+		layui.use('table', function(){
+			  var table = layui.table;
+			  //监听表格复选框选择
+			  table.on('checkbox(deviceList)', function(obj){
+				  
+			  });
+			  //监听工具条
+			  table.on('tool(deviceList)', function(obj){
+			    var dev = obj.data;
+			    if(obj.event === 'del'){
+			      layer.confirm('是否确定删除该条数据？', function(index){
+			    	  $.ajax({
+			                cache: true,
+			                type: "POST",
+			                url:'/devicePage/deleteDevice',
+			                data:{ids : dev.id},
+			                async: false,
+			                dataType:'json',
+			                success: function(xhr) {
+			                	if(xhr.code == 1){
+			                        layer.msg('删除成功');
+			                        obj.del();
+									layer.close(index);
+									table.reload('idTest', {
+						            	where: { //设定异步数据接口的额外参数
+						            		"devName":$("#devName").val()
+						            	}
+									});
+			                    }else{
+			                        layer.msg(xhr.message);
+			                    }
+			                }
+			            });
+			      });
+			    } else if(obj.event === 'edit'){
+			    	layer.open({
+					  title: '编辑设备信息'
+					  ,content: $("#addDiv").html().replace('formTemp','devInfoForm'),
+					  area:['550px','620px'],
+					  success:function(){
+						  $("#devInfoForm input[name='id']").val(dev.id);
+						  queryArea(null,1,"province","省");
+						  if(null != dev.province){
+							  queryArea(dev.province,2,"city","市");
+							  if(null != dev.city){
+								  queryArea(dev.city,3,"district","区");
+								  if(null != dev.district){
+									  queryArea(dev.district,4,"belongArea","点");
+								  }
+							  }
+						  }
+						  $("#devInfoForm select[name='province']").change(function(){
+							  if($(this).val()){
+								  queryArea($(this).val(),2,"city","市");
+								  $("#devInfoForm select[name='district']").empty().append("<option value=''>---请选择区---</option>");
+								  $("#devInfoForm select[name='belongArea']").empty().append("<option value=''>---请选择点---</option>");
+							  }
+						  });
+						  $("#devInfoForm select[name='city']").change(function(){
+							  if($(this).val()){
+								  queryArea($(this).val(),3,"district","区");
+								  $("#devInfoForm select[name='belongArea']").empty().append("<option value=''>---请选择点---</option>");
+							  }
+						  });
+						  $("#devInfoForm select[name='district']").change(function(){
+							  if($(this).val()){
+								  queryArea($(this).val(),4,"belongArea","点");
+							  }
+						  });
+						  if(dev.image){
+							  $("#devInfoForm img[name='imgIcon']").attr("src",dev.image);
+							  $("#devInfoForm input[name='image']").val(dev.image);
+						  }
+						  
+						  $("#devInfoForm input[name='devCode']").val(dev.devCode);
+						  $("#devInfoForm input[name='devName']").val(dev.devName);
+						  $("#devInfoForm #province option[value='"+dev.province+"']").attr('selected',true);
+						  $("#devInfoForm #city option[value='"+dev.city+"']").attr('selected',true);
+						  $("#devInfoForm #district option[value='"+dev.district+"']").attr('selected',true);
+						  $("#devInfoForm #belongArea option[value='"+dev.belongArea+"']").attr('selected',true);
+						  $("#devInfoForm input[name='devMac']").val(dev.devMac);
+						  $("#devInfoForm #devType option[value='"+dev.devType+"']").attr('selected',true);
+						  $("#devInfoForm input[name='constituent']").val(dev.constituent);
+						  $("#devInfoForm input[name='groupName']").val(dev.groupName);
+						  $("#devInfoForm input[name='owner']").val(dev.owner);
+						  $("#devInfoForm input[name='user']").val(dev.user);
+						  $("#devInfoForm input[name='buyTime1']").val(DateUtil.stamp2Time(dev.buyTime));
+						  $("#devInfoForm #buyType option[value='"+dev.buyType+"']").attr('selected',true);
+						  if(dev.buyType == 2){
+							  $("#devInfoForm #expireLi").show();
+							  $("#devInfoForm input[name='expireTime1']").val(DateUtil.stamp2Time(dev.expireTime));
+						  }
+						  $("#devInfoForm textarea[name='devAddr']").text(dev.devAddr);
+						  $("#devInfoForm select[name='buyType']").change(function(){
+							  if($(this).val() == 2){
+								  $("#devInfoForm #expireLi").show();
+							  }else{
+								  $("#devInfoForm #expireLi").hide();
+							  }
+						  });
+						  
+						  $("#devInfoForm").validate({
+							    rules: {
+							    	devCode : "required",
+							    	devName : "required",
+							    	province : "required",
+							    	city : "required",
+							    	district : "required",
+							    	belongArea : "required",
+							    	devMac : "required",
+							    	devType : "required",
+							    	constituent : "required",
+							    	groupName : "required",
+							    	owner : "required",
+							    	user : "required",
+							    	buyTime1 : "required",
+							    	buyType : "required",
+							    	devAddr : "required"
+							    },
+							    messages: {
+							    	devCode : "请输入设备编码",
+							    	devName : "请输入设备名称",
+							    	province : "请选择省",
+							    	city : "请选择市",
+							    	district : "选择区",
+							    	belongArea : "选择点",
+							    	devMac : "请输入设备MAC地址",
+							    	devType : "请选择设备类型",
+							    	constituent : "请输入林分组成",
+							    	groupName : "请输入林业小班",
+							    	owner : "请输入归属方",
+							    	user : "请输入使用方",
+							    	buyTime1 : "请输入购买时间",
+							    	buyType : "请输入购买类型",
+							    	devAddr : "请输入详细地址"
+							    }
+							});
+					  },
+					  btn:['确定','取消']
+					  ,yes: function(){
+						  if(!$("#devInfoForm").valid()) {
+								return false;
+						  }
+						  $.ajax({
+					            cache: true,
+					            type: "POST",
+					            url:'/devicePage/updateDevice',
+					            data:$('#devInfoForm').serialize(),// 你的formid
+					            dataType:'json',
+				                success: function(obj) {
+				                	if(obj.code == 1){
+					                    layer.msg('修改设备成功');
+						                layer.closeAll('page');
+										table.reload('idTest', {
+							            	where: { //设定异步数据接口的额外参数
+							            		"devName":$("#devName").val()
+							            	}
+										});
+					                }else{
+					                    layer.msg(obj.message);
+					                }
+					            }
+					        });
+					  },
+					  btn2: function(){
+					    layer.closeAll();
+					  },
+					  btnAlign: 'c'
+					});
+			    }else if(obj.event === 'setParam'){
+			    	layer.open({
+						  title: '参数设置'
+						  ,content: $("#paramDiv").html().replace('form1Temp','paramForm'),
+						  area:['570px','510px'],
+						  success:function(){
+							  $("#paramForm input[name='deviceId']").val(dev.id);
+							  $("#paramForm input[name='devCode']").val(dev.devCode);
+							  
+							  $.ajax({
+					                cache: true,
+					                type: "POST",
+					                url:'/devicePage/queryParam',
+					                data:{deviceId:dev.id,devCode:dev.devCode},
+					                dataType: 'json',
+					                async: false,
+					                success: function(obj) {
+					                    var devParam = obj.data;
+					                    $("#paramForm input[name='sunshineTime']").val(devParam.sunshineTime);
+										$("#paramForm select[name='runStart'] option[value='"+devParam.runStart+"']").attr('selected',true);
+										$("#paramForm select[name='runEnd'] option[value='"+devParam.runEnd+"']").attr('selected',true);
+										$("#paramForm input[name='workTime']").val(devParam.workTime);
+										$("#paramForm input[name='backTime']").val(devParam.backTime);
+										$("#paramForm input[name='heat']").val(devParam.heat);
+										$("#paramForm input[name='roastTime']").val(devParam.roastTime);
+										$("#paramForm input[name='cleanTime']").val(devParam.cleanTime);
+										$("#paramForm input[name='sleepStart']").val(devParam.sleepStart);
+										$("#paramForm input[name='sleepEnd']").val(devParam.sleepEnd);
+					                }
+					            });
+							  $("#paramForm").validate({
+								    rules: {
+								    	sunshineTime : "required",
+								    	runStart : "required",
+								    	runEnd : "required",
+								    	workTime : "required",
+								    	backTime : "required",
+								    	heat : "required",
+								    	roastTime : "required",
+								    	cleanTime : "required",
+								    	sleepStart : "required",
+								    	sleepEnd : "required"
+								    },
+								    messages: {
+								    	sunshineTime : "请输入光照度",
+								    	runStart : "请选择运行开始时间",
+								    	runEnd : "请选择运行结束时间",
+								    	workTime : "请输入工作周期",
+								    	backTime : "请输入图片回传周期",
+								    	heat : "请输入加热温度",
+								    	roastTime : "请输入烘烤时间",
+								    	cleanTime : "请输入清虫周期",
+								    	sleepStart : "请选择休眠开始时间",
+								    	sleepEnd : "请选择休眠结束时间"
+								    }
+								});
+						  },
+						  btn:['确定','取消']
+						  ,yes: function(){
+							  if(!$("#paramForm").valid()) {
+									return false;
+							  }
+							  $.ajax({
+						            cache: true,
+						            type: "POST",
+						            url:'/devicePage/updateParam',
+						            data:$('#paramForm').serialize(),// 你的formid
+						            dataType:'json',
+					                success: function(obj) {
+					                	if(obj.code == 1){
+						                    layer.msg('参数设置成功');
+							                layer.closeAll('page');
+											table.reload('idTest', {
+								            	where: { //设定异步数据接口的额外参数
+								            		"devName":$("#devName").val()
+								            	}
+											});
+						                }else{
+						                    layer.msg(obj.message);
+						                }
+						            }
+						        });
+						  },
+						  btn2: function(){
+						    layer.closeAll();
+						  },
+						  btnAlign: 'c'
+						});
+			    }else if(obj.event === 'viewPic'){
+			    	window.location.href='/devPage/'+dev.id;
+			    }
+			  });
+			  
+			  var $ = layui.$, active = {
+						openAdd: function(){
+							layer.open({
+							  title: '添加设备信息'
+							  ,content: $("#addDiv").html().replace('formTemp','devInfoForm'),
+							  area:['550px','620px'],
+							  success:function(){
+								  queryArea(null,1,"province","省");
+								  $("#devInfoForm select[name='province']").change(function(){
+									  if($(this).val()){
+										  queryArea($(this).val(),2,"city","市");
+										  $("#devInfoForm select[name='district']").empty().append("<option value=''>---请选择区---</option>");
+										  $("#devInfoForm select[name='belongArea']").empty().append("<option value=''>---请选择点---</option>");
+									  }
+								  });
+								  $("#devInfoForm select[name='city']").change(function(){
+									  if($(this).val()){
+										  queryArea($(this).val(),3,"district","区");
+										  $("#devInfoForm select[name='belongArea']").empty().append("<option value=''>---请选择点---</option>");
+									  }
+								  });
+								  $("#devInfoForm select[name='district']").change(function(){
+									  if($(this).val()){
+										  queryArea($(this).val(),4,"belongArea","点");
+									  }
+								  });
+								  
+								  $("#devInfoForm select[name='buyType']").change(function(){
+									  if($(this).val() == 2){
+										  $("#devInfoForm #expireLi").show();
+									  }else{
+										  $("#devInfoForm #expireLi").hide();
+									  }
+								  });
+								  $("#devInfoForm").validate({
+									    rules: {
+									    	devCode : "required",
+									    	devName : "required",
+									    	province : "required",
+									    	city : "required",
+									    	district : "required",
+									    	belongArea : "required",
+									    	devMac : "required",
+									    	devType : "required",
+									    	constituent : "required",
+									    	groupName : "required",
+									    	owner : "required",
+									    	user : "required",
+									    	buyTime1 : "required",
+									    	buyType : "required",
+									    	devAddr : "required"
+									    },
+									    messages: {
+									    	devCode : "请输入设备编码",
+									    	devName : "请输入设备名称",
+									    	province : "请选择省",
+									    	city : "请选择市",
+									    	district : "选择区",
+									    	belongArea : "选择点",
+									    	devMac : "请输入设备MAC地址",
+									    	devType : "请选择设备类型",
+									    	constituent : "请输入林分组成",
+									    	groupName : "请输入林业小班",
+									    	owner : "请输入归属方",
+									    	user : "请输入使用方",
+									    	buyTime1 : "请输入购买时间",
+									    	buyType : "请输入购买类型",
+									    	devAddr : "请输入详细地址"
+									    }
+									});
+							  },
+							  btn:['确定','取消']
+							  ,yes: function(){
+								  if(!$("#devInfoForm").valid()) {
+										return false;
+								  }
+								  $.ajax({
+							            cache: true,
+							            type: "POST",
+							            url:'/devicePage/addDevice',
+							            data:$('#devInfoForm').serialize(),// 你的formid
+							            success: function(data) {
+							                if(data=="success"){
+							                    layer.msg('添加成功');
+								                layer.closeAll('page');
+												table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数
+									            		"devName":$("#devName").val()
+									            	}
+												});
+							                }else{
+							                    layer.msg('添加失败');
+							                }
+							            }
+							        });
+							  },
+							  btn2: function(){
+							    layer.closeAll();
+							  },
+							  btnAlign: 'c'
+							});
+						}
+						,delSelect: function(){ //获取选中数目
+				      		var checkStatus = table.checkStatus('idTest')
+				      			,data = checkStatus.data;
+							if(data.length>0){
+								var ids = "";
+								for(var i=0;i<data.length;i++){
+									ids += ","+ data[i].id;
+								}
+								layer.confirm('是否删除选中的数据？', function(index){
+									$.ajax({
+						                cache: true,
+						                type: "POST",
+						                url:'/devicePage/deleteDevice',
+						                data:{ids:ids.substring(1)},
+						                async: false,
+						                dataType:'json',
+						                success: function(obj) {
+						                	if(obj.code == 1){
+						                        layer.msg('删除成功');
+												layer.close(index);
+												table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数
+									            		"devName":$("#devName").val()
+									            	}
+												});
+						                    }else{
+						                        layer.msg(obj.message);
+						                    }
+						                }
+						            });
+								});
+							}else{
+					      		layer.msg('请选择要删除的数据！');
+							}
+							
+				    	}
+						,doSearch: function(){
+							table.reload('idTest', {
+								page:{
+									curr:1
+								},
+				            	where: { //设定异步数据接口的额外参数
+				            		"devName":$("#devName").val()
+				            	}
+							});
+				    	}
+				  	};
+			  
+			  $('.demoTable .layui-btn').on('click', function(){
+			    var type = $(this).data('type');
+			    active[type] ? active[type].call(this) : '';
+			  });
+			  
+			});
+		
+			jQuery(function($) {
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+			});
+			
+			function queryArea(id,level,selectId,key){
+				$.ajax({
+	                cache: true,
+	                type: "POST",
+	                url:'/areasPage/queryArea',
+	                data:{id:id,level:level},
+	                dataType: 'json',
+	                async: false,
+	                success: function(obj) {
+	                    var areas = obj.data;
+	                    var appendStr="<option value=''>---请选择"+key+"---</option>";
+	                    for(var i=0;i<areas.length;i++){
+	                    	appendStr += "<option value='"+areas[i].id+"'>"+areas[i].name+"</option>"
+	                    }
+	                    $("#devInfoForm select[name='"+selectId+"']").empty().append(appendStr);
+	                }
+	            });
+			}
+			
+			function uploadThumb(fileId,img,picId){
+				if($("#"+fileId).val()){
+					$.ajaxFileUpload({
+						url:"resources/upload",	//需要链接到服务器地址 
+						secureuri:false,
+						fileElementId:fileId,//文件选择框的id属性
+						data : {
+	                        path : 'device'
+	                    },
+						dataType: 'json',	//json
+						success: function (obj) {
+							$("#devInfoForm img[name='"+img+"']").attr("src",obj.data.path);
+							$("#devInfoForm input[name='"+picId+"']").val(obj.data.path);
+						},
+						error:function(XMLHttpRequest, textStatus, errorThrown){
+							layer.msg('上传失败！');
+						}
+					});
+				}
+			}
+		</script>
+		
+	</body>
+</html>
+

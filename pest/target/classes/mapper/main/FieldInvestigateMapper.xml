@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.FieldInvestigateMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.FieldSurvey">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="district_id" jdbcType="INTEGER" property="districtId" />
+    <result column="district_name" jdbcType="VARCHAR" property="districtName" />
+    <result column="district_code" jdbcType="VARCHAR" property="districtCode" />
+    <result column="township_name" jdbcType="VARCHAR" property="townshipName" />
+    <result column="township_code" jdbcType="VARCHAR" property="townshipCode" />
+    <result column="place_name" jdbcType="VARCHAR" property="placeName" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="acreage" jdbcType="INTEGER" property="acreage" />
+    <result column="current_class" jdbcType="VARCHAR" property="currentClass" />
+    <result column="deputy_acreage" jdbcType="INTEGER" property="deputyAcreage" />
+    <result column="lon" jdbcType="VARCHAR" property="lon" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="altitude" jdbcType="VARCHAR" property="altitude" />
+    <result column="stands_type" jdbcType="VARCHAR" property="standsType" />
+    <result column="main_species" jdbcType="VARCHAR" property="mainSpecies" />
+    <result column="investigator" jdbcType="VARCHAR" property="investigator" />
+    <result column="companion" jdbcType="VARCHAR" property="companion" />
+    <result column="survey_time" jdbcType="TIMESTAMP" property="surveyTime" />
+    <result column="stock" jdbcType="VARCHAR" property="stock" />
+    <result column="stock_unit" jdbcType="VARCHAR" property="stockUnit" />
+    <result column="sample_number" jdbcType="VARCHAR" property="sampleNumber" />
+    <result column="sample_number_unit" jdbcType="VARCHAR" property="sampleNumberUnit" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+			id,
+			name,
+			district_id,
+			district_name,
+			district_code,
+			township_name,
+			township_code,
+			place_name,
+			type,
+			number,
+			acreage,
+			current_class,
+			deputy_acreage,
+			lon,
+			lat,
+			altitude,
+			stands_type,
+			main_species,
+			investigator,
+			companion,
+			survey_time,
+			stock,
+			stock_unit,
+			sample_number,
+			sample_number_unit,
+			user_id
+		FROM t_field_survey
+		WHERE 1 = 1
+		<if test="name != null and name !=''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+		<if test="type != null and type !=''">
+			AND type = #{type}
+		</if>
+		<if test="roleId != 1">
+			AND	(district_id in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach> 
+				OR user_id = #{userId}) 
+		</if>
+		ORDER BY survey_time DESC
+	</select>
+	
+	<insert id="addFieldSurvey" useGeneratedKeys="true" keyProperty="id" parameterType="com.isoftstone.entity.model.FieldSurvey">
+		INSERT INTO t_field_survey (
+			name,
+			district_id,
+			district_name,
+			district_code,
+			township_name,
+			township_code,
+			place_name,
+			type,
+			number,
+			acreage,
+			current_class,
+			deputy_acreage,
+			lon,
+			lat,
+			altitude,
+			stands_type,
+			main_species,
+			investigator,
+			companion,
+			survey_time,
+			stock,
+			stock_unit,
+			sample_number,
+			sample_number_unit,
+			user_id
+		)VALUES(
+			#{name},
+			#{districtId},
+		    #{districtName},
+			#{districtCode},
+			#{townshipName},
+			#{townshipCode},
+			#{placeName},
+			#{type},
+			#{number},
+			#{acreage},
+			#{currentClass},
+			#{deputyAcreage},
+			#{lon},
+			#{lat},
+			#{altitude},
+			#{standsType},
+			#{mainSpecies},
+			#{investigator},
+			#{companion},
+			#{surveyTime},
+			#{stock},
+			#{stockUnit},
+			#{sampleNumber},
+			#{sampleNumberUnit},
+			#{userId}
+		)
+	</insert>
+
+	<update id="updateFieldSurvey" parameterType="com.isoftstone.entity.model.FieldSurvey">
+		UPDATE t_field_survey
+		    SET name =#{name},
+		    	district_id =#{districtId},
+			    district_name =#{districtName},
+				district_code =#{districtCode},
+				township_name =#{townshipName},
+				township_code =#{townshipCode},
+				place_name =#{placeName},
+				number =#{number},
+				acreage =#{acreage},
+				current_class =#{currentClass},
+				deputy_acreage =#{deputyAcreage},
+				lon =#{lon},
+				lat =#{lat},
+				altitude =#{altitude},
+				stands_type =#{standsType},
+				main_species =#{mainSpecies},
+				investigator =#{investigator},
+				companion =#{companion},
+				stock = #{stock},
+				stock_unit = #{stockUnit},
+				sample_number = #{sampleNumber},
+				sample_number_unit = #{sampleNumberUnit}
+		WHERE id = #{id} 
+	</update>
+
+	<update id="updateSurveyTime" parameterType="java.util.Map">
+		UPDATE t_field_survey
+		   SET survey_time = DATE_ADD(survey_time, INTERVAL #{day} day)
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteFieldSurvey" parameterType="java.util.List">
+		DELETE FROM t_field_survey WHERE id in
+		<foreach collection="list" item="id" index="index" open="(" separator="," close=")">  	
+		 #{id}
+		</foreach>
+	</delete>
+	
+	<!-- 踏查 start -->
+	<select id="findStepInvestigationPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.model.StepInvestigation">
+		SELECT
+			si.id,
+			si.field_id fieldId,
+			si.images,
+			si.name,
+			si.lon,
+			si.lat,
+			si.altitude,
+			si.constituent,
+			si.pest,
+			si.host_plant hostPlant,
+			si.harm_part harmPart,
+			si.harm_degree harmDegree,
+			si.is_set_standard isSetStandard,
+			si.standard_code standardCode,
+			si.remark,
+			si.insect_status insectStatus
+		FROM t_step_investigation si
+		WHERE si.field_id = #{fieldId}
+		<if test="pest != null and pest !=''">
+		AND si.pest LIKE concat('%',#{pest},'%')
+		</if>
+		<if test="hostPlant != null and hostPlant !=''">
+		AND si.host_plant LIKE concat('%',#{hostPlant},'%')
+		</if>
+		<if test="harmDegree != null and harmDegree != 0">
+		AND si.harm_degree = #{harmDegree}
+		</if>
+		ORDER BY si.id DESC
+	</select>
+	
+	<insert id="addStepInvestigation" parameterType="com.isoftstone.entity.model.StepInvestigation">
+		insert into t_step_investigation(
+			field_id,
+			images,
+			name,
+			lon,
+			lat,
+			altitude,
+			constituent,
+			pest,
+			host_plant,
+			harm_part,
+			harm_degree,
+			is_set_standard,
+			standard_code,
+			remark,
+			insect_status
+		)values
+		<foreach collection="list" item="item" index="index" separator=","> 
+			(
+				#{item.fieldId},
+				#{item.images},
+				#{item.name},
+				#{item.lon},
+				#{item.lat},
+				#{item.altitude},
+				#{item.constituent},
+				#{item.pest},
+				#{item.hostPlant},
+				#{item.harmPart},
+				#{item.harmDegree},
+				#{item.isSetStandard},
+				#{item.standardCode},
+				#{item.remark},
+				#{item.insectStatus}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="editStepInvestigation" parameterType="com.isoftstone.entity.model.StepInvestigation">
+		UPDATE t_step_investigation 
+		  SET images = #{images},
+		  	  name = #{name},
+			  lon = #{lon},
+			  lat = #{lat},
+			  altitude = #{altitude},
+			  constituent = #{constituent},
+			  pest = #{pest},
+			  host_plant = #{hostPlant},
+			  harm_part = #{harmPart},
+			  harm_degree = #{harmDegree},
+			  is_set_standard = #{isSetStandard},
+			  standard_code = #{standardCode},
+			  remark = #{remark},
+			  insect_status = #{insectStatus}
+		where id = #{id}
+	</update>
+	
+	<delete id="delStepInvestigation">
+		DELETE FROM t_step_investigation 
+		WHERE 
+			id in
+			<foreach collection="list" item="id" index="index" open="(" separator="," close=")">  	
+			 #{id}
+			</foreach>
+	</delete>
+	<!-- 踏查 end -->
+	
+	<!-- 标准地 start -->
+	<select id="findStandardSurveyPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.model.StandardSurvey">
+		SELECT
+			ss.id,
+			ss.field_id fieldId,
+			ss.images,
+			ss.pest,
+			ss.host_plant hostPlant,
+			ss.harm_part harmPart,
+			ss.victims_rate victimsRate,
+			ss.harm_degree harmDegree,
+			ss.is_disaster isDisaster,
+			ss.remark,
+			ss.insect_status insectStatus
+		FROM t_standard_survey ss
+		WHERE ss.field_id = #{fieldId}
+		<if test="pest != null and pest !=''">
+		AND ss.pest LIKE concat('%',#{pest},'%')
+		</if>
+		<if test="hostPlant != null and hostPlant !=''">
+		AND ss.host_plant LIKE concat('%',#{hostPlant},'%')
+		</if>
+		<if test="harmDegree != null and harmDegree != 0">
+		AND ss.harm_degree = #{harmDegree}
+		</if>
+		ORDER BY ss.id DESC
+	</select>
+	
+	<insert id="addStandardSurvey" parameterType="com.isoftstone.entity.model.StandardSurvey">
+		insert into t_standard_survey(
+			field_id,
+			images,
+			pest,
+			host_plant,
+			harm_part,
+			victims_rate,
+			harm_degree,
+			is_disaster,
+			remark,
+			insect_status
+		)values
+		<foreach collection="list" item="item" index="index" separator=","> 
+		(
+			#{item.fieldId},
+			#{item.images},
+			#{item.pest},
+			#{item.hostPlant},
+			#{item.harmPart},
+			#{item.victimsRate},
+			#{item.harmDegree},
+			#{item.isDisaster},
+			#{item.remark},
+			#{item.insectStatus}
+		)
+		</foreach>
+	</insert>
+	
+	<update id="editStandardSurvey" parameterType="com.isoftstone.entity.model.StandardSurvey">
+		UPDATE t_standard_survey 
+		  SET images = #{images},
+		  	  pest = #{pest},
+			  host_plant = #{hostPlant},
+			  harm_part = #{harmPart},
+			  victims_rate = #{victimsRate},
+			  harm_degree = #{harmDegree},
+			  is_disaster = #{isDisaster},
+			  remark = #{remark},
+			  insect_status = #{insectStatus}
+		where id = #{id}
+	</update>
+	
+	<delete id="delStandardSurvey">
+		DELETE FROM t_standard_survey 
+		WHERE 
+			id in
+			<foreach collection="list" item="id" index="index" open="(" separator="," close=")">  	
+			 #{id}
+			</foreach>
+	</delete>
+	<!-- 标准地end -->
+	
+	<!-- 诱捕 start -->
+	<select id="findTrappedSurveyPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.model.TrappedSurvey">
+		SELECT
+			ts.id,
+			ts.field_id fieldId,
+			ts.images,
+			ts.insect_name insectName,
+			ts.total_count totalCount,
+			ts.female_count femaleCount,
+			ts.male_count maleCount,
+			ts.remark,
+			ts.insect_status insectStatus,
+			ts.harm_degree harmDegree
+		FROM t_trapped_survey ts
+		WHERE ts.field_id = #{fieldId}
+		<if test="pest != null and pest !=''">
+		AND ts.insect_name LIKE concat('%',#{insectName},'%')
+		</if>
+		<if test="harmDegree != null and harmDegree != 0">
+		AND ts.harm_degree = #{harmDegree}
+		</if>
+		ORDER BY ts.id DESC
+	</select>
+	
+	<insert id="addTrappedSurvey" parameterType="com.isoftstone.entity.model.TrappedSurvey">
+		insert into t_trapped_survey(
+			field_id,
+			images,
+			insect_name,
+			total_count,
+			female_count,
+			male_count,
+			remark,
+			insect_status,
+			harm_degree
+		)values
+		<foreach collection="list" item="item" index="index" separator=","> 
+		(
+			#{item.fieldId},
+			#{item.images},
+			#{item.insectName},
+			#{item.totalCount},
+			#{item.femaleCount},
+			#{item.maleCount},
+			#{item.remark},
+			#{item.insectStatus},
+			#{item.harmDegree}
+		)
+		</foreach>
+	</insert>
+	
+	<update id="editTrappedSurvey" parameterType="com.isoftstone.entity.model.TrappedSurvey">
+		UPDATE t_trapped_survey 
+		  SET images = #{images},
+		  	  insect_name = #{insectName},
+			  total_count = #{totalCount},
+			  female_count = #{femaleCount},
+			  male_count = #{maleCount},
+			  remark = #{remark},
+			  insect_status = #{insectStatus},
+			  harm_degree = #{harmDegree}
+		where id = #{id}
+	</update>
+	
+	<delete id="delTrappedSurvey">
+		DELETE FROM t_trapped_survey 
+		WHERE 
+			id in
+			<foreach collection="list" item="id" index="index" open="(" separator="," close=")">  	
+			 #{id}
+			</foreach>
+	</delete>
+	<!-- 诱捕end -->
+	
+	<!-- 苗圃花木 start -->
+	<select id="findNurserySurveyPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.model.NurserySurvey">
+		SELECT
+			ns.id,
+			ns.field_id fieldId,
+			ns.images,
+			ns.pest,
+			ns.host_plant hostPlant,
+			ns.harm_part harmPart,
+			ns.victims_rate victimsRate,
+			ns.harm_degree harmDegree,
+			ns.is_disaster isDisaster,
+			ns.remark,
+			ns.card_number cardNumber,
+			ns.insect_status insectStatus
+		FROM t_nursery_survey ns
+		WHERE ns.field_id = #{fieldId}
+		<if test="pest != null and pest !=''">
+		AND ns.pest LIKE concat('%',#{pest},'%')
+		</if>
+		<if test="hostPlant != null and hostPlant !=''">
+		AND ns.host_plant LIKE concat('%',#{hostPlant},'%')
+		</if>
+		<if test="harmDegree != null and harmDegree != 0">
+		AND ns.harm_degree = #{harmDegree}
+		</if>
+		ORDER BY ns.id DESC
+	</select>
+	
+	<insert id="addNurserySurvey" parameterType="com.isoftstone.entity.model.NurserySurvey">
+		insert into t_nursery_survey(
+			field_id,
+			images,
+			pest,
+			host_plant,
+			harm_part,
+			victims_rate,
+			harm_degree,
+			is_disaster,
+			remark,
+			card_number,
+			insect_status
+		)values
+		<foreach collection="list" item="item" index="index" separator=","> 
+		(
+			#{item.fieldId},
+			#{item.images},
+			#{item.pest},
+			#{item.hostPlant},
+			#{item.harmPart},
+			#{item.victimsRate},
+			#{item.harmDegree},
+			#{item.isDisaster},
+			#{item.remark},
+			#{item.cardNumber},
+			#{item.insectStatus}
+		)
+		</foreach>
+	</insert>
+	
+	<update id="editNurserySurvey" parameterType="com.isoftstone.entity.model.NurserySurvey">
+		UPDATE t_nursery_survey 
+		  SET images = #{images},
+		  	  pest = #{pest},
+			  host_plant = #{hostPlant},
+			  harm_part = #{harmPart},
+			  victims_rate = #{victimsRate},
+			  harm_degree = #{harmDegree},
+			  is_disaster = #{isDisaster},
+			  remark = #{remark},
+			  card_number = #{cardNumber},
+			  insect_status = #{insectStatus}
+		where id = #{id}
+	</update>
+	
+	<delete id="delNurserySurvey">
+		DELETE FROM t_nursery_survey 
+		WHERE 
+			id in
+			<foreach collection="list" item="id" index="index" open="(" separator="," close=")">  	
+			 #{id}
+			</foreach>
+	</delete>
+	<!-- 苗圃花木end -->
+	
+	<!-- 种果花木 start -->
+	<select id="findFruitSurveyPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.model.FruitSurvey">
+		SELECT
+			fs.id,
+			fs.field_id fieldId,
+			fs.images,
+			fs.pest,
+			fs.host_plant hostPlant,
+			fs.host_type hostType,
+			fs.harm_count harmCount,
+			fs.deputy_count deputyCount,
+			fs.harm_degree harmDegree,
+			fs.remark,
+			fs.insect_status insectStatus
+		FROM t_fruit_survey fs
+		WHERE fs.field_id = #{fieldId}
+		<if test="pest != null and pest !=''">
+		AND fs.pest LIKE concat('%',#{pest},'%')
+		</if>
+		<if test="hostPlant != null and hostPlant !=''">
+		AND fs.host_plant LIKE concat('%',#{hostPlant},'%')
+		</if>
+		<if test="harmDegree != null and harmDegree != 0">
+		AND fs.harm_degree = #{harmDegree}
+		</if>
+		ORDER BY fs.id DESC
+	</select>
+	
+	<insert id="addFruitSurvey" parameterType="com.isoftstone.entity.model.FruitSurvey">
+		insert into t_fruit_survey(
+			field_id,
+			images,
+			pest,
+			host_plant,
+			host_type,
+			harm_count,
+			deputy_count,
+			harm_degree,
+			remark,
+			insect_status
+		)values
+		<foreach collection="list" item="item" index="index" separator=","> 
+		(
+			#{item.fieldId},
+			#{item.images},
+			#{item.pest},
+			#{item.hostPlant},
+			#{item.hostType},
+			#{item.harmCount},
+			#{item.deputyCount},
+			#{item.harmDegree},
+			#{item.remark},
+			#{item.insectStatus}
+		)
+		</foreach>
+	</insert>
+	
+	<update id="editFruitSurvey" parameterType="com.isoftstone.entity.model.FruitSurvey">
+		UPDATE t_fruit_survey 
+		  SET images = #{images},
+		  	  pest = #{pest},
+			  host_plant = #{hostPlant},
+			  host_type = #{hostType},
+			  harm_count = #{harmCount},
+			  deputy_count = #{deputyCount},
+			  harm_degree = #{harmDegree},
+			  remark = #{remark},
+			  insect_status = #{insectStatus}
+		where id = #{id}
+	</update>
+	
+	<delete id="delFruitSurvey">
+		DELETE FROM t_fruit_survey 
+		WHERE 
+			id in
+			<foreach collection="list" item="id" index="index" open="(" separator="," close=")">  	
+			 #{id}
+			</foreach>
+	</delete>
+	<!-- 种果花木end -->
+	
+	<select id="findStepDataPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.pojo.StepInvestigationPojo">
+		SELECT
+			si.id,
+			si.field_id fieldId,
+			si.images,
+			si.name,
+			si.lon,
+			si.lat,
+			si.altitude,
+			si.constituent,
+			si.pest,
+			si.host_plant hostPlant,
+			si.harm_part harmPart,
+			si.harm_degree harmDegree,
+			si.is_set_standard isSetStandard,
+			si.standard_code standardCode,
+			si.remark,
+			si.insect_status insectStatus,
+			a.name fieldName,
+			a.district_id districtId,
+			a.district_name districtName,
+			a.district_code districtCode,
+			a.township_name townshipName,
+			a.township_code townshipCode,
+			a.type,
+			a.number,
+			a.acreage,
+			a.investigator,
+			a.companion,
+			a.survey_time surveyTime,
+			a.user_id userId
+		FROM t_step_investigation si
+		RIGHT JOIN t_field_survey a ON a.id = si.field_id
+		WHERE a.type = 1
+		<if test="surveyTime != null">
+		AND a.survey_time = #{surveyTime}
+		</if>
+		<if test="roleId != 1">
+			AND	(a.district_id in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+				OR a.user_id = #{userId}) 
+		</if>
+	</select>
+	
+	<select id="findStandardDataPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.pojo.StandardSurveyPojo">
+		SELECT
+			ss.id,
+			ss.field_id fieldId,
+			ss.images,
+			ss.pest,
+			ss.host_plant hostPlant,
+			ss.harm_part harmPart,
+			ss.victims_rate victimsRate,
+			ss.harm_degree harmDegree,
+			ss.is_disaster isDisaster,
+			ss.remark,
+			ss.insect_status insectStatus,
+			a.name fieldName,
+			a.district_id districtId,
+			a.district_name districtName,
+			a.district_code districtCode,
+			a.township_name townshipName,
+			a.township_code townshipCode,
+			a.place_name placeName,
+			a.type,
+			a.number,
+			a.acreage,
+			a.current_class currentClass,
+			a.deputy_acreage deputyAcreage,
+			a.lon,
+			a.lat,
+			a.altitude,
+			a.investigator,
+			a.companion,
+			a.survey_time surveyTime,
+			a.user_id userId
+		FROM t_standard_survey ss
+		RIGHT JOIN t_field_survey a ON a.id = ss.field_id
+		WHERE a.type = 2
+		<if test="surveyTime != null">
+		AND a.survey_time = #{surveyTime}
+		</if>
+		<if test="roleId != 1">
+			AND	(a.district_id in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+				OR a.user_id = #{userId}) 
+		</if>
+	</select>
+	
+	<select id="findTrappedDataPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.pojo.TrappedSurveyPojo">
+		SELECT
+			ts.id,
+			ts.field_id fieldId,
+			ts.images,
+			ts.insect_name insectName,
+			ts.total_count totalCount,
+			ts.female_count femaleCount,
+			ts.male_count maleCount,
+			ts.remark,
+			ts.insect_status insectStatus,
+			ts.harm_degree harmDegree,
+			a.name fieldName,
+			a.district_id districtId,
+			a.district_name districtName,
+			a.district_code districtCode,
+			a.township_name townshipName,
+			a.township_code townshipCode,
+			a.type,
+			a.number,
+			a.acreage,
+			a.current_class currentClass,
+			a.lon,
+			a.lat,
+			a.altitude,
+			a.stands_type standsType,
+			a.main_species mainSpecies,
+			a.investigator,
+			a.companion,
+			a.survey_time surveyTime,
+			a.user_id userId
+		FROM t_trapped_survey ts
+		RIGHT JOIN t_field_survey a ON a.id = ts.field_id
+		WHERE a.type = 3
+		<if test="surveyTime != null">
+		AND a.survey_time = #{surveyTime}
+		</if>
+		<if test="roleId != 1">
+			AND	(a.district_id in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+				OR a.user_id = #{userId}) 
+		</if>
+	</select>
+	
+	<select id="findNurseryDataPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.pojo.NurserySurveyPojo">
+		SELECT
+			ns.id,
+			ns.field_id fieldId,
+			ns.images,
+			ns.pest,
+			ns.host_plant hostPlant,
+			ns.harm_part harmPart,
+			ns.victims_rate victimsRate,
+			ns.harm_degree harmDegree,
+			ns.is_disaster isDisaster,
+			ns.remark,
+			ns.card_number cardNumber,
+			ns.insect_status insectStatus,
+			a.name fieldName,
+			a.district_id districtId,
+			a.district_name districtName,
+			a.district_code districtCode,
+			a.township_name townshipName,
+			a.township_code townshipCode,
+			a.place_name placeName,
+			a.type,
+			a.acreage,
+			a.lon,
+			a.lat,
+			a.altitude,
+			a.investigator,
+			a.companion,
+			a.survey_time surveyTime,
+			a.user_id userId
+		FROM t_nursery_survey ns
+		RIGHT JOIN t_field_survey a ON a.id = ns.field_id
+		WHERE a.type = 4
+		<if test="surveyTime != null">
+		AND a.survey_time = #{surveyTime}
+		</if>
+		<if test="roleId != 1">
+			AND	(a.district_id in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+				OR a.user_id = #{userId}) 
+		</if>
+	</select>
+	
+	<select id="findFruitDataPage" parameterType="java.util.Map" resultType="com.isoftstone.entity.pojo.FruitSurveyPojo">
+		SELECT
+			fs.id,
+			fs.field_id fieldId,
+			fs.images,
+			fs.pest,
+			fs.host_plant hostPlant,
+			fs.host_type hostType,
+			fs.harm_count harmCount,
+			fs.deputy_count deputyCount,
+			fs.harm_degree harmDegree,
+			fs.remark,
+			fs.insect_status insectStatus,
+			a.name fieldName,
+			a.district_id districtId,
+			a.district_name districtName,
+			a.district_code districtCode,
+			a.township_name townshipName,
+			a.township_code townshipCode,
+			a.place_name placeName,
+			a.type,
+			a.acreage,
+			a.lon,
+			a.lat,
+			a.altitude,
+			a.investigator,
+			a.companion,
+			a.survey_time surveyTime,
+			a.stock,
+			a.stock_unit stockUnit,
+			a.sample_number sampleNumber,
+			a.sample_number_unit sampleNumberUnit,
+			a.user_id userId
+		FROM t_fruit_survey fs
+		RIGHT JOIN t_field_survey a ON a.id = fs.field_id
+		WHERE a.type = 5
+		<if test="surveyTime != null">
+		AND a.survey_time = #{surveyTime}
+		</if>
+		<if test="roleId != 1">
+			AND	(a.district_id in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+				OR a.user_id = #{userId}) 
+		</if>
+	</select>
+	
+	<!-- 查询野外调查总数 -->
+  <select id="getFieldSurvey" resultType="java.lang.Integer" parameterType="java.util.Map">
+   	SELECT 
+		count(1)
+	FROM
+		t_field_survey fs
+    <where>
+		1=1
+		<if test="roleId != 1">
+			AND	fs.district_id in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach> 
+		</if>
+	</where>
+  </select>
+	
+</mapper>

@@ -1,0 +1,573 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/zTree/css/zTreeStyle/zTreeStyle.css}">
+		<link rel="stylesheet" th:href="@{/zTree/css/demo.css}" />
+
+		<style type="text/css">
+			.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+			.ztreeRightList li {list-style-type:none;}
+		</style>
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">权限管理</li>
+							<li class="active">区域权限</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="row">
+                                		<div class="col-lg-4 col-md-4 col-sm-12">
+                                		 <div class="ztreeCon" style="border:0;">
+                                		 	<ul id="areaTree" class="ztree" style="width: auto;margin-top: 0;height: 600px;background: white;border-color:#CCCCCC;"></ul>
+                                		 </div>
+                                	    </div>
+                                	    <div class="col-lg-8 col-md-8 col-sm-12" style="margin-left: 60px;width: 30%">
+                                	    	<div class="ztreeRight">
+                                	    		<button class="btn btn-primary addList" shiro:hasPermission="/areas/add">
+                                	    			<i class="addIcon"></i>
+                                	    			添加
+                                	    		</button>
+                                	    		<button class="btn btn-info saveList" shiro:hasPermission="/areas/add">
+                                	    			<i class="icon-save"></i>
+                                	    			保存
+                                	    		</button>
+                                	    		<div class="hr dotted"></div>
+                                	    		<form id="ztreeRightFrom" onsubmit="return false">
+	                                	    		<div class="ztreeRightList">
+	                                	    			<ol name="contactInfo">
+	                                	    				<li><h3 name="areaText"></h3></li>
+	                                	    				<li><label>联系人</label><input type="text"/></li>
+	                                	    				<li><label>电话号码</label><input type="text"/></li>
+	                                	    				<li><label>邮箱</label><input type="text"/></li>
+	                                	    				<li><label>&nbsp;</label><button class="btn btn-danger" onclick="listDelet(this)">删除</button></li>
+	                                	    			</ol>
+	                                	    		</div>
+                                	    		</form>
+                                	    	</div>
+                                	    </div>
+                                	</div>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+		
+		<script type="text/javascript" th:src="@{/zTree/js/jquery.ztree.core.js}"></script>
+		<script type="text/javascript" th:src="@{/zTree/js/jquery.ztree.excheck.js}"></script>
+		<script type="text/javascript" th:src="@{/zTree/js/jquery.ztree.exedit.js}"></script>
+		
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+
+		<!-- ace scripts -->
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}" charset="utf-8"></script>
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+			$.validator.addMethod("mobile", function (value, element, param) {
+				if (/^1[3|4|5|7|8|9]\d{9}$/.test(value)){
+					return true;
+				}else if(null==value || ""==value){
+					return true;
+				}else {
+					return  false;
+				}
+			}, "手机号格式不正确");
+			$.validator.addMethod("email1", function (value, element, param) {
+				if (/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(value)){
+					return true;
+				}else if(null==value || ""==value){
+					return true;
+				}else {
+					return  false;
+				}
+			}, "邮箱格式不正确");
+			
+			var layer;
+			layui.use('layer', function(){
+			  	layer = layui.layer;
+			  	
+			});
+		
+			var setting = {
+			    async: { //异步加载
+					enable: true,
+					url: "/areasPage/getAllArea.do"	//请求的action路径
+					//autoParam: ["id=id"] 				//需要传递的参数
+				},
+			    data: {
+					key:{
+						name:"name"
+					},
+			    	simpleData:{
+			    		enable:true,
+			    		idKey:"code",			// id编号命名 默认 
+			    		pIdKey:"parentCode"		// 父id编号命名 默认  
+			    	}
+			    },
+				callback: {
+					beforeDrag: beforeDrag,
+					beforeEditName: beforeEditName,
+					beforeRemove: beforeRemove,
+					beforeRename: beforeRename,
+					onRename: onRename,
+					onClick: onClick
+				},
+				view: {
+					addHoverDom: addHoverDom,
+					removeHoverDom: removeHoverDom,
+					selectedMulti: false
+				},
+				edit: {
+					enable: true,
+					editNameSelectAll: true,
+					showRemoveBtn: showRemoveBtn,
+					showRenameBtn: showRenameBtn
+				}
+			};
+			
+			var className = "dark";
+			function beforeDrag(treeId, treeNodes) {
+				return false;
+			}
+			function beforeEditName(treeId, treeNode) {
+				className = (className === "dark" ? "":"dark");
+				var zTree = $.fn.zTree.getZTreeObj("areaTree");
+				zTree.selectNode(treeNode);
+				setTimeout(function() {
+					if (confirm("编辑点区域 -- \"" + treeNode.name + "\"吗？")) {
+						setTimeout(function() {
+							zTree.editName(treeNode);
+						}, 0);
+					}
+				}, 0);
+				return false;
+			}
+			function beforeRemove(treeId, treeNode) {
+				className = (className === "dark" ? "":"dark");
+				var zTree = $.fn.zTree.getZTreeObj("areaTree");
+				zTree.selectNode(treeNode);
+				var flag = true;
+				if(confirm("确认删除点区域 -- \"" + treeNode.name + "\"吗？")){
+					$.ajax({
+				        cache: true,
+				        type: "POST",
+				        async: false,
+				        url:'/areasPage/delArea.do',
+				        dataType:"json",
+				        data:{id:treeNode.id},
+				        success: function(obj) {
+				        	if(obj.code == 1){
+								layer.msg("删除成功！");
+				        	}else if(obj.code == 20006){
+				        		layer.msg(obj.message);
+				        		flag = false;
+				        	}else{
+				        		layer.msg("该点区域下有用户或设备，不能删除点区域！");
+				        		flag = false;
+				        	}
+				        }
+				    });
+				}else{
+	        		flag = false;
+				}
+				
+				return flag;
+			}
+			
+			function beforeRename(treeId, treeNode, newName, isCancel) {
+				className = (className === "dark" ? "":"dark");
+				if (newName.length == 0) {
+					setTimeout(function() {
+						var zTree = $.fn.zTree.getZTreeObj("areaTree");
+						zTree.cancelEditName();
+						layer.msg("点区域名称不能为空!");
+					}, 0);
+					return false;
+				}
+				return true;
+			}
+			function onRename(e, treeId, treeNode, isCancel) {
+				$.ajax({
+			        cache: true,
+			        type: "POST",
+			        url:'/areasPage/editArea.do',
+			        dataType:"json",
+			        data:treeNode,
+			        success: function(obj) {
+			        	if(obj.code == 1){
+							layer.msg("修改点区域成功！");
+			        	}
+			        	else{
+			        		layer.msg(obj.message);
+			        	}
+			        }
+			    });
+			}
+			function showRemoveBtn(treeId, treeNode) {
+				if(treeNode.level != 3){
+					return false;
+				}
+				return true;
+			}
+			function showRenameBtn(treeId, treeNode) {
+				if(treeNode.level != 3){
+					return false;
+				}
+				return true;
+			}
+			
+			function addHoverDom(treeId, treeNode) {
+				if(treeNode.level == 2){
+					var sObj = $("#" + treeNode.tId + "_span");
+					if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+					var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+						+ "' title='add node' onfocus='this.blur();'></span>";
+					sObj.after(addStr);
+					var btn = $("#addBtn_"+treeNode.tId);
+					
+					if (btn) btn.bind("click", function(){
+						//弹窗开始的地方
+						var editCon = "<div class=\"editCon\"><form id=\"addAreaForm\">";
+							editCon +="<ul>";	
+							editCon +="<li style=\"list-style-type:none;\"><label>点名称:</label><input id=\"addAreaName\" name=\"addAreaName\" type=\"text\"/></li>";
+							editCon +="</ul>";
+							editCon +="</form></div>";
+							bootbox.dialog({
+								title:"添加点区域",
+								message: editCon,
+								buttons: 			
+								{
+									"确定" :
+									 {
+										"className" : "btn-sm btn-primary",
+										"callback": function() {
+											
+											$("#addAreaForm").validate({
+											    rules: {
+											    	addAreaName : "required"
+											    },
+											    messages: {
+											    	addAreaName : "请输入点名称"
+											    }
+											});
+											
+											if(!$("#addAreaForm").valid()) {
+												return false;
+										  	}
+											var newNode = { name:$.trim($("#addAreaName").val()),parentCode:treeNode.code};
+											$.ajax({
+										        cache: true,
+										        type: "POST",
+										        url:'/areasPage/addArea.do',
+										        dataType:"json",
+										        data:newNode,
+										        success: function(obj) {
+										        	if(obj.code == 1){
+										        		var area = obj.data;
+											        	newNode.id=area.id;
+														var zTree = $.fn.zTree.getZTreeObj("areaTree");
+														zTree.addNodes(treeNode,newNode);
+										        	}
+										        	else{
+										        		layer.msg(obj.message);
+										        	}
+										        }
+										    });
+										}
+									},
+									"取消" :
+									{
+										"label" : "取消",
+										"className" : "btn-sm",
+										"callback": function() {
+										}
+									}, 
+									
+								}
+							});
+					});
+				}
+			};
+			function removeHoverDom(treeId, treeNode) {
+				$("#addBtn_"+treeNode.tId).unbind().remove();
+			};
+			
+			var ztreeRightList;
+			var count = 1;
+			var contactInfoList;
+			var areaId;
+			/**
+			 * zTree 点击事件
+			 */
+			function onClick(event, treeId, treeNode, clickFlag) {
+				contactInfoList ='<ol name="contactInfo">';
+				contactInfoList +='<li><h3 name="areaText">'+treeNode.name+'</h3></li>';
+				contactInfoList +='<li><label>联系人</label><input type="text" name="name"/></li>';
+				contactInfoList +='<li><label>电话号码</label><input type="text" name="telephone"/></li>';
+				contactInfoList +='<li><label>邮箱</label><input type="text" name="email"/></li>';
+				contactInfoList +='<li><label>&nbsp;</label><button class="btn btn-danger" onClick="listDelet(this)">删除</button></li>';
+				contactInfoList +='</ol>';
+				areaId = treeNode.id;
+				$("ol[name='contactInfo']").remove();
+			    $.ajax({
+			        cache: true,
+			        type: "POST",
+			        async: false,
+			        url:'/areasPage/queryContact',
+			        dataType:"json",
+			        data:{areaId:treeNode.id},
+			        success: function(obj) {
+			        	var contactInfos = obj.data;
+			        	ztreeRightList = "";
+			        	if(contactInfos.length > 0){
+			        		for(var i =0;i<contactInfos.length;i++){
+			        			ztreeRightList +='<ol name="contactInfo">';
+							    ztreeRightList +='<li><h3 name="areaText">'+treeNode.name+'</h3></li>';
+							    ztreeRightList +='<li><label>联系人</label><input type="text" name="name" value="'+contactInfos[i].name+'"/></li>';
+							    ztreeRightList +='<li><label>电话号码</label><input type="text" name="telephone" value="'+contactInfos[i].telephone+'"/></li>';
+							    ztreeRightList +='<li><label>邮箱</label><input type="text" name="email" value="'+contactInfos[i].email+'"/></li>';
+							    ztreeRightList +='<li><label>&nbsp;</label><button class="btn btn-danger" onClick="listDelet(this)">删除</button></li>';
+							    ztreeRightList +='</ol>';
+			        		}
+			        		$('.ztreeRight').find('.ztreeRightList').append(ztreeRightList);
+						    count = contactInfos.length;
+			        	}
+			        	else{
+						    $('.ztreeRight').find('.ztreeRightList').append(contactInfoList);
+						    count = 1;
+			        	}
+			        }
+			    });
+			    $("#ztreeRightFrom").validate({
+				    rules: {
+				    	name : "required",
+				    	telephone : {
+				    		required : true,
+			    	    	mobile : true,
+			    	    	maxlength : 11
+				    	},
+				    	email : {
+				    		required : true,
+				    		email1 : true
+				    	}
+				    },
+				    messages: {
+				    	name : "请输入联系人姓名",
+				    	telephone: {
+				    		required : "请输入联系人手机号"
+				    	},
+				    	email: {
+				    		required : "请输入邮箱"
+				    	}
+				    }
+				});
+			}
+			
+			$(function() {
+				$.fn.zTree.init($("#areaTree"), setting);
+				
+				$('.addList').on('click',function(){
+					if(count < 5 && contactInfoList){
+						count ++;
+						$('.ztreeRight').find('.ztreeRightList').append(contactInfoList);
+					}
+					else if(count == 5){
+						layer.msg("最多只能添加五个联系人！");
+					}
+					else{
+						layer.msg("请先选择需要添加联系人的区域！");
+					}
+				});
+				$('.saveList').on('click',function(){
+					if(!$("#ztreeRightFrom").valid()) {
+						return false;
+				  	}
+					
+					var nameArray = $("input[name='name']");
+					var telephoneArray = $("input[name='telephone']");
+					var emailArray = $("input[name='email']");
+					var names = "";
+					var telephones = "";
+					var emails = "";
+					if(nameArray.length == telephoneArray.length && nameArray.length == emailArray.length){
+						for(var i=0;i<nameArray.length;i++){
+							if(!nameArray[i].value || !/^1[3|4|5|7|8|9]\d{9}$/.test(telephoneArray[i].value) || !/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(emailArray[i].value)){
+								layer.msg("请把联系人资料填写正确！");
+								return;
+							}
+							names += nameArray[i].value+",";
+							telephones += telephoneArray[i].value +",";
+							emails += emailArray[i].value +",";
+						}
+						if(names != ""){
+							$.ajax({
+						        cache: true,
+						        type: "POST",
+						        async: false,
+						        url:'/areasPage/saveContact',
+						        dataType:"json",
+						        data:{names:names,telephones:telephones,emails:emails,areaId:areaId},
+						        success: function(obj) {
+						        	if(obj.code == 1){
+						        		layer.msg("保存成功！");
+						        	}else{
+						        		layer.msg(obj.message);
+						        	}
+						        }
+						    });
+						}
+					}else{
+						layer.msg("请把联系人资料填写完整！");
+						return;
+					}
+				});
+			});
+			
+			function listDelet(obj){
+				if(count > 1){
+					$(obj).parent('li').parent('ol').remove();
+					count --;
+				}
+			}
+			
+		</script>
+	</body>
+</html>
+

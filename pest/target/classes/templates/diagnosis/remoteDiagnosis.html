@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>远程诊断--生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<style type="text/css">
+			#J-xl-2-btn{
+				display: inline-block;
+			    vertical-align: middle;
+			    width: 35px;
+			    height: 33px;
+			    background: url(../images/dataTime.png) no-repeat 50% 50% #FFFFFF;
+			    background-size: 70%;
+			    right: 118px;
+			    top: 176px;
+			    position: absolute;
+			}
+		</style>
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+		
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+				
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">远程诊断</li>
+						</ul><!-- .breadcrumb -->
+
+						
+					</div>
+
+					<div class="page-content">
+						
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="sxc-head sxc-subhead clearfix demoTable">
+										<ol class="clearfix manyBtncon">
+											<li><label>用户:</label><input type="text" id="realName" placeholder="输入用户"/></li>
+                                			<li>
+                                				<label>状态:</label>
+                                				<select id="diagnosticStatus">
+                                					<option value="">---请选择---</option>
+                                					<option value="1">待诊断</option>
+                                					<option value="2">已诊断</option>
+                                					<option value="3">信息不全</option>
+                                				</select>
+                                			</li>
+
+                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch">搜索</button></li>
+										</ol>
+										<ol class="clearfix searchCon" style="float: right;">
+											<li>
+                                				<button class="btn btn-primary layui-btn" data-type="openAdd" shiro:hasPermission="/diagnosisPage/addDiagnosis">
+													<i class="addIcon"></i> 添加
+											    </button>
+                                			</li>
+                                			<li>
+                                				<button class="btn btn-danger layui-btn" data-type="delSelect" shiro:hasPermission="/diagnosisPage/delDiagnosis">
+													<i class="icon-trash bigger-120"></i>删除
+											    </button>
+                                			</li>	
+										</ol>
+									</div>
+                                	<div class="table-responsive">
+                                		<table class="layui-table" id="remoteDiagnosisList" lay-data="{url:'/diagnosisPage/findPage', page:true,limit:10,even: true, id:'idTest'}" lay-filter="remoteDiagnosisList">
+										  <thead>
+										    <tr>
+										      <th lay-data="{checkbox:true, fixed: true}"></th>
+										      <th lay-data="{field:'realName', width:100, sort: true}">用户</th>
+										      <th lay-data="{field:'diagnosticStatus', width:90, templet: '#fmtEnable'}">状态</th>
+										      <th lay-data="{field:'description', width:260, sort: true}">文字描述</th>
+										      <th lay-data="{field:'diagnosticPerson', width:100, sort: true}">诊断人</th>
+										      <th lay-data="{field:'diagnosticResult', width:360, sort: true}">诊断结果</th>
+										      <th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}">操作</th>
+										    </tr>
+										  </thead>
+										</table>
+									</div>
+                                </div>
+							</div>
+						</div>
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+		<div id="addDiv" style="display:none;">
+			<form id="formTemp">
+				<div class="editCon">
+					<input type="hidden" name="id"/>
+					<ul>
+						<li style="display:inline-block;">
+							<label>照片:</label>
+							<div>
+								<div style="margin-left: 112px;margin-top: -32px;" class="imgDiv">
+									<img th:src="@{/images/upload.jpg}" onclick="$('#fileIcon').click();" style="width:60px; height:40px;margin-bottom: 5px"/>
+								</div>
+							</div>
+							<input type="hidden" name="image" value="" /> 
+							<input type="file" multiple="multiple" onchange="uploadThumb('fileIcon','image');" id="fileIcon" accept="image/*" style="display:none;" name="fileInput" />
+						</li>
+						<li>
+							<label>文字描述:</label>
+							<textarea name="description"></textarea>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		
+		<div id="diagnosisDiv" style="display:none;">
+			<form id="form1Temp">
+				<div class="editCon">
+					<input type="hidden" name="id"/>
+					<ul>
+						<li>
+							<label>诊断人:</label>
+							<input type="text" name="diagnosticPerson" style="height: 35px;"/>
+						</li>
+						<li>
+							<label>诊断状态:</label>
+							<select name="diagnosticStatus" style="height: 35px;">
+								<option value="2">已诊断</option>
+								<option value="3">信息不全</option>
+							</select>
+						</li>
+						<li>
+							<label>诊断结果:</label>
+							<div style="width:80%; display:inline-flex;">
+								<script type="text/plain" name="diagnosticResult" id="myEditorTemp"></script>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:999999999;width:100%;height:100%;display:none;">
+		    <div id="innerdiv" style="position:absolute;">
+		        <img id="bigimg" style="border:5px solid #fff;" src="" />
+		    </div>
+		</div> 
+		
+		<div id="viewDiv" style="display:none;">
+			<form id="formTemp1">
+				<div class="editCon">
+				</div>
+			</form>
+		</div>
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+        
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootstrap-wysiwyg.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ueditor/ueditor.config.js}"></script>
+    	<script type="text/javascript" th:src="@{/js/ueditor/ueditor.all.js}"> </script>
+    	<script type="text/javascript" th:src="@{/js/ueditor/lang/zh-cn/zh-cn.js}"></script>
+
+		<!-- ace scripts -->
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<script type="text/javascript" th:src="@{/js/common/ajaxfileupload.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}" charset="utf-8"></script>
+		
+		<!-- inline scripts related to this page -->
+		<script type="text/html" id="fmtEnable">
+			{{#  if(d.diagnosticStatus === 1){ }}
+    			待诊断
+			{{#  } else if(d.diagnosticStatus === 2){ }}
+    			已诊断
+  			{{#  } else { }}
+    			信息不全
+			{{#  } }}
+		</script>
+		
+		<div id="barDemo" style="display:none;">
+			<a class="green" lay-event="edit" title="编辑"><i class="icon-pencil bigger-150" shiro:hasPermission="/diagnosisPage/editDiagnosis"></i></a>
+			<a class="blue" lay-event="viewPic" title="查看照片"><i class="icon-picture bigger-150"></i></a>
+			<a class="red" lay-event="diagnosis" title="诊断"><i class="icon-medkit bigger-150" shiro:hasPermission="/diagnosisPage/diagnosis"></i></a>
+			<a class="red" lay-event="del" title="删除"><i class="icon-trash bigger-150" shiro:hasPermission="/diagnosisPage/delDiagnosis"></i></a>
+		</div>
+		
+		<script type="text/javascript">
+			var ue;
+			var first = true;
+			layui.use('table', function(){
+			  var table = layui.table;
+			  //监听表格复选框选择
+			  table.on('checkbox(remoteDiagnosisList)', function(obj){
+			    
+			  });
+			  //监听工具条
+			  table.on('tool(remoteDiagnosisList)', function(obj){
+			    var remoteDiagnosis = obj.data;
+			    if(obj.event === 'del'){
+			      layer.confirm('是否确定删除该条数据？', function(index){
+			    	  $.ajax({
+			                cache: true,
+			                type: "POST",
+			                url:'/diagnosisPage/delDiagnosis',
+			                data:{ids : remoteDiagnosis.id},
+			                async: false,
+			                dataType:'json',
+			                success: function(xhr) {
+			                	if(xhr.code == 1){
+			                        layer.msg('删除远程诊断成功');
+			                        obj.del();
+									layer.close(index);
+									table.reload('idTest', {
+							            where: { //设定异步数据接口的额外参数
+							            	"realName":$("#realName").val(),
+							            	"diagnosticStatus":$("#diagnosticStatus").val()
+							            }
+									});
+			                    }else{
+			                    	layer.msg(xhr.message);
+			                    }
+			                }
+			            });
+			      });
+			    } else if(obj.event === 'edit'){
+			    	layer.open({
+						  title: '编辑远程诊断信息'
+						  ,content: $("#addDiv").html().replace('formTemp','remoteDiagnosisForm'),
+						  area:['550px','400px'],
+						  success:function(){
+							  $("#remoteDiagnosisForm img[name='imgIcon']").attr("src",remoteDiagnosis.image);
+							  $("#remoteDiagnosisForm textarea[name='description']").text(remoteDiagnosis.description);
+							  $("#remoteDiagnosisForm input[name='id']").val(remoteDiagnosis.id);
+							  
+							  if(remoteDiagnosis.image){
+								  var imgStr = '';
+								  var pathArr = remoteDiagnosis.image.split(",");
+								  for(var i=0;i<pathArr.length;i++){
+									  imgStr += '<div style="float: left; margin:10px;"><img name="imgIcon" src="'+pathArr[i]+'" style="width:80px; height:80px;margin-bottom: 5px;margin-left: 5px;"><img src="/images/error.png" name="closeImg" style="position:absolute; float:right; margin: 3px 0 auto -17px;" /></div>'
+								  }
+								  imgStr += $("#remoteDiagnosisForm .imgDiv").html();
+								  $("#remoteDiagnosisForm input[name='image']").val(remoteDiagnosis.image);
+								  $("#remoteDiagnosisForm .imgDiv").html(imgStr);
+								  $("#remoteDiagnosisForm img[name=imgIcon]").click(function(){  
+							            var _this = $(this);//将当前的pimg元素作为_this传入函数  
+							            imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);  
+							        }); 
+								  $("#remoteDiagnosisForm img[name=closeImg]").click(function(){
+									  	var reomvePic = $($(this).parent().find("[name=imgIcon]")).attr("src");
+							            var paths = $("#remoteDiagnosisForm input[name='image']").val().replace(','+reomvePic,'').replace(reomvePic+',','').replace(reomvePic,'');
+							            $("#remoteDiagnosisForm input[name='image']").val(paths);
+							            $(this).parent().remove();
+							        }); 
+							  }
+							  
+							  $("#remoteDiagnosisForm").validate({
+								    rules: {
+								    	description : "required"
+								    },
+								    messages: {
+								    	description : "请输入文字描述"
+								    }
+								});
+						  },
+						  btn:['确定','取消']
+						  ,yes: function(){
+							  if(!$("#remoteDiagnosisForm input[name='image']").val()){
+								  alert('请先上传需要诊断的图片');
+								  return false;
+							  }
+							  if(!$("#remoteDiagnosisForm").valid()) {
+									return false;
+							  }
+							  $.ajax({
+						            cache: true,
+						            type: "POST",
+						            url:'/diagnosisPage/editDiagnosis',
+						            data:$('#remoteDiagnosisForm').serialize(),// 你的formid
+						            async: false,
+						            dataType:'json',
+					                success: function(obj) {
+					                	if(obj.code == 1){
+							        		layer.msg('编辑远程诊断成功');
+							                layer.closeAll('page');
+											table.reload('idTest', {
+								            	where: { //设定异步数据接口的额外参数
+								            		"realName":$("#realName").val(),
+								            		"diagnosticStatus":$("#diagnosticStatus").val()
+								            	}
+											});
+							        	}else{
+							        		layer.msg(obj.message);
+							        	}
+						            }
+						        });
+						  },
+						  btn2: function(){
+						    layer.closeAll();
+						  },
+						  btnAlign: 'c'
+						});
+			    	
+			    }else if(obj.event === 'viewPic'){
+			    	if(remoteDiagnosis.image){
+			    		layer.open({
+						  title: '查看照片'
+						  ,content: $("#viewDiv").html().replace('formTemp1','viewForm'),
+						  area:['600px','450px'],
+						  success:function(){
+							  var imgStr = '';
+							  var pathArr = remoteDiagnosis.image.split(",");
+							  for(var i=0;i<pathArr.length;i++){
+								
+								imgStr += '<img src="'+pathArr[i]+'" style="width:500px; height:300px;margin:5px;">'
+							  }
+							  $("#viewForm .editCon").html(imgStr);
+							  
+						  },
+						  btn:['关闭']
+						  ,yes: function(){
+							  layer.closeAll(); 
+						  },
+						  btnAlign: 'c'
+						});
+			    	}else{
+			    		layer.msg("暂未上传图片");
+			    	}
+			    }else if(obj.event === 'diagnosis'){
+			    	layer.open({
+						  title: '诊断'
+						  ,content: $("#diagnosisDiv").html().replace('form1Temp','diagnosisForm').replace('myEditorTemp','myEditor'),
+						  area:['900px','660px'],
+						  success:function(){
+							  if(first){
+								  first = false;
+								  ue = UE.getEditor('myEditor',{
+									  toolbars:[[
+									              'fullscreen', '|', 'undo', 'redo', '|',
+									              'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+									              'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+									              'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+									              'directionalityltr', 'directionalityrtl', 'indent', '|',
+									              'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+									              'help'
+									          ]],
+								  	  initialFrameHeight:300
+								  });
+							  }else{
+								  ue = UE.getEditor('myEditor',{
+									  toolbars:[[
+									              'fullscreen', '|', 'undo', 'redo', '|',
+									              'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+									              'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+									              'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+									              'directionalityltr', 'directionalityrtl', 'indent', '|',
+									              'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+									              'help'
+									          ]],
+								  	  initialFrameHeight:300
+								  }).render('myEditor');  
+							  }
+							  
+							  $("#diagnosisForm input[name='id']").val(remoteDiagnosis.id);
+							  $("#diagnosisForm").validate({
+								    rules: {
+								    	diagnosticPerson : "required",
+								    	diagnosticResult : "required"
+								    },
+								    messages: {
+								    	diagnosticPerson : "请填写诊断人",
+								    	diagnosticResult : "请填写诊断结果"
+								    }
+								});
+						  },
+						  btn:['确定','取消']
+						  ,yes: function(){
+							  if(!$("#diagnosisForm").valid()) {
+									return false;
+							  }
+							  $.ajax({
+						            cache: true,
+						            type: "POST",
+						            url:'/diagnosisPage/diagnosis',
+						            data:$('#diagnosisForm').serialize(),// 你的formid
+						            async: false,
+						            dataType:'json',
+					                success: function(obj) {
+					                	if(obj.code == 1){
+							        		layer.msg('诊断成功');
+							                layer.closeAll('page');
+											table.reload('idTest', {
+									            where: { //设定异步数据接口的额外参数
+									            	"realName":$("#realName").val(),
+									            	"diagnosticStatus":$("#diagnosticStatus").val()
+									            }
+											});
+							        	}else{
+							        		layer.msg(obj.message);
+							        	}
+						            }
+						        });
+						  },
+						  btn2: function(){
+						    layer.closeAll();
+						  },
+						  btnAlign: 'c'
+						});
+			    }
+			  });
+			  
+			  var $ = layui.$, active = {
+						openAdd: function(){
+							layer.open({
+							  title: '添加远程诊断信息'
+							  ,content: $("#addDiv").html().replace('formTemp','remoteDiagnosisForm'),
+							  area:['550px','400px'],
+							  success:function(){
+								  $("#remoteDiagnosisForm").validate({
+									    rules: {
+									    	description : "required"
+									    },
+									    messages: {
+									    	description : "请填写文字描述" 
+									    }
+									});
+							  },
+							  btn:['确定','取消']
+							  ,yes: function(){
+								  if(!$("#remoteDiagnosisForm input[name='image']").val()){
+									  alert('请先上传需要诊断的图片');
+									  return false;
+								  }
+								  if(!$("#remoteDiagnosisForm").valid()) {
+										return false;
+								  }
+								  $.ajax({
+							            cache: true,
+							            type: "POST",
+							            url:'/diagnosisPage/addDiagnosis',
+							            data:$('#remoteDiagnosisForm').serialize(),// 你的formid
+							            async: false,
+							            dataType:'json',
+						                success: function(obj) {
+						                	if(obj.code == 1){
+							                    layer.msg('添加远程诊断成功');
+								                layer.closeAll('page');
+												table.reload('idTest', {
+										            where: { //设定异步数据接口的额外参数
+										            	"realName":$("#realName").val(),
+										            	"diagnosticStatus":$("#diagnosticStatus").val()
+										            }
+												});
+							                }else{
+							                	layer.msg(obj.message);
+							                }
+							            }
+							        });
+							  },
+							  btn2: function(){
+							    layer.closeAll();
+							  },
+							  btnAlign: 'c'
+							});
+						}
+						,delSelect: function(){ //获取选中数目
+				      		var checkStatus = table.checkStatus('idTest')
+				      			,data = checkStatus.data;
+							if(data.length>0){
+								var ids = "";
+								for(var i=0;i<data.length;i++){
+									ids += ","+ data[i].id;
+								}
+								layer.confirm('是否删除选中的数据？', function(index){
+									$.ajax({
+						                cache: true,
+						                type: "POST",
+						                url:'/diagnosisPage/delDiagnosis',
+						                data:{ids:ids.substring(1)},
+						                async: false,
+						                dataType:'json',
+						                success: function(obj) {
+						                	if(obj.code == 1){
+						                        layer.msg('删除远程诊断成功');
+												layer.close(index);
+												table.reload('idTest', {
+										            where: { //设定异步数据接口的额外参数
+										            	"realName":$("#realName").val(),
+										            	"diagnosticStatus":$("#diagnosticStatus").val()
+										            }
+												});
+						                    }else{
+						                    	layer.msg(obj.message);
+						                    }
+						                }
+						            });
+								});
+							}else{
+					      		layer.msg('请选择要删除的数据！');
+							}
+							
+				    	}
+						,doSearch: function(){
+							table.reload('idTest', {
+								page:{
+									curr:1
+								},
+					            where: { //设定异步数据接口的额外参数
+					            	"realName":$("#realName").val(),
+					            	"diagnosticStatus":$("#diagnosticStatus").val()
+					            }
+							});
+				    	}
+				  	};
+			  
+			  $('.demoTable .layui-btn').on('click', function(){
+			    var type = $(this).data('type');
+			    active[type] ? active[type].call(this) : '';
+			  });
+			  
+			  
+			});
+		
+			jQuery(function($) {
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+			
+			
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+			});
+			
+			function uploadThumb(fileId,picId){
+				if($("#"+fileId).val()){
+					$.ajaxFileUpload({
+						url:"/resources/uploadMore",	//需要链接到服务器地址 
+						secureuri:false,
+						fileElementId:fileId,//文件选择框的id属性
+						data : {
+	                        path : 'diagnosis'
+	                    },
+						dataType: 'json',	//json
+						success: function (obj) {
+							var paths = '';
+							var imgStr = '';
+							for(var i=0;i<obj.data.length;i++){
+								paths += ","+ obj.data[i].path;
+								imgStr += '<div style="float: left; margin:10px;"><img name="imgIcon" src="'+obj.data[i].path+'" style="width:80px; height:80px;margin-bottom: 5px;margin-left: 5px;"/><img src="/images/error.png" name="closeImg" style="position:absolute; float:right; margin: 3px 0 auto -17px;" /></div>'
+							}
+							imgStr += $("#remoteDiagnosisForm .imgDiv").html();
+							var picPath = $("#remoteDiagnosisForm input[name='"+picId+"']").val();
+							if(picPath){
+								$("#remoteDiagnosisForm input[name='"+picId+"']").val(paths.substring(1) + ',' + picPath);
+							}else{
+								$("#remoteDiagnosisForm input[name='"+picId+"']").val(paths.substring(1));
+							}
+							$("#remoteDiagnosisForm .imgDiv").html(imgStr);
+							$("#remoteDiagnosisForm img[name=imgIcon]").click(function(){  
+					            var _this = $(this);//将当前的pimg元素作为_this传入函数  
+					            imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);  
+					        }); 
+							
+							$("#remoteDiagnosisForm img[name=closeImg]").click(function(){
+							  	var reomvePic = $($(this).parent().find("[name=imgIcon]")).attr("src");
+					            var paths = $("#remoteDiagnosisForm input[name='image']").val().replace(','+reomvePic,'').replace(reomvePic+',','').replace(reomvePic,'');
+					            $("#remoteDiagnosisForm input[name='image']").val(paths);
+					            $(this).parent().remove();
+					        }); 
+						},
+						error:function(XMLHttpRequest, textStatus, errorThrown){
+							layer.msg('上传失败！');
+						}
+					});
+				}
+			}
+			
+			function imgShow(outerdiv, innerdiv, bigimg, _this){  
+		        var src = _this.attr("src");//获取当前点击的pimg元素中的src属性  
+		        $(bigimg).attr("src", src);//设置#bigimg元素的src属性  
+		      
+		            /*获取当前点击图片的真实大小，并显示弹出层及大图*/  
+		        $("<img/>").attr("src", src).load(function(){  
+		            var windowW = $(window).width();//获取当前窗口宽度  
+		            var windowH = $(window).height();//获取当前窗口高度  
+		            var realWidth = this.width;//获取图片真实宽度  
+		            var realHeight = this.height;//获取图片真实高度  
+		            var imgWidth, imgHeight;  
+		            var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放  
+		              
+		            if(realHeight>windowH*scale) {//判断图片高度  
+		                imgHeight = windowH*scale;//如大于窗口高度，图片高度进行缩放  
+		                imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度  
+		                if(imgWidth>windowW*scale) {//如宽度扔大于窗口宽度  
+		                    imgWidth = windowW*scale;//再对宽度进行缩放  
+		                }  
+		            } else if(realWidth>windowW*scale) {//如图片高度合适，判断图片宽度  
+		                imgWidth = windowW*scale;//如大于窗口宽度，图片宽度进行缩放  
+		                            imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度  
+		            } else {//如果图片真实高度和宽度都符合要求，高宽不变  
+		                imgWidth = realWidth;  
+		                imgHeight = realHeight;  
+		            }  
+		                    $(bigimg).css("width",imgWidth);//以最终的宽度对图片缩放  
+		              
+		            var w = (windowW-imgWidth)/2;//计算图片与窗口左边距  
+		            var h = (windowH-imgHeight)/2;//计算图片与窗口上边距  
+		            $(innerdiv).css({"top":h, "left":w});//设置#innerdiv的top和left属性  
+		            $(outerdiv).fadeIn("fast");//淡入显示#outerdiv及.pimg  
+		        });  
+		          
+		        $(outerdiv).click(function(){//再次点击淡出消失弹出层  
+		            $(this).fadeOut("fast");  
+		        });  
+		    }  
+			
+			$('#editor1').ace_wysiwyg({
+				toolbar:
+				[
+					'font',
+					null,
+					'fontSize',
+					null,
+					{name:'bold', className:'btn-info'},
+					{name:'italic', className:'btn-info'},
+					{name:'strikethrough', className:'btn-info'},
+					{name:'underline', className:'btn-info'},
+					null,
+					{name:'insertunorderedlist', className:'btn-success'},
+					{name:'insertorderedlist', className:'btn-success'},
+					{name:'outdent', className:'btn-purple'},
+					{name:'indent', className:'btn-purple'},
+					null,
+					{name:'justifyleft', className:'btn-primary'},
+					{name:'justifycenter', className:'btn-primary'},
+					{name:'justifyright', className:'btn-primary'},
+					{name:'justifyfull', className:'btn-inverse'},
+					null,
+					{name:'createLink', className:'btn-pink'},
+					{name:'unlink', className:'btn-pink'},
+					null,
+					{name:'insertImage', className:'btn-success'},
+					null,
+					'foreColor',
+					null,
+					{name:'undo', className:'btn-grey'},
+					{name:'redo', className:'btn-grey'}
+				],
+				'wysiwyg': {
+					fileUploadError: showErrorAlert
+				}
+			}).prev().addClass('wysiwyg-style2');
+			
+			function showErrorAlert (reason, detail) {
+				var msg='';
+				if (reason==='unsupported-file-type') { msg = "Unsupported format " +detail; }
+				else {
+					console.log("error uploading file", reason, detail);
+				}
+				$('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>'+ 
+				 '<strong>File upload error</strong> '+msg+' </div>').prependTo('#alerts');
+			}
+		</script>
+	</body>
+</html>
+

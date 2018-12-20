@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.RemoteDiagnosisMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.RemoteDiagnosis">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="capture_time" jdbcType="TIMESTAMP" property="captureTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="diagnostic_status" jdbcType="INTEGER" property="diagnosticStatus" />
+    <result column="diagnostic_person" jdbcType="VARCHAR" property="diagnosticPerson" />
+    <result column="diagnostic_result" jdbcType="VARCHAR" property="diagnosticResult" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <resultMap id="PojoResultMap" extends="BaseResultMap" type="com.isoftstone.entity.pojo.RemoteDiagnosisPojo">
+    <result column="realname" jdbcType="VARCHAR" property="realName" />
+  </resultMap>
+
+	<select id="findPage" resultMap="PojoResultMap" parameterType="java.util.HashMap">
+		SELECT
+			rd.id,
+			rd.image,
+			rd.user_id,
+			rd.capture_time,
+			rd.description,
+			rd.diagnostic_status,
+			rd.diagnostic_person,
+			rd.diagnostic_result,
+			rd.status,
+			rd.create_time,
+			u.realname
+		FROM t_remote_diagnosis rd
+		LEFT JOIN t_user u ON rd.user_id = u.id
+		WHERE rd.status = 1
+		<if test="realName != null and realName !=''">
+			AND	u.realname LIKE concat('%',#{realName},'%')
+		</if>
+		<if test="captureTime != null">
+			AND	rd.capture_time = #{captureTime}
+		</if>
+		<if test="diagnosticStatus != null and diagnosticStatus !=''">
+			AND	rd.diagnostic_status = #{diagnosticStatus}
+		</if>
+		<if test="roleId == 2 or roleId == 3">
+			AND rd.user_id = #{userId}
+		</if>
+		ORDER BY rd.create_time DESC
+	</select>
+
+	<!-- 批量删除远程诊断信息 -->
+	<update id="delDiagnosis">		
+		UPDATE t_remote_diagnosis SET
+		status = 0
+		<where>
+		id in
+		<foreach collection="list" item="id" index="index" open="(" separator="," close=")">  	
+		 #{id}
+		</foreach>
+		</where>
+	</update>
+	
+	<insert id="addDiagnosis" parameterType="com.isoftstone.entity.model.RemoteDiagnosis">
+		insert into t_remote_diagnosis(
+			image,
+			user_id,
+			description,
+			diagnostic_status,
+			status,
+			create_time
+		)values(
+			#{image},
+			#{userId},
+			#{description},
+			1,
+			1,
+			SYSDATE()
+		)
+	</insert>
+	
+	<update id="editDiagnosis" parameterType="com.isoftstone.entity.model.RemoteDiagnosis">		
+		UPDATE t_remote_diagnosis 
+		  SET image = #{image},
+			  description = #{description}
+		where id = #{id}
+	</update>
+	
+	
+	<update id="diagnosis" parameterType="com.isoftstone.entity.model.RemoteDiagnosis">		
+		UPDATE t_remote_diagnosis 
+		  SET diagnostic_status = #{diagnosticStatus},
+			  diagnostic_person = #{diagnosticPerson},
+			  diagnostic_result = #{diagnosticResult}
+		where id = #{id}
+	</update>
+
+</mapper>

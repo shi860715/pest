@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>角色管理--生兴防治</title>
+	<meta name="keywords" content="生兴防治" />
+	<meta name="description" content="生兴防治" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+ 	<!-- basic styles -->
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" />
+	<!--[if IE 7]>
+	  <link rel="stylesheet" th:href="@{/css/font-awesome-ie7.min.css}" />
+	<![endif]-->
+	<!-- page specific plugin styles -->
+	<!-- fonts -->
+	<!-- ace styles -->
+	<link rel="stylesheet" th:href="@{/css/ace.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/newCss.css}" />
+	<!-- layer ui css -->
+  	<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+  	
+    <link th:href="@{/zTree/css/zTreeStyle/zTreeStyle.css}" rel="stylesheet" />
+  	
+	<!--[if lte IE 8]>
+	  <link rel="stylesheet" th:href="@{/css/ace-ie.min.css}" />
+	<![endif]-->
+	<!-- inline styles related to this page -->
+	<!-- ace settings handler -->
+	<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+	<script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+	<![endif]-->
+</head>
+<body>
+		
+	<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">菜单权限</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<!-- PAGE CONTENT BEGINS -->
+						<div class="row">
+							<div class="col-sm-5">
+								<div class="widget-box">
+									<div
+										class="widget-header widget-header-flat widget-header-small">
+										<h5>
+											<i class="icon-user"></i> 用户身份
+										</h5>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main" id="roleList">
+											
+										</div>
+										<!-- /widget-main -->
+									</div>
+									<!-- /widget-body -->
+								</div>
+								<div class="sxc-head sxc-subhead demoTable">
+                               		<ol class="clearfix">
+                               			<li>
+                               				<button class="btn btn-primary layui-btn" shiro:hasPermission="/roles/add" onclick="openAdd();">
+												<i class="addIcon"></i> 添加角色
+										    </button>
+                               			</li>
+                               			<li>
+                               				<button class="btn btn-danger layui-btn" shiro:hasPermission="/roles/delete" onclick="delRole();">
+												<i class="icon-trash bigger-120"></i>删除角色
+										    </button>
+                               			</li>
+                               			<li>
+                               				<button class="btn btn-primary layui-btn" shiro:hasPermission="/roles/save" onclick="saveRoleResources();">
+												<i class="addIcon"></i> 保存角色权限
+										    </button>
+                               			</li>
+                               		</ol>
+                               	</div>
+								<!-- /widget-box -->
+							</div>
+
+							<div class="vspace-sm"></div>
+
+							<div class="col-sm-5">
+								<div class="widget-box">
+									<div
+										class="widget-header widget-header-flat widget-header-small">
+										<h5>
+											<i class="icon-signal"></i> 权限列表
+										</h5>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main">
+							                <ul id="treeDemo" class="ztree"></ul>
+										</div>
+										<!-- /widget-main -->
+									</div>
+									<!-- /widget-body -->
+								</div>
+								<!-- /widget-box -->
+							</div>
+							<!-- /span -->
+						</div><!-- /.row -->
+					</div>
+					<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+				<div th:include="common/toolbar :: toolbar"></div>
+				<!-- /#ace-settings-container -->
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+		
+		<div id="addDiv" style="display:none;">
+			<form id="formTemp">
+				<div class="editCon">
+					<ul>
+						<li>
+							<label>角色:</label>
+							<input type="text" name="roledesc" />
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<![endif]-->
+		
+		<!--[if !IE]> -->
+		
+		<script type="text/javascript">
+			window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+		
+		<!-- <![endif]-->
+		
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-1.10.2.min.js}'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+
+		<!-- ace scripts -->
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+			
+		<!-- layer ui scripts -->
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/layui/lay/modules/layer.js}" charset="utf-8"></script>
+		<!-- ztree scripts -->
+		<script type="text/javascript" th:src="@{/zTree/js/jquery.ztree.core.js}"></script>
+		<script type="text/javascript" th:src="@{/zTree/js/jquery.ztree.excheck.js}"></script>
+		
+		<script type="text/javascript">
+
+			var setting = {
+				view: {
+					showIcon: false
+				},
+	            check: {
+	                enable: true,
+	                chkboxType:  { "Y" : "ps", "N" : "ps" }
+	            },
+	            data: {
+	                simpleData: {
+	                    enable: true,
+	                    idKey: "id",
+	                    pIdKey: "parentid",
+	                }
+	            }
+	        };
+			
+			jQuery(function($) {
+				loadRoels();
+				initZtree();
+			});
+			
+			function loadRoels(){
+		        $.ajax({
+		            async:false,
+		            type : "POST",
+		            url: "roles",
+		            dataType:'json',
+		            success: function(data){
+		            	var showHtml = "";
+		            	var color = ['label-purple','label-primary','label-pink','label-yellow','.label-grey'];
+		            	for(var i=0;i<data.length;i++){
+							var lbl_color = color[i]?color[i]:'label-primary';
+							showHtml += '<div class="clearfix">'+
+								'<div class="grid3">'+
+									'<div class="row">'+
+										'<label> '+
+											'<input name="iden" type="radio" value="'+data[i].id+'" class="ace" />'+
+											'<span class="lbl">&nbsp;&nbsp;'+
+												'<span class="label label-xlg '+lbl_color+' arrowed arrowed-right">'+data[i].roledesc+'</span>'+
+											'</span>'+
+										'</label>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+							'<div class="space-6"></div>';
+		            	}
+		            	$("#roleList").empty().append(showHtml);
+
+						
+						$("input[name='iden']").on('click',function(){
+					        $.ajax({
+					            async:false,
+					            type : "POST",
+					            data:{rid:$(this).val()},
+					            url: "resources/resourcesWithSelected",
+					            dataType:'json',
+					            success: function(data){
+					                $.fn.zTree.init($("#treeDemo"), setting, data);
+					                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+					                zTree.expandAll(true);
+					            }
+					        });
+						});
+		            }
+		        });
+			}
+			
+			
+			function initZtree(){
+		        $.ajax({
+		            async:false,
+		            type : "POST",
+		            url: "resources/queryAll",
+		            dataType:'json',
+		            success: function(data){
+		                $.fn.zTree.init($("#treeDemo"), setting, data);
+		                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+		                zTree.expandAll(true);
+		                $('#selectResources').modal();
+		            }
+		        });
+			}
+			
+			function saveRoleResources(){
+		        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+		                checkNode= zTree.getCheckedNodes(true);
+		        var roleId = $("input[name='iden']:checked").val();
+		        if(roleId){
+			        var ids = new Array();
+			        for(var i=0;i<checkNode.length;i++){
+			            ids.push(checkNode[i].id);
+			        }
+			        if(ids.length>0){
+				        $.ajax({
+				            async:false,
+				            type : "POST",
+				            data:{roleid:roleId,resourcesid:ids.join(",")},
+				            url: "roles/saveRoleResources",
+				            dataType:'json',
+			                success: function(obj) {
+			                	if(obj.code == 1){
+				                    layer.msg('保存角色权限成功');
+				                }else{
+				                    layer.msg(obj.message);
+				                }
+				            }
+				        });
+			        }else{
+			        	layer.msg('请至少选择一个权限');	
+			        }
+		        }else{
+		        	layer.msg('请选择一个用户身份');
+		        }
+			}
+			
+			function openAdd(){
+				layer.open({
+					  title: '添加角色'
+					  ,content: $("#addDiv").html().replace('formTemp','roleForm'),
+					  area:['400px','180px'],
+					  btn:['确定','取消']
+					  ,yes: function(){
+						  $.ajax({
+					            cache: true,
+					            type: "POST",
+					            url:'roles/add',
+					            data:$('#roleForm').serialize(),// 你的formid
+					            async: false,
+					            dataType:'json',
+				                success: function(obj) {
+				                	if(obj.code == 1){
+					                    layer.msg('添加角色成功');
+					                    loadRoels();
+					                }else{
+					                    layer.msg(obj.message);
+					                }
+					            }
+					        });
+					  },
+					  btn2: function(){
+					    layer.closeAll();
+					  },
+					  btnAlign: 'c'
+					});
+				}
+			
+			function delRole(){
+				var id =  $("input[name='iden']:checked").val();
+				if(id){
+			        layer.confirm('您确定要删除该角色吗？', {
+			            btn: ['确认','取消'] //按钮
+			        }, function(){
+			            $.ajax({
+			                cache: true,
+			                type: "POST",
+			                url:'roles/delete',
+			                data:{id:id},
+			                async: false,
+			                dataType:'json',
+			                success: function(obj) {
+			                	if(obj.code == 1){
+			                        layer.msg('删除角色成功');
+				                    loadRoels();
+			                    }else{
+			                    	layer.msg(obj.message);
+			                    }
+			                }
+			            });
+			        });
+				}else{
+					layer.msg('请选择要删除的角色');
+				}
+			}
+		</script>
+	</body>
+</html>

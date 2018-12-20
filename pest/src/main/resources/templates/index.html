@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<title>用户管理--生兴防治</title>
+	<meta name="keywords" content="生兴防治" />
+	<meta name="description" content="生兴防治" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+ 	<!-- basic styles -->
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" />
+	<!--[if IE 7]>
+	  <link rel="stylesheet" th:href="@{/css/font-awesome-ie7.min.css}" />
+	<![endif]-->
+	<!-- page specific plugin styles -->
+	<!-- fonts -->
+	<!-- ace styles -->
+	<link rel="stylesheet" th:href="@{/css/ace.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/newCss.css}" />
+	<!-- layer ui css -->
+  	<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+  	
+	<link rel="stylesheet" th:href="@{/js/fSelect/fSelect.css}" />
+	<link rel="stylesheet" th:href="@{/zTree/css/zTreeStyle/zTreeStyle.css}">
+	<style type="text/css">
+		.infobox{
+			height: 147px;
+		}
+		.infobox-data{
+			min-width: auto !important;
+		}
+	</style>
+	<!--[if lte IE 8]>
+	  <link rel="stylesheet" th:href="@{/css/ace-ie.min.css}" />
+	<![endif]-->
+	<!-- inline styles related to this page -->
+	<!-- ace settings handler -->
+	<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+	<script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+	<![endif]-->
+</head>
+<body>
+		
+	<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<!-- PAGE CONTENT BEGINS -->
+						<div class="row">
+							<div class="col-xs-12">
+							
+								<div class="alert alert-block alert-success">
+									<button type="button" class="close" data-dismiss="alert">
+										<i class="icon-remove"></i>
+									</button>
+
+									<i class="icon-ok green"></i>
+
+									欢迎使用
+									<strong class="green">
+										生兴防治林业有害生物监测预警系统
+									</strong>
+								</div>
+								
+								<div class="row">
+									<div class="space-6"></div>
+
+									<div class="col-sm-4 infobox-container" style="width: 50%;">
+										<div class="infobox infobox-green"  style="width: 50%;">
+											<div class="infobox-icon" style="margin-top: 12%;margin-left: 33%;">
+												<i class="icon-group"></i>
+											</div>
+
+											<div class="infobox-data" style="margin-top: 12%;">
+												<span class="infobox-data-number" th:text="${userCount}"></span>
+												<div class="infobox-content">用户数</div>
+											</div>
+										</div>
+
+										<div class="infobox infobox-blue" style="width: 50%;">
+											<div class="infobox-icon" style="margin-top: 12%;margin-left: 33%;">
+												<i class="icon-cogs"></i>
+											</div>
+
+											<div class="infobox-data" style="margin-top: 12%;">
+												<span class="infobox-data-number" th:text="${devCount}"></span>
+												<div class="infobox-content">设备数</div>
+											</div>
+										</div>
+
+										<div class="infobox infobox-red" style="width: 50%;">
+											<div class="infobox-icon" style="margin-top: 12%;margin-left: 33%;">
+												<i class="icon-list-alt"></i>
+											</div>
+
+											<div class="infobox-data" style="margin-top: 12%;">
+												<span class="infobox-data-number" th:text="${fieldSurveyCount}"></span>
+												<div class="infobox-content">调查</div>
+											</div>
+										</div>
+
+										<div class="infobox infobox-orange2" style="width: 50%;">
+											<div class="infobox-icon" style="margin-top: 12%;margin-left: 33%;">
+												<i class="icon-cogs"></i>
+											</div>
+
+											<div class="infobox-data" style="margin-top: 12%">
+												<span class="infobox-data-number" th:text="${expireDevCount}"></span>
+												<div class="infobox-content">设备过期数</div>
+											</div>
+										</div>
+
+										<div class="space-6"></div>
+
+									</div>
+
+									<div class="col-sm-6 infobox-container">
+										<div class="widget-header widget-header-flat">
+												<h4 class="lighter" style="font-size: 14px;">
+													虫害统计图
+												</h4>
+											</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div id="piechart-placeholder"></div>
+
+												<div class="hr hr22 hr-double"></div>
+
+												<div class="clearfix" id="statistics">
+													
+												</div>
+											</div><!-- /widget-main -->
+										</div>
+
+										<div class="space-6"></div>
+
+									</div>
+									<div class="vspace-sm"></div>
+
+									
+								</div><!-- /row -->
+								
+								<div class="hr hr32 hr-dotted"></div>
+								
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="widget-box transparent">
+											<div class="widget-header widget-header-flat">
+												<h4 class="lighter">
+													<i class="icon-bullhorn orange bigger-130"></i>
+													虫害告警
+												</h4>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="icon-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main no-padding">
+													<table class="layui-table" id="warningDataList" lay-data="{url:'index/getWarningData', id:'idTest'}" lay-filter="warningDataList">
+														<thead class="thin-border-bottom">
+															<tr>
+																<th lay-data="{field:'address', width:'35%'}">地点</th>
+										      					<th lay-data="{field:'insectName', width:'15%'}">虫类</th>
+										      					<th lay-data="{field:'warningNum', width:'14%'}">预警值</th>
+										      					<th lay-data="{field:'createTime', width:'35%', templet: '#fmtCreateTime'}">预警时间</th>
+															</tr>
+														</thead>
+													</table>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div>
+
+									<div class="col-sm-6">
+										<div class="widget-box transparent">
+											<div class="widget-header widget-header-flat">
+												<h4 class="lighter">
+													<i class="icon-bell red bigger-130"></i>
+													过期设备
+												</h4>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="icon-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main no-padding">
+													<table class="layui-table" id="warningDataList" lay-data="{url:'index/getExpireDev', id:'idTest'}" lay-filter="warningDataList">
+														<thead class="thin-border-bottom">
+															<tr>
+																<th lay-data="{field:'devName', width:'40%'}">设备名称</th>
+										      					<th lay-data="{field:'expireTime', width:'35%', templet: '#fmtExpireTime'}">过期时间</th>
+										      					<th lay-data="{field:'owner', width:'12%'}">归属方</th>
+										      					<th lay-data="{field:'user', width:'12%'}">使用方</th>
+															</tr>
+														</thead>
+													</table>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div>
+								</div>
+								
+								
+							</div>
+						</div>
+
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+				<div th:include="common/toolbar :: toolbar"></div>
+				<!-- /#ace-settings-container -->
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+		
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<![endif]-->
+		
+		<!--[if !IE]> -->
+		
+		<script type="text/javascript">
+			window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+		
+		<!-- <![endif]-->
+		
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-1.10.2.min.js}'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+	
+		<!-- layer ui scripts -->
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+
+		<script type="text/javascript" th:src="@{/js/common/ajaxfileupload.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/fSelect/fSelect.js}" charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:src="@{/zTree/js/jquery.ztree.core.js}"></script>
+		<script type="text/javascript" th:src="@{/zTree/js/jquery.ztree.excheck.js}"></script>
+		
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!-- inline scripts related to this page -->
+		<script type="text/html" id="fmtCreateTime">
+			{{# return DateUtil.stamp2Time(d.createTime) }}
+		</script>
+		
+		<script type="text/html" id="fmtExpireTime">
+			{{# return DateUtil.stamp2Time(d.expireTime) }}
+		</script>
+		
+		<script type="text/javascript">
+			layui.use('table', function(){
+				  var table = layui.table;
+			})
+			
+			var data = new Array(); 
+			var placeholder;
+			var pl;
+			jQuery(function($) {
+				$('.easy-pie-chart.percentage').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+					var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+					var size = parseInt($(this).data('size')) || 50;
+					$(this).easyPieChart({
+						barColor: barColor,
+						trackColor: trackColor,
+						scaleColor: false,
+						lineCap: 'butt',
+						lineWidth: parseInt(size/10),
+						animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+						size: size
+					});
+				})
+			
+				$('.sparkline').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+					$(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
+				});
+			
+			 placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'160px'});
+			 loadData(null,null);
+			 drawPieChart(placeholder, data);
+			 placeholder.data('chart', data);
+			 placeholder.data('draw', drawPieChart);
+			 /**
+			 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+			 so that's not needed actually.
+			 */
+			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+			  var previousPoint = null;
+			
+			  placeholder.on('plothover', function (event, pos, item) {
+				if(item) {
+					if (previousPoint != item.seriesIndex) {
+						previousPoint = item.seriesIndex;
+						var tip = item.series['label'] + " : "+item.datapoint[1][0][1]+"(" + returnFloat(item.series['percent'])+'%)';
+						$tooltip.show().children(0).text(tip);
+					}
+					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+				} else {
+					$tooltip.hide();
+					previousPoint = null;
+				}
+				
+			 });
+			});
+			function drawPieChart(placeholder, data, position) {
+			 	  pl = $.plot(placeholder, data, {
+					series: {
+						pie: {
+							show: true,
+							tilt:0.8,
+							highlight: {
+								opacity: 0.25
+							},
+							stroke: {
+								color: '#fff',
+								width: 2
+							},
+							startAngle: 2
+						}
+					},
+					legend: {
+						show: true,
+						position: position || "ne", 
+						labelBoxBorderColor: null,
+						margin:[-30,15]
+					}
+					,
+					grid: {
+						hoverable: true,
+						clickable: true
+					}
+				 });
+			 }
+			function loadData(areaId,captureTime){
+				var request;
+				if(captureTime != null && captureTime != ""){
+					request = {areaId:areaId,captureTime:(captureTime+" 00:00:00")};
+				}
+				else{
+					request = {areaId:areaId};
+				}
+				$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url:'/statisticsPage/findInsectStatisticsPage',
+		            data:request,
+		            async: false,
+		            dataType:'json',
+		            success: function(obj) {
+		            	var str = '';
+		            	var divHtml;
+		            	if(obj.data.length == 1){
+		            		divHtml = '<div class="grid3" style="width: 100%;">';
+		            	}
+		            	else if(obj.data.length == 2){
+		            		divHtml = '<div class="grid3" style="width: 50%;">';
+		            	}
+		            	else{
+		            		divHtml = '<div class="grid3">';
+		            	}
+		            	data = [];
+		            	var length = obj.data.length;
+		            	if(length > 5){
+		            		length = 5;
+		            	}
+		            	for(var i=0;i<length;i++){
+		            		var item = {label: obj.data[i].insectName,  data: obj.data[i].totalCount};
+		            		data.push(item);
+		            		if(i < 3){
+			            		str += divHtml;
+			            		if(i == 0){
+			            			str += '<span class="red" style="font-size: 13px;">';
+			            		}else if(i == 1){
+			            			str += '<span class="green" style="font-size: 13px;">';
+			            		}else{
+			            			str += '<span class="orange" style="font-size: 13px;">';
+			            		}
+			            		str += obj.data[i].insectName;
+			            		str += '</span>';
+			            		str += '<h4 class="bigger pull-right">'+obj.data[i].totalCount+'</h4>';
+			            		str += '</div>';
+		            		}
+		            	}
+		            	$("#statistics").empty().html(str);
+		            }
+		        });
+			}
+			
+			function returnFloat(value){
+				var value=Math.round(parseFloat(value)*100)/100;
+				var xsd=value.toString().split(".");
+				if(xsd.length==1){
+					value=value.toString()+".00";
+					return value;
+				}
+				if(xsd.length>1){
+					if(xsd[1].length<2){
+						value=value.toString()+"0";
+					}
+					return value;
+				}
+			}
+		</script>
+	</body>
+</html>

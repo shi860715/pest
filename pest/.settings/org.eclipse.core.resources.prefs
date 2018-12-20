@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/resources/application.properties=GBK
+encoding//src/main/resources/static/zTree=UTF-8
+encoding//src/main/resources/static/zTree/api/cn/setting.view.fontCss.html=UTF-8
+encoding//src/main/resources/static/zTree/api/cn/zTreeObj.updateNode.html=UTF-8
+encoding//src/main/resources/templates/common/footer.html=UTF-8
+encoding//src/main/resources/templates/common/leftMenu.html=UTF-8
+encoding//src/main/resources/templates/common/menu.html=UTF-8
+encoding//src/main/resources/templates/common/toolbar.html=UTF-8
+encoding//src/main/resources/templates/common/top.html=UTF-8
+encoding//src/test/java=UTF-8
+encoding//src/test/resources=UTF-8
+encoding/<project>=UTF-8

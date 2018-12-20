@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">自动虫情</li>
+							<li class="active">参数设置</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sxc-head" style="border-bottom: none;padding-bottom: 0;">
+                                		<ol class="clearfix dataTime">
+                                			<li>
+                                				<label>设备名称:</label>
+                                				<input type="text" name="devName" id="devName" placeholder="输入设备名"/>
+                                			</li>
+                                			<li><button class="btn btn-primary" onClick="searchDev()">搜索</button></li>
+                                		</ol>
+                                	</div>
+                                	<div id="paramListDiv" class="setParameterCon mainCon">
+                                	  
+                                	</div>
+                                	<!--分页-->
+                                	<div id="pageDiv" style="text-align:right;"></div>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+	
+        
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+			var layer;
+			jQuery(function($) {
+				toPage(null,1);
+			});
+			
+			function toPage(devName,page){
+				$.ajax({
+	                cache: true,
+	                type: "POST",
+	                url:'/paramPage/findPage',
+	                data:{devName:devName,page:page,limit:2},
+	                dataType: 'json',
+	                async: false,
+	                success: function(xhr) {
+	                    var params = xhr.data;
+	                    var paramStr='';
+	                    if(params.length > 0){
+	                    	for(var i =0;i<params.length;i++){
+		                    	var param = params[i];
+		                    	var runTm = param.runTm.split(",");
+		                    	var runStart = runTm[0];
+		                    	var runEnd = runTm[1];
+		                    	var sleepTm = param.sleepTm.split(",");
+		                    	var sleepStart = sleepTm[0];
+		                    	var sleepEnd = sleepTm[1];
+		                    	
+		                    	paramStr += '<form onsubmit="return false"><div class="setParameterList"><div class="listHead clearfix">';
+		                    	paramStr += '<input type="hidden" name="deviceId" value="'+param.deviceId+'"/><input type="hidden" name="devCode" value="'+param.devCode+'"/>';
+		                    	paramStr += '<h3>设备名称：'+param.devName+'</h3><button class="btn btn-primary" onClick="saveParam(this)">保存</button></div>';
+		                    	if(param.image){
+		                    		paramStr += '<div class="listCon clearfix"><img src="'+ param.image +'"/><ul class="listList"><li><dl>';
+		                    	}else{
+		                    		
+			                    	paramStr += '<div class="listCon clearfix"><img src="/images/devImage.png"/><ul class="listList"><li><dl>';
+		                    	}
+		                    	paramStr += '<dd><label>光照度：</label><input type="text" name="sunshineTime" value="'+param.lmTh+'"/><span>单位：1x</span></dd>';
+		                    	paramStr += '<dd><label>运行开始时间：</label><select name="runStart" style="width: 140px;">';
+		                    	for(var j=1;j<=24;j++){
+		                    		if(j<10){
+		                    			paramStr += '<option value="'+j+'" '+ (runStart==j? 'selected="true"' : '') +'>0'+j+':00</option>';
+		                    		}else{
+		                    			paramStr += '<option value="'+j+'" '+ (runStart==j? 'selected="true"' : '') +'>'+j+':00</option>';
+		                    		}
+		                    	}
+		                    	paramStr += '</select></dd>';
+		                    	paramStr += '<dd><label>运行结束时间：</label><select name="runEnd" style="width: 140px;">';
+		                    	for(var j=1;j<=24;j++){
+		                    		if(j<10){
+		                    			paramStr += '<option value="'+j+'" '+ (runEnd==j? 'selected="true"' : '') +'>0'+j+':00</option>';
+		                    		}else{
+		                    			paramStr += '<option value="'+j+'" '+ (runEnd==j? 'selected="true"' : '') +'>'+j+':00</option>';
+		                    		}
+		                    	}
+		                    	paramStr += '</select></dd>';
+		                    	paramStr += '<dd><label>工作周期：</label><input type="text" name="workTime" value="'+(param.wkInvl/3600)+'"/><span>单位：时</span></dd>';
+		                    	paramStr += '<dd><label>图片回传周期：</label><input type="text" name="backTime" value="'+(param.picUpInvl/3600)+'"/></dd></dl></li>';
+		                    	paramStr += '<li><dd><label>加热温度：</label><input type="text" name="heat" value="'+param.heatTemp+'"/><span>单位：℃</span></dd>';
+		                    	paramStr += '<dd><label>烘烤时间：</label><input type="text" name="roastTime" value="'+(param.hearTm/60)+'"/><span>单位：分</span></dd>';
+		                    	paramStr += '<dd><label>清虫周期：</label><input type="text" name="cleanTime" value="'+(param.clearInvl/86400)+'"/><span>单位：天</span></dd>';
+		                    	paramStr += '<dd><label>休眠开始时间：</label><input name="sleepStart" type="text" onfocus="laydate({isdate: true,format: \'YYYY-MM-DD\'});" value="'+DateUtil.stamp4Time(sleepStart*1000)+'"></dd>';
+		                    	paramStr += '<dd><label>休眠结束时间：</label><input name="sleepEnd" type="text" onfocus="laydate({isdate: true,format: \'YYYY-MM-DD\'});" value="'+DateUtil.stamp4Time(sleepEnd*1000)+'"></dd>';
+		                    	paramStr += '</li></ul></div></div></form>';
+		                    }
+	                    }
+	                    else{
+	                    	paramStr += '<form onsubmit="return false"><div class="setParameterList">';
+	                    	paramStr += '<div class="layui-none" style="line-height: 40px;text-align: center;color: #999;">未检索到设备</div>';
+	                    	paramStr += '</div></form>';
+	                    }
+	                    $("#paramListDiv").html(paramStr);
+	                    
+	                    layui.use(['laypage', 'layer'], function(){
+		      				var laypage = layui.laypage
+		      				layer = layui.layer;
+		      				laypage.render({
+		      				    elem: 'pageDiv',
+		      				    count: xhr.count, //数据总数
+		      				    limit: 2,
+		      				  	curr: page,
+		      				    jump: function(obj, first){
+		      				    	if(!first){
+		      				    		toPage(devName,obj.curr)
+		      				    	}
+		      				    }
+		      				});
+		      			});
+	                }
+	            });
+			}
+			
+			
+			function searchDev(){
+				var devName = $("#devName").val();
+				toPage(devName,1);
+			}
+			
+			function saveParam(event){
+				var param = $($(event).parent().parent().parent()).serialize();
+				$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url:'/devicePage/updateParam',
+		            data:param,
+		            dataType:'json',
+	                success: function(obj) {
+	                	if(obj.code == 1){
+		                    layer.msg('参数设置成功');
+							
+		                }else{
+		                    layer.msg(obj.message);
+		                }
+		            }
+		        });
+			}
+		</script>
+		
+	</body>
+</html>
+

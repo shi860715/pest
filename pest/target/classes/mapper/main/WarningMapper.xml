@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.WarningMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.Warning">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="area_id" jdbcType="VARCHAR" property="areaId" />
+    <result column="insect_id" jdbcType="VARCHAR" property="insectId" />
+    <result column="creater" jdbcType="INTEGER" property="creater" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <select id="findPage" resultType="com.isoftstone.entity.model.Warning">
+   	SELECT 
+			  		      w.id AS "id",
+			  	   w.area_id AS "areaId",
+						  a.`name` AS "areaName",
+			  	 w.insect_id AS "insectId",
+					   ii.`name` AS "insectName",
+			  	   w.creater AS "creater",
+			   w.create_time AS "createTime"
+	FROM
+		t_warning w
+	LEFT JOIN 
+		t_insect_info ii 
+	ON  w.insect_id = ii.id
+	LEFT JOIN 
+		t_area a 
+	ON  w.area_id = a.id
+	ORDER BY w.create_time DESC
+  </select>
+  
+  
+  	<!-- 添加预警信息 -->
+	<insert id="addWarning" useGeneratedKeys="true" keyProperty="id" parameterType="com.isoftstone.entity.model.Warning">
+		INSERT INTO
+		 t_warning (
+				area_id,
+				insect_id,
+				creater,
+				create_time
+				)
+		VALUES
+		(
+		#{areaId},
+		#{insectId},
+		#{creater},
+		SYSDATE()
+	)
+	</insert>
+	
+	<!-- 更新预警信息 -->
+	<update id="updateWarning">
+		UPDATE t_warning SET
+				area_id = #{areaId},
+				insect_id = #{insectId},
+				creater = #{creater},
+				create_time = SYSDATE()
+			WHERE id = #{id}	
+	</update>
+	
+	<!-- 删除预警信息 -->
+	<delete id="delWarning" >
+    	DELETE FROM t_warning WHERE id in
+    	<foreach collection="idList" item="id" index="index" open="(" separator="," close=")">  
+			#{id}
+		</foreach>
+    </delete>
+	
+</mapper>

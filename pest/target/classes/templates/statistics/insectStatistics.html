@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">统计分析</li>
+							<li class="active">虫类统计图</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content statistical_con">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="space-6"></div>
+									<div class="col-sm-12">
+										<div class="widget-box">
+											<div class="widget-header widget-header-flat widget-header-small">
+												<h5>
+													<i class="icon-bug"></i>
+													虫类统计图
+												</h5>
+                                                 <dl style="margin-right: 50px;">
+                                                 	<dd><label>请选择地点：</label><select id="area"></select></dd>
+                                                 	<dd><label>时间：</label><input type="text" id="captureTime" onfocus="laydate({isdate: true,format: 'YYYY-MM-DD'});"></dd>
+                                                 	<dd><button class="btn btn-primary" style="border-width: 0;padding: 4px 10px;" onclick="doSearch()">统计</button></dd>
+                                                 </dl>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div id="piechart-placeholder"></div>
+
+													<div class="hr hr22 hr-double"></div>
+
+													<div id="viewDiv">
+														
+													</div>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div><!-- /span -->
+								</div><!-- /row -->
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+        <script type="text/javascript" th:src="@{/js/echart/echarts.min.js}"></script>
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+
+		<!-- inline scripts related to this page -->
+        <script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<script type="text/javascript">
+			var data = new Array(); 
+			var placeholder;
+			var pl;
+			jQuery(function($) {
+				
+				$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url:'/areasPage/queryAreaByUser',
+		            async: false,
+		            dataType:'json',
+		            success: function(obj) {
+		            	var areas = obj.data;
+		            	var appendStr = '';
+		            	for(var i=0;i<areas.length;i++){
+	                    	appendStr += "<option value='"+areas[i].id+"'>"+areas[i].name+"</option>"
+	                    }
+		            	$("#area").append(appendStr);
+		            }
+		        });
+				
+				$('.easy-pie-chart.percentage').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+					var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+					var size = parseInt($(this).data('size')) || 50;
+					$(this).easyPieChart({
+						barColor: barColor,
+						trackColor: trackColor,
+						scaleColor: false,
+						lineCap: 'butt',
+						lineWidth: parseInt(size/10),
+						animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+						size: size
+					});
+				})
+			
+				$('.sparkline').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+					$(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
+				});
+			
+			 placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'400px'});
+			 loadData(null,null);
+			 drawPieChart(placeholder, data);
+			 placeholder.data('chart', data);
+			 placeholder.data('draw', drawPieChart);
+			 /**
+			 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+			 so that's not needed actually.
+			 */
+			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+			  var previousPoint = null;
+			
+			  placeholder.on('plothover', function (event, pos, item) {
+				if(item) {
+					if (previousPoint != item.seriesIndex) {
+						previousPoint = item.seriesIndex;
+						var tip = item.series['label'] + " : "+item.datapoint[1][0][1]+"(" + returnFloat(item.series['percent'])+'%)';
+						$tooltip.show().children(0).text(tip);
+					}
+					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+				} else {
+					$tooltip.hide();
+					previousPoint = null;
+				}
+				
+			 });
+			});
+			function drawPieChart(placeholder, data, position) {
+			 	  pl = $.plot(placeholder, data, {
+					series: {
+						pie: {
+							show: true,
+							tilt:0.8,
+							highlight: {
+								opacity: 0.25
+							},
+							stroke: {
+								color: '#fff',
+								width: 2
+							},
+							startAngle: 2
+						}
+					},
+					legend: {
+						show: true,
+						position: position || "ne", 
+						labelBoxBorderColor: null,
+						margin:[-30,15]
+					}
+					,
+					grid: {
+						hoverable: true,
+						clickable: true
+					}
+				 });
+			 }
+			function loadData(areaId,captureTime){
+				var request;
+				if(captureTime != null && captureTime != ""){
+					request = {areaId:areaId,captureTime:(captureTime+" 00:00:00")};
+				}
+				else{
+					request = {areaId:areaId};
+				}
+				$.ajax({
+		            cache: true,
+		            type: "POST",
+		            url:'/statisticsPage/findInsectStatisticsPage',
+		            data:request,
+		            async: false,
+		            dataType:'json',
+		            success: function(obj) {
+		            	var str = '';
+		            	var divHtml;
+		            	if(obj.data.length == 1){
+		            		divHtml = '<div class="grid3" style="width: 100%;">';
+		            	}
+		            	else if(obj.data.length == 2){
+		            		divHtml = '<div class="grid3" style="width: 50%;">';
+		            	}
+		            	else{
+		            		divHtml = '<div class="grid3">';
+		            	}
+		            	data = [];
+		            	for(var i=0;i<obj.data.length;i++){
+		            		var item = {label: obj.data[i].insectName,  data: obj.data[i].totalCount};
+		            		data.push(item);
+		            		if(i < 3){
+			            		str += divHtml;
+			            		if(i == 0){
+			            			str += '<span class="red">';
+			            		}else if(i == 1){
+			            			str += '<span class="green">';
+			            		}else{
+			            			str += '<span class="orange">';
+			            		}
+			            		str += obj.data[i].insectName;
+			            		str += '</span>';
+			            		str += '<h4 class="bigger pull-right">'+obj.data[i].totalCount+'</h4>';
+			            		str += '</div>';
+		            		}
+		            	}
+		            	$("#viewDiv").empty().html(str);
+		            }
+		        });
+			}
+			
+			function returnFloat(value){
+				var value=Math.round(parseFloat(value)*100)/100;
+				var xsd=value.toString().split(".");
+				if(xsd.length==1){
+					value=value.toString()+".00";
+					return value;
+				}
+				if(xsd.length>1){
+					if(xsd[1].length<2){
+						value=value.toString()+"0";
+					}
+					return value;
+				}
+			}
+			function doSearch(){
+				var areaId = $("#area").val();
+				var captureTime = $("#captureTime").val();
+				loadData(areaId,captureTime);
+				pl.setData(data);
+				pl.setupGrid();
+				pl.draw();
+			}
+		</script>
+	</body>
+</html>
+

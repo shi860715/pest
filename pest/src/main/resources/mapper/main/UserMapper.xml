@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.UserMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="telphone" jdbcType="VARCHAR" property="telphone" />
+    <result column="province" jdbcType="INTEGER" property="province" />
+    <result column="city" jdbcType="INTEGER" property="city" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="address" jdbcType="VARCHAR" property="address" /> 
+    <result column="manage_area" jdbcType="INTEGER" property="manageArea" />
+    <result column="enable" jdbcType="INTEGER" property="enable" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="pic_path" jdbcType="VARCHAR" property="picPath" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+  </resultMap>
+  
+  <select id="findPage" resultType="com.isoftstone.entity.pojo.UserPojo">
+   	SELECT
+			u.id AS "id",
+			u.username AS "username",
+			u.realname AS "realname",
+			u. PASSWORD AS PASSWORD,
+			u.telphone AS "telphone",
+			u.province AS "province",
+			a1.`name` AS "provinceName",
+			u.city AS "city",
+			a2.`name` AS "cityName",
+			u.area AS "area",
+			a3.`name` AS "areaName",
+			u.address AS "address",
+			u.manage_area AS "manageArea",
+			a4.`name` AS "manageAreaName",
+			u.`enable` AS "enable",
+			u.remark AS "remark",
+			u.create_time AS "createTime",
+			u.`status` AS "status",
+			u.pic_path AS "picPath",
+			u.sex AS "sex",
+			u.email AS "email",
+			r.id AS "roleId",
+			r.roleDesc AS "roleName"
+		FROM
+			t_user u
+		LEFT JOIN t_area a1 ON u.province = a1.id
+		LEFT JOIN t_area a2 ON u.city = a2.id
+		LEFT JOIN t_area a3 ON u.area = a3.id
+		LEFT JOIN t_area a4 ON u.manage_area = a4.id
+		LEFT JOIN t_user_role ur ON ur.userId = u.id
+		LEFT JOIN t_role r ON ur.roleId = r.id
+    <where>
+		u.status = 1
+		<if test="username != null and username != ''">
+		AND	u.username LIKE concat('%',#{username},'%')
+		</if>
+	</where>
+	ORDER BY u.create_time DESC
+  </select>
+  
+  
+  	<!-- 添加用户 -->
+	<insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.isoftstone.entity.pojo.UserPojo">
+		INSERT INTO
+		 t_user (
+				username ,
+				<if test="realname != null and realname != ''">
+				realname ,
+				</if>
+				password ,
+				<if test="telphone != null and telphone != ''">
+				telphone ,
+				</if>
+				<if test="address != null and address != ''">
+				address,
+				</if>
+				enable,
+				<if test="remark != null and remark != ''">
+				remark,
+				</if>
+				<if test="picPath != null and picPath != ''">
+				pic_path,
+				</if>
+				<if test="sex != null and sex != ''">
+				sex,
+				</if>
+				<if test="email != null and email != ''">
+				email,
+				</if>
+				province,
+				city,
+				area,
+				create_time ,
+				status
+				)
+		VALUES
+		(
+		#{username},
+		<if test="realname != null and realname != ''">
+		#{realname},
+		</if>
+		#{password},
+		<if test="telphone != null and telphone != ''">
+		#{telphone},
+		</if>
+		<if test="address != null and address != ''">
+		#{address},
+		</if>
+		#{enable},
+		<if test="remark != null and remark != ''">
+		#{remark},
+		</if>
+		<if test="picPath != null and picPath != ''">
+		#{picPath},
+		</if>
+		<if test="sex != null and sex != ''">
+		#{sex},
+		</if>
+		<if test="email != null and email != ''">
+		#{email},
+		</if>
+		#{province},
+		#{city},
+		#{area},
+		SYSDATE(),
+		#{status}
+	)
+	</insert>
+	
+	<!-- 更新用户信息 -->
+	<update id="updateUser">
+		UPDATE t_user SET
+			<if test="realname != null and realname != ''">
+			realname =#{realname},
+			</if>
+			<if test="telphone != null and telphone != ''">
+			telphone =#{telphone},
+			</if>
+			<if test="address != null and address != ''">
+			address = #{address},
+			</if>
+			<if test="remark != null and remark != ''">
+			remark = #{remark},
+			</if>
+			<if test="picPath != null and picPath != ''">
+			pic_path = #{picPath},
+			</if>
+			<if test="sex != null and sex != ''">
+			sex = #{sex},
+			</if>
+			<if test="email != null and email != ''">
+			email = #{email},
+			</if>
+			province = #{province},
+			city = #{city},
+			area = #{area},
+			username = #{username}
+			WHERE id = #{id}	
+	</update>
+	
+	<!-- 根据ID查询用户 -->
+	<select id="getUser" resultType="com.isoftstone.entity.pojo.UserPojo">
+		SELECT
+			u.id AS "id",
+			u.username AS "username",
+			u.realname AS "realname",
+			u. PASSWORD AS PASSWORD,
+			u.telphone AS "telphone",
+			u.province AS "province",
+			a1.`name` AS "provinceName",
+			u.city AS "city",
+			a2.`name` AS "cityName",
+			u.area AS "area",
+			a3.`name` AS "areaName",
+			u.address AS "address",
+			u.manage_area AS "manageArea",
+			a4.`name` AS "manageAreaName",
+			u.`enable` AS "enable",
+			u.remark AS "remark",
+			u.create_time AS "createTime",
+			u.`status` AS "status",
+			u.pic_path AS "picPath",
+			u.sex AS "sex",
+			u.email AS "email",
+			r.id AS "roleId",
+			r.roleDesc AS "roleName"
+		FROM
+			t_user u
+		LEFT JOIN t_area a1 ON u.province = a1.id
+		LEFT JOIN t_area a2 ON u.city = a2.id
+		LEFT JOIN t_area a3 ON u.area = a3.id
+		LEFT JOIN t_area a4 ON u.manage_area = a4.id
+		LEFT JOIN t_user_role ur ON ur.userId = u.id
+		LEFT JOIN t_role r ON ur.roleId = r.id
+		WHERE u.id = #{id} and u.status = 1
+	</select>
+	
+	<!-- 删除用户信息 -->
+	<update id="deleteUser">		
+		UPDATE t_user SET
+		status = 0
+		<where>
+		id in
+		<foreach collection="uList" item="id" index="index" open="(" separator="," close=")">  	
+		 #{id}
+		</foreach>
+		</where>
+	</update>
+	
+	<!-- 启用用户 -->
+	<update id="enableUser">
+		UPDATE t_user SET
+		enable = 1
+		<where>
+		id in
+		<foreach collection="uList" item="id" index="index" open="(" separator="," close=")">  
+		 #{id}
+		</foreach>
+		</where>
+	</update>
+	
+	<!-- 禁用用户 -->
+	<update id="unableUser">
+		UPDATE t_user SET
+		enable = 0
+		<where>
+		id in
+		<foreach collection="uList" item="id" index="index" open="(" separator="," close=")">  
+		 #{id}
+		</foreach>
+		</where>
+	</update>
+  
+  <select id="login" parameterType="java.lang.String" resultType="com.isoftstone.entity.pojo.UserPojo">
+  		SELECT
+			t.id,
+			t.username,
+			t.realname,
+			t.telphone,
+			t.province,
+			a1.`name` provinceName,
+			t.city,
+			a2.`name` cityName,
+			t.area,
+			a3.`name` areaName,
+			t.address,
+			t.manage_area manageArea,
+			a4.`name` manageAreaName,
+			t.`enable`,
+			t.remark,
+			t.create_time createTime,
+			t.`status`,
+			r.id AS "roleId",
+			r.roleDesc rolename
+		FROM
+			t_user t
+		LEFT JOIN t_user_role ur ON t.id = ur.userId
+		LEFT JOIN t_role r ON ur.roleId = r.id
+		LEFT JOIN t_area a1 ON t.province = a1.id
+		LEFT JOIN t_area a2 ON t.city = a2.id
+		LEFT JOIN t_area a3 ON t.area = a3.id
+		LEFT JOIN t_area a4 ON t.manage_area = a4.id
+		WHERE
+			t.username = #{username} 
+  </select>
+  
+  <select id="getRoleName" parameterType="java.lang.Long" resultType="java.lang.String">
+  	SELECT
+		r.roleDesc rolename
+	FROM
+		t_user t
+	LEFT JOIN t_user_role ur ON t.id = ur.userId
+	LEFT JOIN t_role r ON ur.roleId = r.id
+	WHERE t.id = #{id}
+  </select>
+
+	<select id="queryUserByManageArea" resultType="com.isoftstone.entity.model.User">
+		SELECT
+			u.id AS "id",
+			u.username AS "username",
+			u.realname AS "realname",
+			u.`password` AS "password",
+			u.telphone AS "telphone",
+			u.province AS "province",
+			u.city AS "city",
+			u.area AS "area",
+			u.address AS "address",
+			u.manage_area AS "manageArea",
+			u.`enable` AS "enable",
+			u.remark AS "remark",
+			u.create_time AS "createTime",
+			u.`status` AS "status"
+		FROM
+			t_user u
+		WHERE u.manage_area in
+			<foreach collection="deList" item="item" index="index" open="(" separator="," close=")">  	
+			 #{item.belongArea}
+			</foreach>
+	</select>
+	
+	<select id="queryUsers" resultType="com.isoftstone.entity.pojo.UserPojo">
+   		SELECT
+			u.id AS "id",
+			u.username AS "username",
+			u.realname AS "realname",
+			u. PASSWORD AS PASSWORD,
+			u.telphone AS "telphone",
+			u.province AS "province",
+			a1.`name` AS "provinceName",
+			u.city AS "city",
+			a2.`name` AS "cityName",
+			u.area AS "area",
+			a3.`name` AS "areaName",
+			u.address AS "address",
+			u.manage_area AS "manageArea",
+			a4.`name` AS "manageAreaName",
+			u.`enable` AS "enable",
+			u.remark AS "remark",
+			u.create_time AS "createTime",
+			u.`status` AS "status",
+			r.id AS "roleId",
+			r.roleDesc AS "roleName"
+		FROM
+			t_user u
+		LEFT JOIN t_area a1 ON u.province = a1.id
+		LEFT JOIN t_area a2 ON u.city = a2.id
+		LEFT JOIN t_area a3 ON u.area = a3.id
+		LEFT JOIN t_area a4 ON u.manage_area = a4.id
+		LEFT JOIN t_user_role ur ON ur.userId = u.id
+		LEFT JOIN t_role r ON ur.roleId = r.id
+	    <where>
+			u.status = 1
+			<if test="username != null and username != ''">
+			AND	u.username LIKE concat('%',#{username},'%')
+			</if>
+		</where>
+		ORDER BY u.create_time DESC
+	</select>
+	
+	<!-- 重置密码 -->
+	<update id="updatePwd">
+		UPDATE t_user SET
+			password = #{password}
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="importUsers" parameterType="com.isoftstone.entity.imports.UserTemp">
+		INSERT INTO t_user (
+			username,
+			realname,
+			password,
+			telphone,
+			province,
+			city,
+			area,
+			address,
+			manage_area,
+			enable,
+			remark,
+			create_time,
+			status
+		) VALUES
+		<foreach collection="userList" item="item" index="index" separator=",">  
+	         (
+	         	#{item.username},
+	         	#{item.realname},
+	         	#{item.password},
+	         	#{item.telphone},
+	         	(select id from t_area where name = #{item.provinceName}),
+	         	(select id from t_area where name = #{item.cityName}),
+	         	(select id from t_area where name = #{item.areaName}),
+	         	#{item.address},
+	         	(select id from t_area where name = #{item.manageAreaName}),
+	         	(case when #{item.enable} = '启用' then 1 else 0 end),
+	         	#{item.remark},
+	         	SYSDATE(),
+ 				1
+			)
+	    </foreach>
+	</insert>
+	
+	<update id="updateManageArea" parameterType="com.isoftstone.entity.model.User">
+		UPDATE t_user
+		   SET manage_area = #{manageArea}
+		 WHERE id = #{id}
+	</update>
+	
+	<select id="selectByUsername" parameterType="com.isoftstone.entity.model.User" resultType="java.lang.Integer">
+  	SELECT
+		count(1)
+	FROM
+		t_user t
+	WHERE t.id != #{id} 
+			<if test="username != null and username != ''">
+			AND	t.username = #{username}
+			</if>
+  </select>
+  
+  <select id="selectByTelphone" parameterType="com.isoftstone.entity.model.User" resultType="java.lang.Integer">
+  	SELECT
+		count(1)
+	FROM
+		t_user t
+	WHERE t.id != #{id} 
+			<if test="telphone != null and telphone != ''">
+			AND	t.telphone = #{telphone}
+			</if>
+  </select>
+	
+	<select id="loginByPhone" parameterType="java.lang.String" resultType="com.isoftstone.entity.pojo.UserPojo">
+  		SELECT
+			t.id,
+			t.username,
+			t.realname,
+			t.telphone,
+			t.province,
+			a1.`name` provinceName,
+			t.city,
+			a2.`name` cityName,
+			t.area,
+			a3.`name` areaName,
+			t.address,
+			t.manage_area manageArea,
+			a4.`name` manageAreaName,
+			t.`enable`,
+			t.remark,
+			t.create_time createTime,
+			t.`status`,
+			r.id AS "roleId",
+			r.roleDesc rolename
+		FROM
+			t_user t
+		LEFT JOIN t_user_role ur ON t.id = ur.userId
+		LEFT JOIN t_role r ON ur.roleId = r.id
+		LEFT JOIN t_area a1 ON t.province = a1.id
+		LEFT JOIN t_area a2 ON t.city = a2.id
+		LEFT JOIN t_area a3 ON t.area = a3.id
+		LEFT JOIN t_area a4 ON t.manage_area = a4.id
+		WHERE
+			t.telphone = #{telphone}
+  </select>
+  
+  <select id="getUserSum" parameterType="java.util.Map" resultType="java.lang.Integer">
+  	SELECT
+		count(1)
+	FROM
+		t_user t
+	<where>
+	    t.status = 1
+		<if test="roleId != 1">
+			AND	t.manage_area in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+		</if>
+	</where>
+  </select>
+
+
+	<update id="saveUserInfo">
+		UPDATE t_user SET
+			<if test="realname != null and realname != ''">
+				realname = #{realname},
+			</if>
+			<if test="picPath != null and picPath != ''">
+				pic_path = #{picPath},
+			</if>
+			<if test="sex != null and sex != ''">
+				sex = #{sex},
+			</if>
+			`status` = 1
+		WHERE id = #{id}
+	</update>
+	
+	<select id="selectRoleByRolename" resultType="java.lang.Long" parameterType="java.lang.String">
+		select id from t_role where roledesc = #{rolename}
+	</select>
+	
+	<insert id="addRole" parameterType="com.isoftstone.entity.imports.UserTemp">
+		INSERT INTO t_user_role (
+			userId,
+			roleId
+		) VALUES
+		<foreach collection="userList" item="item" index="index" separator=",">  
+	         (
+	         	(select id from t_user where username =  #{item.username}),
+	         	(select id from t_role where roledesc = #{item.rolename})
+			)
+	    </foreach>
+	</insert>
+	
+	<select id="selectUserByTel" parameterType="com.isoftstone.entity.model.User" resultType="java.lang.Integer">
+		select count(1) from t_user u where u.status = 0 and u.telphone = #{telphone}
+	</select>
+	
+	<update id="updateStatus" parameterType="com.isoftstone.entity.model.User">
+		UPDATE t_user SET
+			status = 1
+		WHERE telphone = #{telphone}
+	</update>
+	
+</mapper>

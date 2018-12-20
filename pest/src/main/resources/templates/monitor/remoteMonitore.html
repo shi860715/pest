@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+ 
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">远程监控</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="sxc-head sxc-subhead clearfix demoTable">
+										<ol class="clearfix manyBtncon">
+											<li>
+                                				<button class="btn btn-primary layui-btn" data-type="openAdd" shiro:hasPermission="/monitorPage/addRemoteMonitore">
+													<i class="addIcon"></i> 添加
+											    </button>
+                                			</li>
+                                			<li>
+                                				<button class="btn btn-danger layui-btn" data-type="delSelect" shiro:hasPermission="/monitorPage/delRemoteMonitore">
+													<i class="icon-trash bigger-120"></i>删除
+											    </button>
+                                			</li>
+										</ol>
+										<ol class="clearfix searchCon" style="float: right;">
+											<li><label>设备名:</label><input type="text" id="name" placeholder="输入设备名"/></li>
+                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch">搜索</button></li>
+										</ol>
+									</div>
+                                	<div class="table-responsive">
+										<table class="layui-table" id="remoteMonitoreList" lay-data="{url:'/monitorPage/findPage', page:true,limit:10,even: true, id:'idTest'}" lay-filter="remoteMonitoreList">
+										  <thead>
+										    <tr>
+										      <th lay-data="{checkbox:true, fixed: true}"></th>
+										      <th lay-data="{field:'name', width:150, sort: true}">设备名称</th>
+										      <th lay-data="{field:'code', width:150, sort: true}">设备编号</th>
+										      <th lay-data="{field:'address', width:250, sort: true}">地点</th>
+										      <th lay-data="{field:'belongAreaName', width:150, sort: true}">所属点区域</th>
+										      <th lay-data="{field:'user', width:150, sort: true}">使用方</th>
+										      <th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}">操作</th>
+										    </tr>
+										  </thead>
+										</table>
+									</div>
+                                </div>
+                                	
+                                	
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+        
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+
+		<!-- ace scripts -->
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}" charset="utf-8"></script>
+		<!-- inline scripts related to this page -->
+
+		<div id="barDemo" style="display:none;">
+			<a class="green" lay-event="edit" title="编辑" shiro:hasPermission="/monitorPage/editRemoteMonitore"><i class="icon-pencil bigger-150"></i></a>
+<!-- 			<a class="red" lay-event="video" title="实时录像" shiro:hasPermission="/monitorPage/video"><i class="icon-facetime-video bigger-150"></i></a>
+ -->			<a class="red" lay-event="video2" title="实时录像" shiro:hasPermission="/monitorPage/video"><i class="icon-facetime-video bigger-150"></i></a>
+			<a class="red" lay-event="del" title="删除" shiro:hasPermission="/monitorPage/delRemoteMonitore"><i class="icon-trash bigger-150"></i></a>
+		</div>
+
+		<div id="addDiv" style="display:none;">
+			<form id="formTemp">
+				<div class="editCon">
+					<input type="hidden" name="id"/>
+					<ul>
+						<li>
+							<label>设备名称:</label>
+							<input type="text" name="name"/>
+						</li>
+						<li>
+							<label>设备编号:</label>
+							<input type="text" name="code"/>
+						</li>
+						<li>
+							<label>IP地址:</label>
+							<input type="text" name="loginip"/>
+						</li>
+						<li>
+							<label>端口号:</label>
+							<input type="text" name="port"/>
+						</li>
+						<li>
+							<label>设备序列号:</label>
+							<input type="text" name="deviceSerial"/>
+						</li>
+						<li>
+							<label>设备通道号:</label>
+							<input type="text" name="cameraNo"/>
+						</li>
+						<li>
+							<label>视频流畅地址:</label>
+							<input type="text" name="ezopen"/>
+						</li>
+						<li>
+							<label>视频高清地址:</label>
+							<input type="text" name="ezopenHd"/>
+						</li>
+						<li>
+							<label>RTMP流畅地址:</label>
+							<input type="text" name="rtmp"/>
+						</li>
+						<li>
+							<label>RTMP高清地址:</label>
+							<input type="text" name="rtmpHd"/>
+						</li>
+						<li>
+							<label>HLS流畅地址:</label>
+							<input type="text" name="hls"/>
+						</li>
+						<li>
+							<label>HLS高清地址:</label>
+							<input type="text" name="hlsHd"/>
+						</li>
+						<li>
+							<label>地点:</label>
+							<input type="text" name="address"/>
+						</li>
+						<li>
+							<label>省:</label>
+							<select id="province" name="province">
+								<option value="">---请选择省---</option>
+							</select>
+						</li>
+						<li>
+							<label>市:</label>
+							<select id="city" name="city">
+								<option value="">---请选择市---</option>
+							</select>
+						</li>
+						<li>
+							<label>区:</label>
+							<select id="district" name="district">
+								<option value="">---请选择区---</option>
+							</select>
+						</li>
+						<li>
+							<label>所属点区域:</label>
+							<select id="belongArea" name="belongArea">
+								<option value="">---请选择点---</option>
+							</select>
+						</li>
+						<li>
+							<label>使用方:</label>
+							<input type="text" name="user"/>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<script type="text/javascript">
+		layui.use('table', function(){
+			  var table = layui.table;
+			  //监听表格复选框选择
+			  table.on('checkbox(remoteMonitoreList)', function(obj){
+			    
+			  });
+			  //监听工具条
+			  table.on('tool(remoteMonitoreList)', function(obj){
+			    var remoteMonitore = obj.data;
+			    if(obj.event === 'del'){
+			      layer.confirm('是否确定删除该条数据？', function(index){
+			    	  $.ajax({
+			                cache: true,
+			                type: "POST",
+			                url:'/monitorPage/delRemoteMonitore',
+			                data:{ids : remoteMonitore.id},
+			                async: false,
+			                dataType:'json',
+			                success: function(xhr) {
+			                	if(xhr.code == 1){
+			                        layer.msg('删除成功');
+			                        obj.del();
+									layer.close(index);
+									table.reload('idTest', {
+						            	where: { //设定异步数据接口的额外参数
+						            		"name":$("#name").val()
+						            	}
+									});
+			                    }else{
+			                        layer.msg(xhr.message);
+			                    }
+			                }
+			            });
+			      });
+			    } else if(obj.event === 'edit'){
+			    	layer.open({
+						  title: '编辑远程监控设备信息'
+						  ,content: $("#addDiv").html().replace('formTemp','remoteMonitoreForm'),
+						  area:['550px','400px'],
+						  success:function(){
+							  $("#remoteMonitoreForm input[name='id']").val(remoteMonitore.id);
+							  queryArea(null,1,"province","省");
+							  if(null != remoteMonitore.province){
+								  queryArea(remoteMonitore.province,2,"city","市");
+								  if(null != remoteMonitore.city){
+									  queryArea(remoteMonitore.city,3,"district","区");
+									  if(null != remoteMonitore.district){
+										  queryArea(remoteMonitore.district,4,"belongArea","点");
+									  }
+								  }
+							  }
+							  $("#remoteMonitoreForm select[name='province']").change(function(){
+								  if($(this).val()){
+									  queryArea($(this).val(),2,"city","市");
+									  $("#remoteMonitoreForm select[name='district']").empty().append("<option value=''>---请选择区---</option>");
+									  $("#remoteMonitoreForm select[name='belongArea']").empty().append("<option value=''>---请选择点---</option>");
+								  }
+							  });
+							  $("#remoteMonitoreForm select[name='city']").change(function(){
+								  if($(this).val()){
+									  queryArea($(this).val(),3,"district","区");
+									  $("#remoteMonitoreForm select[name='belongArea']").empty().append("<option value=''>---请选择点---</option>");
+								  }
+							  });
+							  $("#remoteMonitoreForm select[name='district']").change(function(){
+								  if($(this).val()){
+									  queryArea($(this).val(),4,"belongArea","点");
+								  }
+							  });
+							  $("#remoteMonitoreForm input[name='code']").val(remoteMonitore.code);
+							  $("#remoteMonitoreForm input[name='name']").val(remoteMonitore.name);
+							  $("#remoteMonitoreForm input[name='loginip']").val(remoteMonitore.loginip);
+							  $("#remoteMonitoreForm input[name='port']").val(remoteMonitore.port);
+							  $("#remoteMonitoreForm input[name='deviceSerial']").val(remoteMonitore.deviceSerial);
+							  $("#remoteMonitoreForm input[name='cameraNo']").val(remoteMonitore.cameraNo);
+							  $("#remoteMonitoreForm input[name='ezopen']").val(remoteMonitore.ezopen);
+							  $("#remoteMonitoreForm input[name='ezopenHd']").val(remoteMonitore.ezopenHd);
+							  $("#remoteMonitoreForm input[name='rtmp']").val(remoteMonitore.rtmp);
+							  $("#remoteMonitoreForm input[name='rtmpHd']").val(remoteMonitore.rtmpHd);
+							  $("#remoteMonitoreForm input[name='hls']").val(remoteMonitore.hls);
+							  $("#remoteMonitoreForm input[name='hlsHd']").val(remoteMonitore.hlsHd);
+							  $("#remoteMonitoreForm input[name='address']").val(remoteMonitore.address);
+							  $("#remoteMonitoreForm #province option[value='"+remoteMonitore.province+"']").attr('selected',true);
+							  $("#remoteMonitoreForm #city option[value='"+remoteMonitore.city+"']").attr('selected',true);
+							  $("#remoteMonitoreForm #district option[value='"+remoteMonitore.district+"']").attr('selected',true);
+							  $("#remoteMonitoreForm #belongArea option[value='"+remoteMonitore.belongArea+"']").attr('selected',true);
+							  $("#remoteMonitoreForm input[name='user']").val(remoteMonitore.user);
+							  
+							  $("#remoteMonitoreForm").validate({
+								    rules: {
+								    	name : "required",
+								    	code : "required",
+								    	loginip : "required",
+								    	port : "required",
+								    	deviceSerial : "required",
+								    	cameraNo : "required",
+								    	ezopen : "required",
+								    	ezopenHd : "required",
+								    	rtmp : "required",
+								    	rtmpHd : "required",
+								    	hls : "required",
+								    	hlsHd : "required",
+								    	address:'required',
+								    	belongArea : "required",
+								    	user : "required"
+								    },
+								    messages: {
+								    	name : "请输入设备名称",
+								    	code : "请输入设备编码",
+								    	loginip : "请输入IP地址",
+								    	port : "请输入端口号",
+								    	deviceSerial : "请输入设备序列号",
+								    	cameraNo : "请输入设备通道号",
+								    	ezopen : "请输入视频流畅地址",
+								    	ezopenHd : "请输入视频高清地址",
+								    	rtmp : "请输入rtmp流畅地址",
+								    	rtmpHd : "请输入rtmp高清地址",
+								    	hls : "请输入hls流畅地址",
+								    	hlsHd : "请输入hls高清地址",
+								    	address:'请输入地点',
+								    	belongArea : "选择点",
+								    	user : "请输入使用方"
+								    }
+								});
+						  },
+						  btn:['确定','取消']
+						  ,yes: function(){
+							  if(!$("#remoteMonitoreForm").valid()) {
+									return false;
+							  }
+							  $.ajax({
+						            cache: true,
+						            type: "POST",
+						            url:'/monitorPage/editRemoteMonitore',
+						            data:$('#remoteMonitoreForm').serialize(),// 你的formid
+						            dataType:'json',
+					                success: function(obj) {
+					                	if(obj.code == 1){
+						                    layer.msg('编辑成功');
+							                layer.closeAll('page');
+											table.reload('idTest', {
+								            	where: { //设定异步数据接口的额外参数
+								            		"name":$("#name").val()
+								            	}
+											});
+						                }else{
+						                	layer.msg(obj.message);
+						                }
+						            }
+						        });
+						  },
+						  btn2: function(){
+						    layer.closeAll();
+						  },
+						  btnAlign: 'c'
+						});
+			    	
+			    }else if(obj.event === 'video'){
+			    	window.open("/monitorPage/video/"+remoteMonitore.id);
+			    }else if(obj.event === 'video2'){
+			    	window.open("/monitorPage/video2/"+remoteMonitore.id);
+			    }
+			  });
+			  
+			  var $ = layui.$, active = {
+						openAdd: function(){
+							layer.open({
+								  title: '添加远程监控设备信息'
+								  ,content: $("#addDiv").html().replace('formTemp','remoteMonitoreForm'),
+								  area:['550px','400px'],
+								  success:function(){
+									  queryArea(null,1,"province","省");
+									  
+									  $("#remoteMonitoreForm select[name='province']").change(function(){
+										  if($(this).val()){
+											  queryArea($(this).val(),2,"city","市");
+											  $("#remoteMonitoreForm select[name='district']").empty().append("<option value=''>---请选择区---</option>");
+											  $("#remoteMonitoreForm select[name='belongArea']").empty().append("<option value=''>---请选择点---</option>");
+										  }
+									  });
+									  $("#remoteMonitoreForm select[name='city']").change(function(){
+										  if($(this).val()){
+											  queryArea($(this).val(),3,"district","区");
+											  $("#remoteMonitoreForm select[name='belongArea']").empty().append("<option value=''>---请选择点---</option>");
+										  }
+									  });
+									  $("#remoteMonitoreForm select[name='district']").change(function(){
+										  if($(this).val()){
+											  queryArea($(this).val(),4,"belongArea","点");
+										  }
+									  });
+									  
+									  $("#remoteMonitoreForm").validate({
+										    rules: {
+										    	name : "required",
+										    	code : "required",
+										    	loginip : "required",
+										    	port : "required",
+										    	deviceSerial : "required",
+										    	cameraNo : "required",
+										    	ezopen : "required",
+										    	ezopenHd : "required",
+										    	rtmp : "required",
+										    	rtmpHd : "required",
+										    	hls : "required",
+										    	hlsHd : "required",
+										    	address:'required',
+										    	belongArea : "required",
+										    	user : "required"
+										    },
+										    messages: {
+										    	name : "请输入设备名称",
+										    	code : "请输入设备编码",
+										    	loginip : "请输入IP地址",
+										    	port : "请输入端口号",
+										    	deviceSerial : "请输入设备序列号",
+										    	cameraNo : "请输入设备通道号",
+										    	ezopen : "请输入视频流畅地址",
+										    	ezopenHd : "请输入视频高清地址",
+										    	rtmp : "请输入rtmp流畅地址",
+										    	rtmpHd : "请输入rtmp高清地址",
+										    	hls : "请输入hls流畅地址",
+										    	hlsHd : "请输入hls高清地址",
+										    	address:'请输入地点',
+										    	belongArea : "选择点",
+										    	user : "请输入使用方"
+										    }
+										});
+								  },
+								  btn:['确定','取消']
+								  ,yes: function(){
+									  if(!$("#remoteMonitoreForm").valid()) {
+											return false;
+									  }
+									  $.ajax({
+								            cache: true,
+								            type: "POST",
+								            url:'/monitorPage/addRemoteMonitore',
+								            data:$('#remoteMonitoreForm').serialize(),// 你的formid
+								            dataType:'json',
+							                success: function(obj) {
+							                	if(obj.code == 1){
+								                    layer.msg('添加成功');
+									                layer.closeAll('page');
+													table.reload('idTest', {
+										            	where: { //设定异步数据接口的额外参数
+										            		"name":$("#name").val()
+										            	}
+													});
+								                }else{
+								                	layer.msg(obj.message);
+								                }
+								            }
+								        });
+								  },
+								  btn2: function(){
+								    layer.closeAll();
+								  },
+								  btnAlign: 'c'
+								});
+						}
+						,delSelect: function(){ //获取选中数目
+				      		var checkStatus = table.checkStatus('idTest')
+				      			,data = checkStatus.data;
+							if(data.length>0){
+								var ids = "";
+								for(var i=0;i<data.length;i++){
+									ids += ","+ data[i].id;
+								}
+								layer.confirm('是否删除选中的数据？', function(index){
+									$.ajax({
+						                cache: true,
+						                type: "POST",
+						                url:'/monitorPage/delRemoteMonitore',
+						                data:{ids:ids.substring(1)},
+						                async: false,
+						                dataType:'json',
+						                success: function(obj) {
+						                	if(obj.code == 1){
+						                        layer.msg('删除成功');
+												layer.close(index);
+												table.reload('idTest', {
+									            	where: { //设定异步数据接口的额外参数
+									            		"name":$("#name").val()
+									            	}
+												});
+						                    }else{
+						                    	layer.msg(obj.message);
+						                    }
+						                }
+						            });
+								});
+							}else{
+					      		layer.msg('请选择要删除的数据！');
+							}
+							
+				    	}
+						,doSearch: function(){
+							table.reload('idTest', {
+								page:{
+									curr:1
+								},
+				            	where: { //设定异步数据接口的额外参数
+				            		"name":$("#name").val()
+				            	}
+							});
+				    	}
+				  	};
+			  
+			  $('.demoTable .layui-btn').on('click', function(){
+			    var type = $(this).data('type');
+			    active[type] ? active[type].call(this) : '';
+			  });
+			  
+			  
+			});
+		
+			jQuery(function($) {
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+			
+			
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+			});
+			
+			function queryArea(id,level,selectId,key){
+				$.ajax({
+	                cache: true,
+	                type: "POST",
+	                url:'/areasPage/queryArea',
+	                data:{id:id,level:level},
+	                dataType: 'json',
+	                async: false,
+	                success: function(obj) {
+	                    var areas = obj.data;
+	                    var appendStr="<option value=''>---请选择"+key+"---</option>";
+	                    for(var i=0;i<areas.length;i++){
+	                    	appendStr += "<option value='"+areas[i].id+"'>"+areas[i].name+"</option>"
+	                    }
+	                    $("#remoteMonitoreForm select[name='"+selectId+"']").empty().append(appendStr);
+	                }
+	            });
+			}
+		</script>
+		
+	</body>
+</html>
+

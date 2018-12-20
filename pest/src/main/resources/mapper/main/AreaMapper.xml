@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.AreaMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.Area">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="INTEGER" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="parent_code" jdbcType="INTEGER" property="parentCode" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  
+  <resultMap id="ContactInfoMap" type="com.isoftstone.entity.model.ContactInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+  </resultMap>
+
+	<select id="getAllArea" resultMap="BaseResultMap">
+		SELECT
+			id,
+			code,
+			name,
+			level,
+			parent_code,
+			status
+		FROM
+			t_area
+		WHERE
+			status = 1
+	</select>
+
+	<insert id="addArea" useGeneratedKeys="true" keyProperty="id" parameterType="com.isoftstone.entity.model.Area">  
+	    INSERT INTO t_area (
+			name,
+			level,
+			parent_code
+		)
+		VALUES
+			(#{name}, 4, #{parentCode});
+	</insert> 
+	
+	<update id="editArea" parameterType="com.isoftstone.entity.model.Area">
+		UPDATE t_area
+		SET name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delArea" parameterType="java.lang.Long">
+		UPDATE t_area
+		SET status = 0
+		WHERE id = #{id}
+		AND (SELECT
+				u.userCount + di.devCount + rm.rmCount
+			FROM(SELECT count(1) userCount
+					 FROM t_user
+					 WHERE manage_area = #{id} and status = 1) u,
+				(SELECT count(1) devCount
+					FROM t_dev_info
+					WHERE belong_area = #{id} and isdelete = 0
+				) di,
+				(SELECT count(1) rmCount
+				FROM t_remote_monitore
+				WHERE belong_area = #{id} and status = 1) rm) = 0
+	</update>
+	
+	<select id="getProvince" resultType="com.isoftstone.entity.model.Area">
+		SELECT
+			id,
+			code,
+			name
+		FROM
+			t_area
+		WHERE
+			status = 1 AND level = 1
+	</select>
+	
+	<select id="queryContact" parameterType="java.lang.Long" resultMap="ContactInfoMap">
+		SELECT
+			id,
+			area_id,
+			NAME,
+			telephone,
+			email
+		FROM
+			t_contact_info
+		WHERE
+			area_id = #{areaId}
+	</select>
+
+	<insert id="saveContact">
+    	INSERT INTO t_contact_info(area_id, name, telephone,email)values
+        <foreach collection="contactList" item="contact" index="index" separator=","> 
+    		(#{contact.areaId}, #{contact.name}, #{contact.telephone},#{contact.email})	
+    	</foreach>
+    </insert>
+    
+   	<delete id="delContact" parameterType="java.lang.Long">
+   		delete from t_contact_info where area_id = #{areaId}
+   	</delete>
+	
+	<select id="queryArea" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			id,
+			code,
+			name,
+			level,
+			parent_code,
+			status
+		FROM
+			t_area
+		WHERE
+			status = 1
+		<if test="id != null and id != ''">
+			and parent_code = (
+				SELECT
+					a.code
+				FROM
+					t_area a
+				WHERE a.id = #{id}
+			)
+		</if>
+		<if test="level!=null and level!=''">
+			and level = #{level}
+		</if>
+	</select>
+	
+	<select id="queryChildrenIds" resultType="java.lang.String">
+		SELECT queryChildrenAreaInfo(#{id})
+	</select>
+	
+	<select id="queryAreaByCode" resultMap="BaseResultMap">
+		SELECT
+			id,
+			code,
+			name,
+			level,
+			parent_code,
+			status
+		FROM
+			t_area
+		WHERE
+			status = 1
+		AND code = #{code}
+	</select>
+	
+	<select id="queryAreaByUser" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			id,
+			code,
+			name,
+			level,
+			parent_code,
+			status
+		FROM
+			t_area
+		WHERE
+			status = 1
+			and (parent_code = (
+					SELECT
+						a.code
+					FROM
+						t_area a
+					WHERE a.id = #{id}
+				) or id = #{id}
+			)
+		ORDER BY id
+	</select>
+	
+	<select id="getAllContact" parameterType="java.util.Map" resultType="com.isoftstone.entity.pojo.ContactInfoPojo">
+		SELECT
+			ci.id as id,
+			ci.area_id as areaId,
+			a.name as areaName,
+			ci.`name` as name,
+			ci.telephone as telephone,
+			ci.email as email
+		FROM
+			t_contact_info ci
+		LEFT JOIN 
+			t_area a
+		ON ci.area_id = a.id
+		WHERE
+		a.name IS NOT NULL
+		<if test="roleId != 1 and roleId != 5">
+		and ci.areaId in
+		<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+		 #{item}
+		</foreach>
+		</if>
+		<if test="name != null and name != ''">
+				AND	(ci.`name` LIKE concat('%',#{name},'%'))
+		</if>
+		<if test="areaName != null and areaName != ''">
+				AND	(a.name LIKE concat('%',#{areaName},'%'))
+		</if>
+		ORDER BY area_id
+	</select>
+	
+	<!-- 修改区域联系人信息 -->
+	<update id="updateContact">
+		UPDATE t_contact_info SET
+				name = #{name},
+				telephone = #{telephone},
+				email = #{email}
+			WHERE id = #{id} 
+	</update>
+	
+	<!-- 删除区域联系人信息 -->
+	<delete id="deleteContact">
+		DELETE FROM t_contact_info WHERE id = #{id} 
+	</delete>
+</mapper>

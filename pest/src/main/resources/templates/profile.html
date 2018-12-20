@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<title>用户信息--生兴防治</title>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+	 	<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" th:href="@{/css/font-awesome-ie7.min.css}" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<link rel="stylesheet" th:href="@{/css/jquery-ui-1.10.3.custom.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/jquery.gritter.css}" />
+		<link rel="stylesheet" th:href="@{/css/select2.css}" />
+		<link rel="stylesheet" th:href="@{/css/bootstrap-editable.css}" />
+
+		<!-- fonts -->
+
+
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}" />
+		<link rel="stylesheet" th:href="@{/css/newCss.css}" />
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" th:href="@{/css/ace-ie.min.css}" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+		<script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+		<![endif]-->
+		<style type="text/css">
+			.editable-error-block{
+				color:#ff0000;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="javascript:void(0);">首页</a>
+							</li>
+							<li class="active">用户管理</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="clearfix">
+									<div class="pull-left">
+										<span class="green middle bolder">选项: &nbsp;</span>
+										<div class="btn-toolbar inline middle no-margin">
+											<div data-toggle="buttons" class="btn-group no-margin">
+												<label class="btn btn-sm btn-yellow active">
+													<span class="bigger-110">基本信息</span>
+													<input type="radio" value="1" />
+												</label>
+												<label class="btn btn-sm btn-yellow">
+													<span class="bigger-110">安全设置</span>
+
+													<input type="radio" value="3" />
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="hr dotted"></div>
+								<div>
+									<div id="user-profile-1" class="user-profile row">
+										<div class="col-xs-12 col-sm-3 center">
+											<div>
+												<span class="profile-picture">
+													<img id="avatar" class="avatar editable img-responsive" style="max-width: 242px; max-height: 242px;" alt="用户头像" th:src="(${session.webUser.picPath eq '' or session.webUser.picPath==null}) ? @{/avatars/user.jpg} : ${session.webUser.picPath}"  />
+												</span>
+												<div class="space-4"></div>
+											</div>
+												<div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+													<div class="inline position-relative">
+														<a href="javascript:void(0);" onclick="$('#fileHead').click();" class="user-title-label">
+															<span class="white">修改头像</span>
+														</a>
+														<input type="hidden" id="head" name="head" th:value="(${session.webUser.picPath eq '' or session.webUser.picPath==null}) ? @{/avatars/user.jpg} : ${session.webUser.picPath}"" /> 
+														<input type="file" onchange="uploadHead('fileHead','imgIcon','image');" id="fileHead" accept="image/*" style="display:none;" name="fileInput" />
+													</div>
+												</div>
+                                            <div class="space-6"></div>
+										</div>
+
+										<div class="col-xs-12 col-sm-9">
+											<div class="space-12"></div>
+
+											<div class="profile-user-info profile-user-info-striped">
+												<div class="profile-info-row">
+													<div class="profile-info-name"> 用户名</div>
+
+													<div class="profile-info-value">
+														<span class="editable" id="username" th:text="${session.webUser.username}"></span>
+													</div>
+												</div>
+												<div class="profile-info-row">
+													<div class="profile-info-name"> 真实姓名</div>
+
+													<div class="profile-info-value">
+														<span class="editable" id="realname" th:text="${session.webUser.realname}"></span>
+													</div>
+												</div>
+												<div class="profile-info-row">
+													<div class="profile-info-name"> 角色</div>
+
+													<div class="profile-info-value">
+														<span class="editable" id="roleName" th:text="${session.webUser.roleName}"></span>
+													</div>
+												</div>
+												<div class="profile-info-row">
+													<div class="profile-info-name"> 性别</div>
+
+													<div class="profile-info-value">
+														<span class="editable" id="sex" th:text="${session.webUser.sex == 1 ? '男' : session.webUser.sex == 2 ? '女' : '保密'}"></span>
+													</div>
+												</div>
+												<div class="profile-info-row">
+													<div class="profile-info-name"> 管理区域</div>
+
+													<div class="profile-info-value">
+														<i class="icon-map-marker light-orange bigger-110"></i>
+														<span class="editable" id="province" th:text="${session.webUser.provinceName}"></span>
+														<span class="editable" id="city" th:text="${session.webUser.cityName}"></span>
+														<span class="editable" id="area" th:text="${session.webUser.areaName}"></span>
+														<span class="editable" id="manageArea" th:text="${session.webUser.manageAreaName}"></span>
+													</div>
+												</div>
+
+												<div class="profile-info-row">
+													<div class="profile-info-name">加入时间</div>
+
+													<div class="profile-info-value">
+														<span class="editable" id="signup" th:text="${session.webUser.createTime}"></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="hide">
+									<div id="user-profile-3" class="user-profile row">
+										<div class="col-sm-offset-1 col-sm-10">
+											<form class="form-horizontal" id="pwdForm">
+												<div id="edit-password" class="tab-pane">
+													<div class="space-10"></div>
+													<input type="hidden" name="id" th:value="${session.webUser.id}">
+													<input type="hidden" name="username" th:value="${session.webUser.username}">
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-pass1">原密码</label>
+
+														<div class="col-sm-9">
+															<input type="password" id="oldPassword" name="oldPassword"  />
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-pass1">新密码</label>
+
+														<div class="col-sm-9">
+															<input type="password" id="password" name="password" />
+														</div>
+													</div>
+
+													<div class="space-4"></div>
+
+													<div class="form-group">
+														<label class="col-sm-3 control-label no-padding-right" for="form-field-pass2">确认密码</label>
+														<div class="col-sm-9">
+															<input type="password" id="confirmPwd" />
+														</div>
+													</div>
+												</div>
+
+												<div class="clearfix form-actions">
+													<div class="col-md-offset-3 col-md-9">
+														<button class="btn btn-primary" onclick="savePwd();" type="button">
+															<i class="icon-ok bigger-110"></i>
+															保存
+														</button>
+
+														&nbsp; &nbsp;
+														<button class="btn" type="reset">
+															<i class="icon-undo bigger-110"></i>
+															重置
+														</button>
+													</div>
+												</div>
+											</form>
+										</div><!-- /span -->
+									</div>
+								
+
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script th:src='@{/js/jquery-1.10.2.min.js}'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!--[if lte IE 8]>
+		  <script th:src="@{/js/excanvas.min.js}"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.gritter.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.hotkeys.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap-wysiwyg.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/select2.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/date-time/bootstrap-datepicker.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/fuelux/fuelux.spinner.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/x-editable/bootstrap-editable.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/x-editable/ace-editable.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.maskedinput.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/common/ajaxfileupload.js}" charset="utf-8"></script>
+
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+			jQuery(function($) {
+			
+				//editables on first profile page
+				$.fn.editable.defaults.mode = 'inline';
+				$.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
+			    $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>'+
+			                                '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';    
+				
+				//editables 
+			    $('#realname').editable({
+					type: 'text',
+					name: 'username',
+					validate: function (value) { //字段验证
+		                if (!$.trim(value)) {
+		                    return '不能为空';
+		                }else{
+		                	$.ajax({
+				                cache: true,
+				                type: "POST",
+				                url:'users/saveUserInfo',
+				                data:{realname : value},
+				                async: false,
+				                dataType:'json',
+				                success: function(data) {
+				                }
+				            });
+		                }
+		            }
+			    });
+
+				$('#sex').editable({
+					type: 'select',
+					name: 'username',
+					source:[{value:"1",text:"男"},{value:"2",text:"女"},{value:"3",text:"保密"}],
+					validate: function (value) { //字段验证
+		                if (!$.trim(value)) {
+		                    return '不能为空';
+		                }else{
+		                	$.ajax({
+				                cache: true,
+				                type: "POST",
+				                url:'users/saveUserInfo',
+				                data:{sex : value},
+				                async: false,
+				                dataType:'json',
+				                success: function(data) {
+				                }
+				            });
+		                }
+		            }
+			    });
+				
+				//change profile
+				$('[data-toggle="buttons"] .btn').on('click', function(e){
+					var target = $(this).find('input[type=radio]');
+					var which = parseInt(target.val());
+					$('.user-profile').parent().addClass('hide');
+					$('#user-profile-'+which).parent().removeClass('hide');
+				});
+			});
+			
+			function uploadHead(fileId,img,picId){
+				if($("#"+fileId).val()){
+					$.ajaxFileUpload({
+						url:"resources/upload",	//需要链接到服务器地址 
+						secureuri:false,
+						fileElementId:fileId,//文件选择框的id属性
+						data : {
+	                        path : 'profile'
+	                    },
+						dataType: 'json',	//json
+						success: function (obj) {
+							$(".avatar").attr("src",obj.data.path);
+							$("#head").val(obj.data.path);
+							debugger;
+							$.ajax({
+				                cache: true,
+				                type: "POST",
+				                url:'users/saveUserInfo',
+				                data:{picPath : obj.data.path},
+				                async: false,
+				                dataType:'json',
+				                success: function(data) {
+				                }
+				            });
+						},
+						error:function(XMLHttpRequest, textStatus, errorThrown){
+							alert('上传失败！');
+						}
+					});
+				}
+			}
+			
+			function savePwd(){
+				if(!$.trim($("#oldPassword").val())){
+					alert("旧密码不能为空");
+					return;
+				}
+				if(!$.trim($("#password").val())){
+					alert("新密码不能为空");
+					return;
+				}
+				if(!$.trim($("#confirmPwd").val())){
+					alert("确认密码不能为空");
+					return;
+				}
+				if($("#password").val().length<6){
+					alert("密码长度不能小于6位");
+					return;
+				}
+				if($("#password").val()!=$("#confirmPwd").val()){
+					alert("两次密码不相同");
+					return;
+				}
+				$.ajax({
+	                cache: true,
+	                type: "POST",
+	                url:'users/updatePassword',
+	                data:$("#pwdForm").serialize(),
+	                async: false,
+	                dataType:'json',
+	                success: function(data) {
+	                }
+	            });
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,81 @@
+<div th:fragment="leftMenu">
+		<!-- 当前登录用户  start -->
+		<dl class="sidebarHead">
+			<dt>
+				<a href="javascript:void(0);">
+					<img class="avatar" th:src="(${session.webUser.picPath eq '' or session.webUser.picPath==null}) ? @{/avatars/user.jpg} : ${session.webUser.picPath}" />
+				</a>
+			</dt>
+			<dd>
+				<p th:text="(${session.webUser.realname eq '' or session.webUser.realname ==null})?${session.webUser.username}:${session.webUser.realname}"></p>
+				<p th:text="${session.webUser.roleName}"></p>
+			</dd>
+		</dl>
+		<!-- 当前登录用户  end -->
+		<!-- 菜单 start -->
+		<ul class="nav nav-list" id="menu">
+			
+		</ul>
+		<!-- 菜单 start -->
+		<div class="sidebar-collapse" id="sidebar-collapse">
+			<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+		</div>
+		<script type="text/javascript">
+			try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+		</script>
+	
+	<script th:src="@{/js/jquery-1.10.2.min.js}"></script>
+    <script type="text/javascript">
+	    $.ajax({
+	        cache: true,
+	        type: "POST",
+	        url:'/resources/loadMenu.do',
+	        dataType:"json",
+	        success: function(data) {
+	        	var menus = [];
+	        	for(var i=0; i<data.length; i++){
+	        		var m = {id:0, menu:{}, childs:[]};
+	        		if(data[i].parentid==1){
+	        			m.id = data[i].id;
+	        			m.menu = data[i];
+		        		menus.push(m);
+	        		}else{
+	        			for(var j=0; j<menus.length; j++){
+	        				if(menus[j].id == data[i].parentid){
+	        					menus[j].childs.push(data[i]);
+	        					break;
+	        				}
+	        			}
+	        		}
+	        	}
+	            var html="";
+	            for(var i=0; i<menus.length;i++){
+	            	if(menus[i].childs.length==0){
+	            		html += '<li><a href="'+menus[i].menu.resurl+'" type="1"><i class="'+menus[i].menu.icon+'"></i><span class="menu-text"> '+menus[i].menu.name+'</span></a></li>';
+	            	}else{
+	            		html += '<li><a href="javascript:void(0);" class="dropdown-toggle"><i class="'+menus[i].menu.icon+'"></i><span class="menu-text"> '+menus[i].menu.name+' </span><b class="arrow icon-angle-down"></b></a>';
+	            		html += '<ul class="submenu">';
+	            		for(var j=0;j<menus[i].childs.length;j++){
+	            			html += '<li><a href="'+menus[i].childs[j].resurl+'" type="2"><i class="icon-double-angle-right"></i> '+menus[i].childs[j].name+'</a></li>';
+	            		}
+	            		html += '</ul></li>';
+	            	}
+	             }
+	            $("#menu").empty().append(html);
+	            //改变当前菜单样式
+	            $("#menu li a").each(function(){
+		            $this = $(this);
+		            if(String(window.location).indexOf($this[0].href) >= 0){
+		                $this.parent().addClass("active").siblings('li').removeClass('active');
+		                if($this.attr("type")==2){
+		                	$this.parent().parent().parent().siblings('li').removeClass('active').removeClass('open');
+		                	$this.parent().parent().parent().addClass("active").addClass('open');	
+		                }
+		            }
+	            });
+	        }
+	    });
+		try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+	</script>
+</div>
+

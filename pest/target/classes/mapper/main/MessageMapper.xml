@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.MessageMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.Message">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="send_user" jdbcType="INTEGER" property="sendUser" />
+    <result column="receive_user" jdbcType="INTEGER" property="receiveUser" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="read_time" jdbcType="DATE" property="readTime" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  
+
+	<select id="getUnreadCount" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM
+			t_message t
+		WHERE
+			t.state = 0 and status = 1 and t.receive_user = #{userId}
+	</select>
+
+	<select id="queryTop4Message" resultType="com.isoftstone.entity.model.Message">
+		SELECT
+			t.id,
+			t.title,
+			t.content, 
+			t.send_user sendUser, 
+			t.receive_user receiveUser,
+			t.type,t.state, 
+			t.read_time readTime, 
+			t.create_time createTime, 
+			t.status
+		FROM
+			t_message t
+		WHERE
+			t.state = 0 and status = 1 and t.receive_user = #{userId}
+			order by t.create_time desc
+			limit 0, 4
+	</select>
+</mapper>

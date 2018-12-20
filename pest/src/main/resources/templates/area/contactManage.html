@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="keywords" content="生兴防治" />
+		<meta name="description" content="生兴防治" />
+		<title>地域联系人管理--生兴防治</title>
+		<!-- basic styles -->
+		<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+		<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" th:href="@{/css/ace.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-rtl.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/ace-skins.min.css}"/>
+		<link rel="stylesheet" th:href="@{/css/newCss.css}"/>
+		<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"  media="all">
+		
+		<link  rel="stylesheet" th:href="@{/css/jquery.editable-select.css}"/>
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script type="text/javascript" th:src="@{/js/ace-extra.min.js}"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		<style type="text/css">
+			#J-xl-4-btn{
+			    right: 118px;
+			    top: 98px;
+			}
+			.editable-select{
+				width: 275px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div th:include="common/top :: top"></div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar" th:include="common/leftMenu :: leftMenu"></div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+                      
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/index">首页</a>
+							</li>
+							<li class="active">地域联系人管理</li>
+						</ul><!-- .breadcrumb -->
+
+						
+					</div>
+
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								
+								<!--
+                                	作者：jwx427616
+                                	时间：2017-11-04
+                                	描述：正文开始
+                                -->
+                                <div class="sx-content">
+                                	<div class="sxc-head demoTable">
+	                                	<ol class="clearfix dataTime" style="margin-top: 10px;">
+                                			<li><label>地域名称:</label><input type="text" id="areaName" placeholder="输入地域名称"/></li>
+                                			<li><label>联系人姓名:</label><input type="text" id="name" placeholder="输入联系人姓名"/></li>
+                                			<li><button class="btn btn-primary layui-btn" data-type="doSearch">搜索</button></li>
+                                		</ol>
+                                	</div>
+                                	<div class="table-responsive">
+										<table class="layui-table" id="contactList" lay-data="{url:'/areasPage/getAllContact', page:true,limit:10, even: true,id:'idTest'}" lay-filter="contactList">
+										  <thead>
+										    <tr>
+										   	  <th lay-data="{templet:'#indexTpl'}">序号</th>
+										      <th lay-data="{field:'areaName', width:260, sort: true}">地域名称</th>
+										      <th lay-data="{field:'name', width:260, sort: true}">联系人姓名</th>
+										      <th lay-data="{field:'telephone', width:260, sort: true}">联系电话</th>
+										      <th lay-data="{field:'email', width:260, sort: true}">联系邮箱</th>
+										      <th lay-data="{fixed: 'right', width:140, align:'center', toolbar: '#barDemo'}">操作</th>
+										    </tr>
+										  </thead>
+										</table>
+									</div>
+                                </div>
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div th:include="common/footer :: footer"></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+				<div th:include="common/toolbar :: toolbar"></div>
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+		<script th:src="@{/js/jquery.editable-select.js}" ></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+		window.jQuery || document.write("<script type='text/javascript' th:src='@{/js/jquery-2.0.3.min.js}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+		if("ontouchend" in document) document.write("<script type='text/javascript' th:src='@{/js/jquery.mobile.custom.min.js}'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/typeahead-bs2.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+		<!--整个的表格系统-->
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.dataTables.bootstrap.js}"></script>
+		
+        <script type="text/javascript" th:src="@{/js/laydate.dev.js}"></script>
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" th:src="@{/js/jquery-ui-1.10.3.custom.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.slimscroll.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.easy-pie-chart.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.sparkline.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.pie.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/flot/jquery.flot.resize.min.js}"></script>
+		<!--弹窗-->
+		<script type="text/javascript" th:src="@{/js/bootbox.min.js}"></script>
+		<!-- ace scripts -->
+
+		<script type="text/javascript" th:src="@{/js/ace-elements.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/ace.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layui/layui.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/ajaxfileupload.js}" charset="utf-8"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}" charset="utf-8"></script>
+		
+		<div id="addDiv" style="display:none;">
+			<form id="formTemp">
+				<div class="editCon">
+					<input type="hidden" name="id"/>
+					<ul>
+							<input type="hidden" name="id"/>
+						<li>
+							<label>地域名称:</label>
+							<input type="text" name="areaName" readonly="true"/>
+						</li>
+						<li>
+							<label>联系人姓名:</label>
+							<input type="text" name="name"/>
+						</li>
+						<li>
+							<label>联系电话:</label>
+							<input type="text" name="telephone">
+						</li>
+						<li>
+							<label>联系邮箱:</label>
+							<input type="text" name="email"/>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		
+		<div id="barDemo" style="display: none;">
+			<a class="green" lay-event="edit" shiro:hasPermission="/areasPage/updateContact" title="编辑"><i class="icon-pencil bigger-150"></i></a>
+			<a class="red" title="删除" shiro:hasPermission="/areasPage/deleteContact" lay-event="del"><i class="icon-trash bigger-150"></i></a>
+		</div>
+		
+		<script type="text/html" id="indexTpl">
+    		{{d.LAY_TABLE_INDEX+1}}
+		</script>
+		
+		<script type="text/javascript">
+		$.validator.addMethod("mobile", function (value, element, param) {
+			if (/^1[3|4|5|7|8|9]\d{9}$/.test(value)){
+				return true;
+			}else if(null==value || ""==value){
+				return true;
+			}else {
+				return  false;
+			}
+		}, "手机号格式不正确");
+		$.validator.addMethod("email1", function (value, element, param) {
+			if (/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(value)){
+				return true;
+			}else if(null==value || ""==value){
+				return true;
+			}else {
+				return  false;
+			}
+		}, "邮箱格式不正确");
+		
+		layui.use('table', function(){
+			  var table = layui.table;
+			  
+			  table.on('tool(contactList)', function(obj){
+				    var contact = obj.data;
+				    if(obj.event === 'del'){
+				      layer.confirm('是否确定删除该条数据？', function(index){
+				    	  $.ajax({
+				                cache: true,
+				                type: "POST",
+				                url:'/areasPage/deleteContact',
+				                data:{id : contact.id},
+				                async: false,
+				                dataType:'json',
+				                success: function(xhr) {
+				                	if(xhr.code == 1){
+				                        layer.msg('删除地域联系人成功');
+				                        obj.del();
+										layer.close(index);
+										table.reload('idTest', {
+							            	where: { //设定异步数据接口的额外参数
+							            		"areaName":$("#areaName").val(),
+												"name":$("#name").val()
+							            	}
+										});
+				                    }else{
+				                        layer.msg(xhr.message);
+				                    }
+				                }
+				            });
+				      });
+				    } else if(obj.event === 'edit'){
+				    	layer.open({
+						  title: '编辑地域联系人信息'
+						  ,content: $("#addDiv").html().replace('formTemp','contactForm').replace('insectTemp','insectId'),
+						  area:['550px','420px'],
+						  success:function(){
+							  $("#contactForm input[name='id']").val(contact.id);
+							  $("#contactForm input[name='areaId']").val(contact.areaId);
+							  $("#contactForm input[name='areaName']").val(contact.areaName);
+							  $("#contactForm input[name='name']").val(contact.name);
+							  $("#contactForm input[name='telephone']").val(contact.telephone);
+	 						  $("#contactForm input[name='email']").val(contact.email);
+							  $("#contactForm").validate({
+								    rules: {
+								    	name : "required",
+								    	telephone : {
+								    		required : true,
+							    	    	mobile : true,
+							    	    	maxlength : 11
+								    	},
+								    	email : {
+								    		required : true,
+								    		email1 : true
+								    	}
+								    },
+								    messages: {
+								    	name : "请填写地域联系人姓名",
+								    	telephone: {
+								    		required : "请填写地域联系人电话"
+								    	},
+								    	email: {
+								    		required : "请填写地域联系人邮箱"
+								    	}
+								    }
+								});
+						  },
+						  btn:['确定','取消']
+						  ,yes: function(){
+							  if(!$("#contactForm").valid()) {
+									return false;
+							  }
+							  $.ajax({
+						            cache: true,
+						            type: "POST",
+						            url:'/areasPage/updateContact',
+						            data:$('#contactForm').serialize(),// 你的formid
+						            dataType:'json',
+					                success: function(obj) {
+					                	if(obj.code == 1){
+						                    layer.msg('编辑成功');
+							                layer.closeAll('page');
+													table.reload('idTest', {
+										            	where: { //设定异步数据接口的额外参数
+										            		"areaName":$("#areaName").val(),
+															"name":$("#name").val()
+										            	}
+													});
+						                }else{
+						                    layer.msg(obj.message);
+						                }
+						            }
+						        });
+						  },
+						  btn2: function(){
+						    layer.closeAll();
+						  },
+						  btnAlign: 'c'
+						});
+				    }
+				  });
+
+			  var $ = layui.$, active = {
+				doSearch: function(){
+							table.reload('idTest', {
+								page:{
+									curr:1
+								},
+				            	where: { //设定异步数据接口的额外参数
+				            		"areaName":$("#areaName").val(),
+									"name":$("#name").val()
+				            	}
+							})
+						}
+		    	};
+				$('.demoTable .layui-btn').on('click', function(){
+				    var type = $(this).data('type');
+				    active[type] ? active[type].call(this) : '';
+				  });
+		});
+		
+		</script>
+		
+	</body>
+</html>
+

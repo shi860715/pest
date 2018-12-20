@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.mapper.main.WarningDataMapper">
+  <resultMap id="BaseResultMap" type="com.isoftstone.entity.model.WarningData">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="device_id" jdbcType="INTEGER" property="deviceId" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="insect_id" jdbcType="INTEGER" property="insectId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="warning_num" jdbcType="INTEGER" property="warningNum" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="capture_time" jdbcType="TIMESTAMP" property="captureTime" />
+    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+  </resultMap>
+
+	<insert id="taskWarningData">
+		INSERT INTO t_warning_data
+			(
+				device_id,area_id,address,insect_id,type,warning_num,create_time,status,capture_time,insert_time
+			)
+		SELECT 
+			c.device_id,
+			di.belong_area,
+			getFullPath(di.belong_area),
+			c.insect_id,
+			1,
+			0,
+			NOW(),
+			1,
+			c.capture_time,
+			c.insert_time
+		FROM t_collect c
+		INNER JOIN t_dev_info di ON c.device_id = di.id
+		INNER JOIN t_warning w ON c.insect_id = w.insect_id
+		AND w.area_id = (SELECT getParLst(di.belong_area))
+	</insert>
+	
+	<select id="getByArea" resultType="com.isoftstone.entity.pojo.WarningDataPojo">
+		SELECT
+			t.id,
+			t.device_id deviceId,
+			t.area_id areaId,
+			t.address,
+			t.insect_id insectId,
+			i.`name` insectName,
+			t.type,
+			t.warning_num warningNum,
+			t.create_time createTime,
+			t.status,
+			t.capture_time captureTime,
+			t.insert_time insertTime
+		FROM
+			t_warning_data t
+		LEFT JOIN t_insect_info i ON t.insect_id = i.id
+		WHERE
+			t.status = 1 AND t.area_id in
+    	<foreach collection="idList" item="id" index="index" open="(" separator="," close=")">  
+			#{id}
+		</foreach>
+		ORDER BY t.create_time DESC
+	</select>
+	
+	<select id="queryWaringData" resultType="com.isoftstone.entity.model.WarningData">
+		SELECT
+			t.id,
+			t.device_id deviceId,
+			t.area_id areaId,
+			t.address,
+			t.insect_id insectId,
+			t.type,
+			t.warning_num warningNum,
+			t.create_time createTime,
+			t.status,
+			t.capture_time captureTime,
+			t.insert_time insertTime
+		FROM
+			t_warning_data t
+		WHERE
+			t.status = 1 
+		AND t.create_time BETWEEN date_sub(date_sub(NOW(),interval 1 day), interval 1 hour) AND NOW()
+	</select>
+	
+	<select id="findPage" resultType="com.isoftstone.entity.pojo.WarningDataPojo">
+		SELECT
+			t.id,
+			t.device_id deviceId,
+			t.area_id areaId,
+			t.address,
+			t.insect_id insectId,
+			i.`name` insectName,
+			t.type,
+			t.warning_num warningNum,
+			t.create_time createTime,
+			t.status,
+			t.capture_time captureTime,
+			t.insert_time insertTime
+		FROM
+			t_warning_data t
+		LEFT JOIN t_insect_info i ON t.insect_id = i.id
+		WHERE
+			t.status = 1 AND t.area_id = #{areaId} 
+		<if test="insectId!='' and insectId!=null">
+			AND t.insect_id = #{insectId}
+		</if>
+		<if test="type!='' and type!=null">
+			AND t.type = #{type}
+		</if>
+	</select>
+	
+	
+    <update id="delWarningDatas" >
+    	UPDATE t_warning_data 
+    	SET status = 0 
+    	WHERE id in
+    	<foreach collection="idList" item="id" index="index" open="(" separator="," close=")">  
+			#{id}
+		</foreach>
+    </update>
+    
+    <select id="selectById" resultType="com.isoftstone.entity.pojo.WarningDataPojo">
+		SELECT
+			t.id,
+			t.device_id deviceId,
+			t.area_id areaId,
+			t.address,
+			t.insect_id insectId,
+			i.`name` insectName,
+			t.type,
+			t.warning_num warningNum,
+			t.create_time createTime,
+			t.status,
+			t.capture_time captureTime,
+			t.insert_time insertTime
+		FROM
+			t_warning_data t
+		LEFT JOIN t_insect_info i ON t.insect_id = i.id
+		WHERE
+			t.id = #{id}
+    </select>
+    
+    <!-- 查询虫情告警数据 -->
+  <select id="getWarningData" resultType="com.isoftstone.entity.pojo.WarningDataPojo" parameterType="java.util.Map">
+   	SELECT 
+			t.id,
+			t.device_id deviceId,
+			t.area_id areaId,
+			t.address,
+			t.insect_id insectId,
+			i.`name` insectName,
+			t.type,
+			t.warning_num warningNum,
+			t.create_time createTime,
+			t.status,
+			t.capture_time captureTime,
+			t.insert_time insertTime
+	FROM
+		t_warning_data t
+		LEFT JOIN t_insect_info i ON t.insect_id = i.id
+    <where>
+    	1=1
+		<if test="roleId != 1">
+			AND	t.area_id in 
+			<foreach collection="areaList" item="item" index="index" open="(" separator="," close=")">  	
+			 	#{item}
+			</foreach>
+		</if>
+	</where>
+	ORDER BY t.insert_time DESC
+	LIMIT 0, 4
+  </select>
+</mapper>
